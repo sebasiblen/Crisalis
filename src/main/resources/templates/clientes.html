@@ -73,7 +73,7 @@
                         <td th:text="${cliente.dni}"></td>
                         <!--th:if="${cliente.empresa ne null}"-->
                         <!--${post.body ne null} ? ${post.body} : '(no content)'"-->
-                        <td th:text="${cliente.empresa ne null} ? ${cliente.empresa.razonSocial} : ' (SIN EMPRESA ASOCIADA)'" ></td>
+                        <td th:text="${cliente.empresa ne null} ? ${cliente.empresa.razonSocial} : ' '" ></td>
                         <td>
                             <a class="btn btn-info" th:href="@{/clientes/editar_persona/{id} (id=${cliente.idCliente})}">Editar</a>
                             <a class="btn btn-danger" th:href="@{/clientes/eliminar_persona/{id} (id=${cliente.idCliente})}">Eliminar</a>

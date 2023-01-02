@@ -17,8 +17,6 @@
               crossorigin="anonymous">
     </head>
     <body>
-
-
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -51,46 +49,67 @@
                 </div>
             </div>
         </nav>
-
-        <br>
-        <br>
-        <br>
-        <br>
+        <h1>Clientes</h1>
 
         <div class="container">
-            <h6 sec:authentication="principal.username"></h6>
-            <br>
-            <h4>
-                Realizar un pedido
-            </h4>
-            <br> <br>
-            <div class="container">
-                <a class="btn btn-success" th:href="@{/carrito}">Nuevo pedido</a>
-            </div>
-            
-            <div class="container">
-                 <table class="table table-bordered">
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
+                <h3>Listado Personas</h3>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Dni</th>
+                    <th>Empresa</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="cliente : ${personas}">
+                        <td th:text="${cliente.idCliente}"></td>
+                        <td th:text="${cliente.nombre}"></td>
+                        <td th:text="${cliente.apellido}"></td>
+                        <td th:text="${cliente.dni}"></td>
+                        <!--th:if="${cliente.empresa ne null}"-->
+                        <!--${post.body ne null} ? ${post.body} : '(no content)'"-->
+                        <td th:text="${cliente.empresa ne null} ? ${cliente.empresa.razonSocial} : ' '" ></td>
+                        <td>
+                            <a class="btn btn-info" th:href="@{/pedidos/confirmacion/{id} (id=${cliente.idCliente})}">Asignar al pedido</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="container">
+            <table class="table table-bordered">
                 <thead >
                     <tr>
-                        <th>ID</th>
-                        <th>Descuento</th>
-                       
+                        <th>Descripcion</th>
+                        <th>Unidades</th>
+                        <th>Precio</th>
+                        <th>Mantenimiento</th>
+                        <th>Garantia (años)</th>
+                        <th>IVA</th>
+                        <th>IIBB</th>
                         <th>subtotal</th>
                         <th>Total</th>
                     </tr>
                 </thead>
-                
+
                 <tbody>
-                    <tr th:each="pedido : ${pedidos}">
-                        <td th:text="${pedido.idPedido}"></td>
-                        <td th:text="${pedido.descuento}"></td>
-                       
-                        <td th:text="${pedido.subtotal}"></td>
-                        <td th:text="${pedido.total}"></td>
-                        <td th:each=" it : ${pedido.items}">
-                            <td th:text="${it}"></td>
-                        </td>
-                        
+                    <tr th:each="item : ${items}">
+                        <td th:text="${item.descripcion}"></td>
+                        <td th:text="${item.unidades}"></td>
+                        <td th:text="${item.precio}"></td>
+                        <td th:text="${item.mantenimiento}"></td>
+                        <td th:text="${item.garantia}"></td>
+                        <td th:text="${item.IVA}"></td>
+                        <td th:text="${item.IIBB}"></td>
+                        <td th:text="${item.subtotal}"></td>
+                        <td th:text="${item.total}"></td>
+
                         <td>
                             <!--hay q cambiarlo para eliminar todo el pedido y no los items-->
                             <!--<a th:href="@{carrito/eliminar/{id} (id=${item.idItem})}" th:object="${item}" class="btn btn-danger"> Eliminar</a>-->
@@ -98,13 +117,7 @@
                     </tr>
                 </tbody>
             </table>
-            </div>
         </div>
-        
-        <div class="container">
-        </div>
-
-
         <!-- Latest compiled and minified JavaScript -->
         <script
             src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
@@ -112,17 +125,3 @@
         crossorigin="anonymous"></script>
     </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-

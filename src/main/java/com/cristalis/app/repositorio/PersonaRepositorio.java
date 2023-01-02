@@ -5,8 +5,10 @@
 package com.cristalis.app.repositorio;
 
 import com.cristalis.app.modelo.Persona;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -15,7 +17,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Qualifier("persona")
-public interface PersonaRepositorio extends JpaRepository<Persona, Long>{
-    
-    public Persona findByDni(String dni);
+public interface PersonaRepositorio extends JpaRepository<Persona, Long> {
+
+//    @Query("SELECT p FROM persona p WHERE p.dni LIKE '%?1%' OR p.nombre LIKE '%?1%'")
+//    public List<Persona> findAll(String palabraClave);
+
 }

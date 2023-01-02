@@ -4,13 +4,10 @@
  */
 package com.cristalis.app.servicio;
 
-import com.cristalis.app.modelo.Cliente;
 import com.cristalis.app.modelo.Persona;
 import com.cristalis.app.repositorio.PersonaRepositorio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,11 +15,11 @@ import org.springframework.stereotype.Service;
  * @author Educacion
  */
 @Service
-public class IPersonaServicio implements PersonaServicio{
-    
+public class IPersonaServicio implements PersonaServicio {
+
     @Autowired
     private PersonaRepositorio repositorio;
-    
+
     @Override
     public List<Persona> listadoPersonas() {
         return repositorio.findAll();
@@ -31,11 +28,6 @@ public class IPersonaServicio implements PersonaServicio{
     @Override
     public Persona guardarPersona(Persona persona) {
         return repositorio.save(persona);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
@@ -52,5 +44,19 @@ public class IPersonaServicio implements PersonaServicio{
     public void eliminarPersona(Long id) {
         repositorio.deleteById(id);
     }
-        
+    
+    /**
+     * BUSQUEDA PERSONA POR DNI O NOMBRE
+     * si el parametro es nulo devuelve todos las personas.
+     * @param palabraClave
+     * @return 
+     */
+    @Override
+    public List<Persona> buscarPorDniONombre(String palabraClave){
+        if (palabraClave != null) {
+//            return repositorio.findAll(palabraClave);
+        }
+        return repositorio.findAll();
+    }
+
 }

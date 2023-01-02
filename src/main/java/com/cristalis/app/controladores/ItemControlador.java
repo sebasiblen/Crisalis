@@ -6,9 +6,11 @@ package com.cristalis.app.controladores;
 
 import com.cristalis.app.modelo.Item;
 import com.cristalis.app.modelo.Producto;
+import com.cristalis.app.modelo.Servicio;
 import com.cristalis.app.servicio.ItemServicio;
 import com.cristalis.app.servicio.ProductoServicio;
 import com.cristalis.app.servicio.ServServicio;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,14 +32,22 @@ public class ItemControlador {
     private ServServicio servServicios;
     @Autowired
     private ProductoServicio productoServicios;
-
+    
+    /*
+        Test1-
+        1-  crear lista<Item>  nueva que vaya agregando los items que selecciono
+        2-  pasar la lista a pedidos. Puede ser un dto o la misma lista
+        3- limpiar la lista<Item> para los proximos pedidos
+    */
+    
 //    private List<Item> listadoCarrito = new ArrayList<>();
-
     @GetMapping("/carrito")
     public String Carrito(Model modelo) {
         modelo.addAttribute("productos", productoServicios.listadoProductos());
         modelo.addAttribute("servicios", servServicios.listadoServicios());
-        modelo.addAttribute("items", itemServicios.listadoItems());
+        
+//        modelo.addAttribute("items", itemServicios.mostrarItemsDTO());
+        modelo.addAttribute("items", itemServicios.orden());
         return "carrito";
     }
 
@@ -54,12 +64,14 @@ public class ItemControlador {
     public String NuevoItem(@ModelAttribute("item") Item item, @PathVariable Long id) {
         Producto p = productoServicios.obtenerProductoPorID(id);
         item.setProducto(p);
-        item.setUnidades(item.getUnidades());
-        item.setUnidades(item.getGarantia());
+        item.setSubtotal(item.SubTotal());
+        item.setTotal(item.Total());
+//        itemServicios.pasarItemsDTO(item);
+        itemServicios.agregarItemAOrden(item);
         itemServicios.guardarItem(item);
         return "redirect:/carrito";
     }
-    
+
     //Agregar servicio
     @GetMapping("/carrito/servicio/{id}")
     public String ItemFormularioServ(Model modelo, @PathVariable Long id) {
@@ -70,16 +82,22 @@ public class ItemControlador {
     }
 
     @PostMapping("/carrito/servicio/{id}")
-    public String NuevoItemServ(@ModelAttribute("item") Item item) {
-        item.setUnidades(item.getUnidades());
+    public String NuevoItemServ(@ModelAttribute("item") Item item, @PathVariable Long id) {
+        Servicio s = servServicios.obtenerServicioPorID(id);
+        item.setServicio(s);
+        item.setSubtotal(item.SubTotal());
+        item.setTotal(item.Total());
+//        itemServicios.pasarItemsDTO(item);
+        itemServicios.agregarItemAOrden(item);
         itemServicios.guardarItem(item);
         return "redirect:/carrito";
     }
-    
+
     @GetMapping("carrito/eliminar/{id}")
     public String EliminarItem(@PathVariable Long id) {
         itemServicios.eliminarItem(id);
         return "redirect:/carrito";
     }
+    
     
 }

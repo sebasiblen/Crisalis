@@ -7,10 +7,10 @@ package com.cristalis.app.modelo;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import lombok.Data;
@@ -47,10 +47,6 @@ public class Item implements Serializable {
     @Column(name = "total")
     private double total;
 
-    // Muchos items corresponen a un pedido
-    @ManyToOne
-    private Pedido pedido;
-
     // Un item correspone a un producto
     @OneToOne
     @JoinColumn(name = "id_producto", referencedColumnName = "idBien")
@@ -60,11 +56,56 @@ public class Item implements Serializable {
     @OneToOne
     @JoinColumn(name = "id_servicio", referencedColumnName = "idBien")
     private Servicio servicio;
-
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="pedido_id")
+    private Pedido pedido;
+    
     public Item() {
         this.unidades = 1;
         this.IVA = 0.21;
         this.IIBB = 0.035;
     }
 
+    public Item(Producto producto) {
+        this.producto = producto;
+        this.IVA = 0.21;
+        this.IIBB = 0.035;
+        this.subtotal = SubTotal();
+    }
+
+    public Item(Servicio servicio) {
+        this.servicio = servicio;
+        this.IVA = 0.21;
+        this.IIBB = 0.035;
+        this.subtotal = SubTotal();
+    }
+
+    public double SubTotal() {
+        if (this.producto != null) {
+            this.subtotal += (this.producto.getPrecio() * this.unidades);
+        }
+        if (this.servicio != null) {
+            this.subtotal += (this.servicio.getPrecio() + this.servicio.getMantenimiento()) * this.unidades;
+        }
+        return this.subtotal;
+    }
+
+    public double Total() {
+        if (this.producto != null) {
+            this.total += ((this.producto.getPrecio()
+                    + (this.producto.getPrecio() * this.IVA)
+                    + (this.producto.getPrecio() * this.IIBB)) * this.unidades);
+            if (this.garantia > 0) {
+                this.total += (this.producto.getPrecio() * 0.02) * this.garantia;
+            }
+        }
+        if (this.servicio != null) {
+            this.total += ((this.servicio.getPrecio()
+                    + (this.servicio.getPrecio() * this.IVA)
+                    + (this.servicio.getPrecio() * this.IIBB)
+                    + this.servicio.getMantenimiento()) * this.unidades);
+        }
+        return this.total;
+    }
 }

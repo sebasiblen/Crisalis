@@ -4,6 +4,7 @@
  */
 package com.cristalis.app.modelo;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.Data;
-import org.springframework.stereotype.Component;
 
 /**
  *
@@ -36,8 +36,8 @@ public class Persona extends Cliente {
     @JoinColumn(name = "empresa_id")
     private Empresa empresa;
 
-//    @OneToMany(fetch = FetchType.LAZY)
-//    private List<Pedido> pedidos;
+    @OneToMany(mappedBy = "persona")
+    private List<Pedido> pedidos;
 
     public Persona() {
         super();
@@ -47,6 +47,21 @@ public class Persona extends Cliente {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
+    }
+    
+    protected List<Servicio> ServiciosContratados(){
+        
+        List<Servicio> servicios = new ArrayList<>();
+        
+        for (Pedido pedido : pedidos) {
+            for (Item item : pedido.getItems()) {
+                if(item.getServicio() != null){
+                    servicios.add(item.getServicio());
+                }
+            }
+        }
+        
+        return servicios;
     }
 
 }

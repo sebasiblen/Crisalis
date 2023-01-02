@@ -4,9 +4,8 @@
  */
 package com.cristalis.app.servicio;
 
+import com.cristalis.app.controladores.DTO.ItemDTO;
 import com.cristalis.app.modelo.Item;
-import com.cristalis.app.modelo.Producto;
-import com.cristalis.app.modelo.Servicio;
 import java.util.List;
 
 /**
@@ -17,11 +16,20 @@ public interface ItemServicio {
     
     public List<Item> listadoItems();
     
+    // FUNCIONA SIN USAR DTO
+    public List<Item> orden();
+    
+    public void agregarItemAOrden(Item item);
+    
+    public void borrarOrdenActual();
+    
+    //
+    public List<ItemDTO> pasarItemsDTO(Item item);
+    
+    public List<ItemDTO> mostrarItemsDTO();
+    
     public Item guardarItem(Item item);
     
-    public Item agregarProducto(Producto producto);
-    
-    public Item agregarServicio(Servicio servicio);
-    
     public void eliminarItem(Long id);
+    
 }

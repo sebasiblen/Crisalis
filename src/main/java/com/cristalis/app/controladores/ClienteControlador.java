@@ -106,11 +106,9 @@ public class ClienteControlador {
     }
     
     
-    /**
+    /*
      * SE ELIMINA LA PERSONA SIN EMPRESA ASOCIADA
      * PARA PRESERVAR LA RELACION, EDITAR LA EMPRESA O LA PERSONA EN SU DEFECTO.
-     * @param id
-     * @return 
      */
     @GetMapping("/clientes/eliminar_persona/{id}")
     public String EliminarPersona(@PathVariable Long id) {
