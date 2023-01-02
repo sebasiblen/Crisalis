@@ -35,6 +35,12 @@ public class IItemServicio implements ItemServicio {
     public Item guardarItem(Item item) {
         return repositorio.save(item);
     }
+    
+    
+    @Override
+    public Item obtenerItemPorID(Long id) {
+        return repositorio.findById(id).orElse(null);
+    }
 
     @Override
     public void eliminarItem(Long id) {
@@ -85,5 +91,11 @@ public class IItemServicio implements ItemServicio {
     public void borrarOrdenActual() {
         this.ordenActual.clear();
     }
+
+    @Override
+    public void eliminarItemDeOrden(Item item) {
+        ordenActual.remove(item);
+    }
+
 
 }

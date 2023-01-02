@@ -4,6 +4,7 @@
  */
 package com.cristalis.app.controladores;
 
+import com.cristalis.app.modelo.Item;
 import com.cristalis.app.modelo.Pedido;
 import com.cristalis.app.modelo.Persona;
 import com.cristalis.app.servicio.ItemServicio;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  *
@@ -52,12 +54,29 @@ public class PedidoControlador {
         Persona persona = personaServicio.obtenerPersonaPorID(id);
         Pedido nuevoPedido = new Pedido(persona, itemServicio.orden());
         persona.getPedidos().add(nuevoPedido);
-
+        for (Item it : itemServicio.orden()) {
+            if(!itemServicio.orden().isEmpty()){
+                Item itBDD = itemServicio.obtenerItemPorID(it.getIdItem());
+                itBDD.setPedido(nuevoPedido);
+            }
+        }
         pedidoServicio.guardarPedido(nuevoPedido);
-
-
-//        itemServicio.borrarOrdenActual();
+        itemServicio.borrarOrdenActual();
         return "redirect:/pedidos";
     }
-
+    
+    
+    @GetMapping("/pedidos/{id}")
+    public String eliminarPedido(@PathVariable Long id){
+        Pedido p = pedidoServicio.obtenerPedidoPorID(id);
+        
+        for (Item item : p.getItems()) {
+            itemServicio.eliminarItem(item.getIdItem());
+        }
+        
+        pedidoServicio.eliminarPedido(id);
+        
+        
+        return "redirect:/pedidos";
+    }
 }

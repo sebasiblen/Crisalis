@@ -4,8 +4,8 @@
  */
 package com.cristalis.app.servicio;
 
-import com.cristalis.app.controladores.DTO.ItemDTO;
 import com.cristalis.app.modelo.Pedido;
+import com.cristalis.app.repositorio.ItemRepositorio;
 import com.cristalis.app.repositorio.PedidoRepositorio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +38,7 @@ public class IPedidoServicio implements PedidoServicio {
 
     @Override
     public void eliminarPedido(Long id) {
+        
         repositorio.deleteById(id);
     }
 

@@ -16,6 +16,12 @@ public interface ItemServicio {
     
     public List<Item> listadoItems();
     
+    public Item obtenerItemPorID(Long id);
+    
+    public Item guardarItem(Item item);
+
+    public void eliminarItem(Long id);
+
     // FUNCIONA SIN USAR DTO
     public List<Item> orden();
     
@@ -23,13 +29,12 @@ public interface ItemServicio {
     
     public void borrarOrdenActual();
     
-    //
+    public void eliminarItemDeOrden(Item item);
+    // 
     public List<ItemDTO> pasarItemsDTO(Item item);
     
     public List<ItemDTO> mostrarItemsDTO();
     
-    public Item guardarItem(Item item);
     
-    public void eliminarItem(Long id);
     
 }

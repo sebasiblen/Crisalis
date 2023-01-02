@@ -32,21 +32,12 @@ public class ItemControlador {
     private ServServicio servServicios;
     @Autowired
     private ProductoServicio productoServicios;
-    
-    /*
-        Test1-
-        1-  crear lista<Item>  nueva que vaya agregando los items que selecciono
-        2-  pasar la lista a pedidos. Puede ser un dto o la misma lista
-        3- limpiar la lista<Item> para los proximos pedidos
-    */
-    
-//    private List<Item> listadoCarrito = new ArrayList<>();
+
     @GetMapping("/carrito")
     public String Carrito(Model modelo) {
         modelo.addAttribute("productos", productoServicios.listadoProductos());
         modelo.addAttribute("servicios", servServicios.listadoServicios());
-        
-//        modelo.addAttribute("items", itemServicios.mostrarItemsDTO());
+        //orden actual
         modelo.addAttribute("items", itemServicios.orden());
         return "carrito";
     }
@@ -87,17 +78,26 @@ public class ItemControlador {
         item.setServicio(s);
         item.setSubtotal(item.SubTotal());
         item.setTotal(item.Total());
-//        itemServicios.pasarItemsDTO(item);
         itemServicios.agregarItemAOrden(item);
         itemServicios.guardarItem(item);
         return "redirect:/carrito";
     }
 
+    /**
+     * Al eliminar el item de la liste que se va creando, lo tengo que eliminar
+     * de la lista de items de la orden y del repo.
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("carrito/eliminar/{id}")
     public String EliminarItem(@PathVariable Long id) {
+
+        Item i = itemServicios.obtenerItemPorID(id);
+        itemServicios.eliminarItemDeOrden(i);
+
         itemServicios.eliminarItem(id);
         return "redirect:/carrito";
     }
-    
-    
+
 }

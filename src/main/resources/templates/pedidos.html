@@ -67,40 +67,37 @@
             <div class="container">
                 <a class="btn btn-success" th:href="@{/carrito}">Nuevo pedido</a>
             </div>
-            
+
             <div class="container">
-                 <table class="table table-bordered">
-                <thead >
-                    <tr>
-                        <th>ID</th>
-                        <th>Descuento</th>
-                       
-                        <th>subtotal</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                
-                <tbody>
-                    <tr th:each="pedido : ${pedidos}">
-                        <td th:text="${pedido.idPedido}"></td>
-                        <td th:text="${pedido.descuento}"></td>
-                       
-                        <td th:text="${pedido.subtotal}"></td>
-                        <td th:text="${pedido.total}"></td>
-                        <td th:each=" it : ${pedido.items}">
-                            <td th:text="${it}"></td>
-                        </td>
-                        
-                        <td>
-                            <!--hay q cambiarlo para eliminar todo el pedido y no los items-->
-                            <!--<a th:href="@{carrito/eliminar/{id} (id=${item.idItem})}" th:object="${item}" class="btn btn-danger"> Eliminar</a>-->
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                <table class="table table-bordered">
+                    <thead >
+                        <tr>
+                            <th>ID</th>
+                            <th>Descuento</th>
+
+                            <th>subtotal</th>
+                            <th>Total</th>
+                            <th>ITEMS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr th:each="pedido : ${pedidos}">
+                            <td th:text="${pedido.idPedido}"></td>
+                            <td th:text="${pedido.descuento}"></td>
+                            <td th:text="${pedido.subtotal}"></td>
+                            <td th:text="${pedido.total}"></td>
+                            <td>
+                                <a th:href="@{pedidos/{id}
+                                (id=${pedido.idPedido})}" th:object="${pedido}" 
+                                class="btn btn-danger"> Eliminar</a> 
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-        
+
         <div class="container">
         </div>
 

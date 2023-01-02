@@ -4,6 +4,7 @@
  */
 package com.cristalis.app.controladores.DTO;
 
+import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,7 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author Educacion
  */
 @Data
-public class ClienteRegistroDTO {
+public class ClienteRegistroDTO implements Serializable{
 
     private Long idCliente;
     private String nombre;

@@ -6,6 +6,7 @@ package com.cristalis.app.controladores.DTO;
 
 import com.cristalis.app.modelo.Producto;
 import com.cristalis.app.modelo.Servicio;
+import java.io.Serializable;
 import lombok.Data;
 
 /**
@@ -13,7 +14,7 @@ import lombok.Data;
  * @author Educacion
  */
 @Data
-public class ItemDTO {
+public class ItemDTO implements Serializable{
 
     private Long idItem;
     private String descripcion;

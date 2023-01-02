@@ -1,5 +1,6 @@
 package com.cristalis.app.controladores.DTO;
 
+import java.io.Serializable;
 import lombok.Data;
 
 /**
@@ -7,7 +8,7 @@ import lombok.Data;
  * @author seba
  */
 @Data
-public class UsuarioRegistroDTO {
+public class UsuarioRegistroDTO implements Serializable{
 
     private Long id;
     private String nombre;

@@ -4,6 +4,7 @@
  */
 package com.cristalis.app.modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -20,7 +21,7 @@ import lombok.Data;
  */
 @Data
 @Entity
-public class Persona extends Cliente {
+public class Persona extends Cliente implements Serializable {
 
     @Column(name = "nombre")
     private String nombre;
