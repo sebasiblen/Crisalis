@@ -24,6 +24,14 @@ public class IPersonaServicio implements PersonaServicio {
     public List<Persona> listadoPersonas() {
         return repositorio.findAll();
     }
+    
+    @Override
+    public List<Persona> filtrarPersonas(String palabraClave) {
+        if (palabraClave != null) {
+            return repositorio.findAll(palabraClave);
+        }
+        return repositorio.findAll();
+    }
 
     @Override
     public Persona guardarPersona(Persona persona) {

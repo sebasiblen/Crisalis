@@ -67,7 +67,23 @@
             <div class="container">
                 <a class="btn btn-success" th:href="@{/carrito}">Nuevo pedido</a>
             </div>
-
+            <br>
+            <br>
+            <form class="form-inline" th:action="@{/pedidos}">
+                <div class="form-group">
+                    <label>Filtrar Pedido  :  </label>
+                </div>
+                <div class="form-group" >
+                    <input type="text" name="palabraClave" 
+                           class="form-control" id="palabraClave" 
+                           th:value="${palabraClave}" 
+                           placeholder="Cliente" required>
+                </div>
+                <input type="submit" class="btn btn-info mb-2" value="Buscar">
+                <input type="button" class="btn btn-info mb-2" value="Limpiar" onclick="limpiarCampos()">
+            </form>
+            <br>
+            <br>
             <div class="container">
                 <table class="table table-bordered">
                     <thead >
@@ -89,8 +105,8 @@
                             <td th:text="${pedido.total}"></td>
                             <td>
                                 <a th:href="@{pedidos/{id}
-                                (id=${pedido.idPedido})}" th:object="${pedido}" 
-                                class="btn btn-danger"> Eliminar</a> 
+                                   (id=${pedido.idPedido})}" th:object="${pedido}" 
+                                   class="btn btn-danger"> Eliminar</a> 
                             </td>
                         </tr>
                     </tbody>
@@ -102,6 +118,12 @@
         </div>
 
 
+
+        <script type="text/javascript">
+            function limpiarCampos(){
+            window.location='/pedidos';
+            }
+        </script>
         <!-- Latest compiled and minified JavaScript -->
         <script
             src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
@@ -109,17 +131,3 @@
         crossorigin="anonymous"></script>
     </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-

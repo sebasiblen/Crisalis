@@ -16,6 +16,8 @@ public interface PedidoServicio {
     
     public List<Pedido> listadoPedidos();
     
+    public List<Pedido> filtrarPedidosPorCliente(String cliente);
+    
     public Pedido guardarPedido(Pedido pedido);
     
     public Pedido obtenerPedidoPorID(Long id);

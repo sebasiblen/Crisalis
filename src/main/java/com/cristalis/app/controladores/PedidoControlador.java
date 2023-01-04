@@ -24,38 +24,37 @@ import org.springframework.web.bind.annotation.PostMapping;
  */
 @Controller
 public class PedidoControlador {
-
+    
     @Autowired
     private PedidoServicio pedidoServicio;
-
+    
     @Autowired
     private PersonaServicio personaServicio;
-
+    
     @Autowired
     private ItemServicio itemServicio;
-
+    
     @GetMapping("/pedidos")
     public String Pedidos(Model modelo, @Param("palabraClave") String palabraClave) {
-//        personaServicio.buscarPorDniONombre(palabraClave);
-
-        modelo.addAttribute("pedidos", pedidoServicio.listadoPedidos());
+        modelo.addAttribute("pedidos", pedidoServicio.filtrarPedidosPorCliente(palabraClave));
+//        modelo.addAttribute("pedidos", pedidoServicio.listadoPedidos());
         modelo.addAttribute("items", itemServicio.orden());
         return "pedidos";
     }
-
+    
     @GetMapping("/pedidos/confirmacion")
     public String ConfirmacionPedido(Model modelo) {
         modelo.addAttribute("personas", personaServicio.listadoPersonas());
         return "confirmacion_pedido";
     }
-
+    
     @GetMapping("/pedidos/confirmacion/{id}")
     public String AsignarPersonaAlPedido(@PathVariable Long id) {
         Persona persona = personaServicio.obtenerPersonaPorID(id);
         Pedido nuevoPedido = new Pedido(persona, itemServicio.orden());
         persona.getPedidos().add(nuevoPedido);
         for (Item it : itemServicio.orden()) {
-            if(!itemServicio.orden().isEmpty()){
+            if (!itemServicio.orden().isEmpty()) {
                 Item itBDD = itemServicio.obtenerItemPorID(it.getIdItem());
                 itBDD.setPedido(nuevoPedido);
             }
@@ -65,17 +64,16 @@ public class PedidoControlador {
         return "redirect:/pedidos";
     }
     
-    
     @GetMapping("/pedidos/{id}")
-    public String eliminarPedido(@PathVariable Long id){
+    public String eliminarPedido(@PathVariable Long id) {
         Pedido p = pedidoServicio.obtenerPedidoPorID(id);
         
         for (Item item : p.getItems()) {
+            item.setProducto(null);
             itemServicio.eliminarItem(item.getIdItem());
         }
         
         pedidoServicio.eliminarPedido(id);
-        
         
         return "redirect:/pedidos";
     }

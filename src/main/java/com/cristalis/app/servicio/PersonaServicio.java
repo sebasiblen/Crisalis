@@ -14,7 +14,9 @@ import java.util.List;
 public interface PersonaServicio {
 
     public List<Persona> listadoPersonas();
-
+    
+    public List<Persona> filtrarPersonas(String palabraClave);
+    
     public Persona guardarPersona(Persona persona);
 
     public Persona obtenerPersonaPorID(Long id);

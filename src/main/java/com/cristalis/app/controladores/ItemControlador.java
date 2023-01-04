@@ -10,7 +10,6 @@ import com.cristalis.app.modelo.Servicio;
 import com.cristalis.app.servicio.ItemServicio;
 import com.cristalis.app.servicio.ProductoServicio;
 import com.cristalis.app.servicio.ServServicio;
-import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -92,12 +91,12 @@ public class ItemControlador {
      */
     @GetMapping("carrito/eliminar/{id}")
     public String EliminarItem(@PathVariable Long id) {
-
         Item i = itemServicios.obtenerItemPorID(id);
         itemServicios.eliminarItemDeOrden(i);
-
+        i.setProducto(null);
+        i.setServicio(null);
         itemServicios.eliminarItem(id);
+
         return "redirect:/carrito";
     }
-
 }

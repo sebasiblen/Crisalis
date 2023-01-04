@@ -5,6 +5,7 @@
 package com.cristalis.app.modelo;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,7 +49,7 @@ public class Item implements Serializable {
     private double total;
 
     // Un item correspone a un producto
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_producto", referencedColumnName = "idBien")
     private Producto producto;
 

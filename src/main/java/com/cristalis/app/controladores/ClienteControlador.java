@@ -10,6 +10,7 @@ import com.cristalis.app.modelo.Persona;
 import com.cristalis.app.servicio.EmpresaServicio;
 import com.cristalis.app.servicio.PersonaServicio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +32,8 @@ public class ClienteControlador {
     private EmpresaServicio es;
 
     @GetMapping("/clientes")
-    public String VistaClientes(Model modelo) {
-        modelo.addAttribute("personas", ps.listadoPersonas());
+    public String VistaClientes(Model modelo, @Param("palabraClave") String palabraClave) {
+        modelo.addAttribute("personas", ps.filtrarPersonas(palabraClave));
         modelo.addAttribute("empresas", es.listadoEmpresa());
         return "clientes";
     }
@@ -52,8 +53,8 @@ public class ClienteControlador {
      */
     @PostMapping("/clientes/formulario")
     public String AgregarNuevoCliente(@ModelAttribute("cliente") ClienteRegistroDTO cliente) {
-        Persona p = new Persona();
-        Empresa e = new Empresa();
+        Persona p;
+        Empresa e;
 
         if (cliente.getNombre() != null && cliente.getApellido() != null && cliente.getDni() != null) {
             p = new Persona(cliente.getNombre(), cliente.getApellido(), cliente.getDni());

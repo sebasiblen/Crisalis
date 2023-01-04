@@ -89,13 +89,12 @@ public class IItemServicio implements ItemServicio {
 
     @Override
     public void borrarOrdenActual() {
-        this.ordenActual.clear();
+        ordenActual.clear();
     }
 
     @Override
     public void eliminarItemDeOrden(Item item) {
         ordenActual.remove(item);
     }
-
 
 }
