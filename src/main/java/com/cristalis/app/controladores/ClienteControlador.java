@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -33,6 +34,16 @@ public class ClienteControlador {
     @Autowired
     private EmpresaServicio empresaServicio;
 
+    /*
+        Empresa Temporal para la vinculacion
+        Persona Temporal para la vinculacion
+    */
+    Empresa empresaTemp = null;
+    Persona personaTemp = null;
+    
+    
+    
+    
     @GetMapping("/clientes")
     public String VistaClientes(Model modelo, @Param("palabraClave") String palabraClave) {
         modelo.addAttribute("personas", personaServicio.filtrarPersonas(palabraClave));
@@ -58,7 +69,7 @@ public class ClienteControlador {
     public String AgregarNuevoCliente(@ModelAttribute("cliente") ClienteRegistroDTO cliente) {
         Persona p;
         Empresa e;
-        
+
         if (cliente.getNombre() != null && cliente.getApellido() != null
                 && cliente.getDni() != null) {
 
@@ -123,13 +134,11 @@ public class ClienteControlador {
         return "redirect:/clientes";
     }
 
-    
 //    @GetMapping("/clientes/vincularEmpresa/{id}")
 //    public String VincularEmpresa(@PathVariable Long id, @ModelAttribute("persona")Persona persona){
 //            
 //        return "redirect:/clientes";
 //    }
-    
     @GetMapping("/clientes/eliminar_persona/{id}")
     public String EliminarPersona(@PathVariable Long id) {
         personaServicio.eliminarPersona(id);
@@ -141,4 +150,98 @@ public class ClienteControlador {
         empresaServicio.eliminarEmpresa(id);
         return "redirect:/clientes";
     }
+    
+    /**
+     * Desvincular P (x E)
+     * @param id
+     * @return 
+     */
+    @GetMapping("/clientes/desvincular_empresa/{id}")
+    public String DesvincularEmpresaDePersona(@PathVariable Long id) {
+        Persona p = personaServicio.obtenerPersonaPorID(id);
+        empresaTemp = p.getEmpresa();
+        empresaTemp.setPersona(null);
+        p.setEmpresa(null);
+        personaServicio.actualizarPersona(p);
+        empresaServicio.actualizarEmpresa(empresaTemp);
+        
+        empresaTemp = null;
+        return "redirect:/clientes";
+    }
+    
+    /**
+     * Desvincular  E (x P)
+     * @param id
+     * @return 
+     */
+    @GetMapping("/clientes/desvincular_persona/{id}")
+    public String DesvincularPersonaDeEmpresa(@PathVariable Long id) {
+        Empresa e = empresaServicio.obtenerEmpresaPorID(id);
+        personaTemp = e.getPersona();
+        personaTemp.setEmpresa(null);
+        e.setPersona(null);
+        empresaServicio.actualizarEmpresa(e);
+        personaServicio.actualizarPersona(personaTemp);
+        
+        personaTemp = null;
+        return "redirect:/clientes";
+    }
+    
+    
+    /**
+     * Vlincular E -> P
+     * @param id
+     * @param modelo
+     * @return 
+     */
+    @GetMapping("/clientes/vincular_empresa/empresa/{id}")
+    public String SeleccionarEmpresa(@PathVariable Long id, Model modelo) {
+        empresaTemp = empresaServicio.obtenerEmpresaPorID(id);
+        modelo.addAttribute("personas", personaServicio.listadoPersonas());
+        return "persona_vinculable";
+    }
+    
+    @GetMapping("/clientes/vincular_empresa/empresa/persona/{id}")
+    public String SeleccionarEmpresaPersona(@PathVariable Long id) {
+        personaTemp = personaServicio.obtenerPersonaPorID(id);
+        empresaTemp.setPersona(personaTemp);
+        personaTemp.setEmpresa(empresaTemp);
+        
+        personaServicio.actualizarPersona(personaTemp);
+        empresaServicio.actualizarEmpresa(empresaTemp);
+        
+        personaTemp = null;
+        empresaTemp = null;
+        return "redirect:/clientes";
+    }
+    
+     /**
+     * Vlincular P -> E
+     * @param id
+     * @param modelo
+     * @return 
+     */
+    @GetMapping("/clientes/vincular_empresa/persona/{id}")
+    public String SeleccionarPersona(@PathVariable Long id, Model modelo) {
+        personaTemp = personaServicio.obtenerPersonaPorID(id);
+        modelo.addAttribute("empresas", empresaServicio.listadoEmpresas());
+        return "empresa_vinculable";
+    }
+    
+    @GetMapping("/clientes/vincular_empresa/persona/empresa/{id}")
+    public String SeleccionarPersonaEmpresa(@PathVariable Long id) {
+        empresaTemp = empresaServicio.obtenerEmpresaPorID(id);
+        empresaTemp.setPersona(personaTemp);
+        personaTemp.setEmpresa(empresaTemp);
+        
+        personaServicio.actualizarPersona(personaTemp);
+        empresaServicio.actualizarEmpresa(empresaTemp);
+        
+        personaTemp = null;
+        empresaTemp = null;
+        return "redirect:/clientes";
+    }
+    
+    
+    
 }

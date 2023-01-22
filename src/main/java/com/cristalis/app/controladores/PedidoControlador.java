@@ -178,9 +178,6 @@ public class PedidoControlador {
 
         Persona persona = personaServicio.obtenerPersonaPorID(id);
         pedidoTemp.setPersona(persona);
-        if (persona.getEmpresa() != null) {
-            pedidoTemp.setEmpresa(persona.getEmpresa());
-        }
 
         pedidoServicio.guardarPedido(pedidoTemp);
         pedidoTemp = null;

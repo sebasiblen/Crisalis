@@ -53,69 +53,26 @@
 
         <div class="container">
             
-            <a class="btn btn-success" th:href="@{/clientes/formulario}">Nuevo Cliente</a>
-            <br>
-            <br><h3>Listado Personas</h3>
-            <br>
-                
+            <br><h3>Listado Empresas Vinculables</h3>
                 
                     <form class="form-inline" th:action="@{/clientes}">
                         <div class="form-group">
-                            <label>Filtrar Personas  :  </label>
+                            <label>Filtrar Empresas  :  </label>
                         </div>
                         <div class="form-group" >
                             <input type="text" name="palabraClave" 
                                    class="form-control" id="palabraClave" 
                                    th:value="${palabraClave}" 
-                                   placeholder="Apellido o DNI" required>
+                                   placeholder="Razon Social" required>
                         </div>
                         <input type="submit" class="btn btn-info mb-2" value="Buscar">
                         <input type="button" class="btn btn-info mb-2" value="Limpiar" onclick="limpiarCampos()">
                     </form>
             <br>
             <br>
-            <table class="table table-striped table-bordered ">
-                <thead>
-                
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Dni</th>
-                    <th>Tipo Comprador</th>
-                    <th>Empresa</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="persona : ${personas}">
-                        <td th:text="${persona.idCliente}"></td>
-                        <td th:text="${persona.nombre}"></td>
-                        <td th:text="${persona.apellido}"></td>
-                        <td th:text="${persona.dni}"></td>
-                        <td th:text="${persona.tipo}"></td>
-                        <!--th:if="${cliente.empresa ne null}"-->
-                        <!--${post.body ne null} ? ${post.body} : '(no content)'"-->
-                        <td th:text="${persona.empresa ne null} ? ${persona.empresa.razonSocial} : ' '" ></td>
-                        <td>
-                            <div th:if="${persona.empresa == null}">
-                                <a class="btn btn-primary" 
-                                   th:href="@{/clientes/vincular_empresa/persona/{id} (id=${persona.idCliente})}">Vincular</a>
-                            </div>
-                            <div th:if="${persona.empresa != null}">
-                            <a class="btn btn-warning" th:href="@{/clientes/desvincular_empresa/{id} (id=${persona.idCliente})}">Desvincular</a>
-                            </div>
-                            <a class="btn btn-info" th:href="@{/clientes/editar_persona/{id} (id=${persona.idCliente})}">Editar</a>
-                            <a class="btn btn-danger" th:href="@{/clientes/eliminar_persona/{id} (id=${persona.idCliente})}">Eliminar</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="container">
+            <div class="container">
             <table class="table table-striped table-bordered">
                 <thead class="table-dark">
-                <h3>Listado Empresas</h3>
                 <tr>
                     <th>ID</th>
                     <th>Tipo Comprador</th>
@@ -125,8 +82,8 @@
                     <th>Acciones</th>
                 </tr>
                 </thead>
-                <tbody>
-                    <tr th:each="cliente : ${empresas}">
+                <tbody >
+                    <tr th:each="cliente : ${empresas}" th:if="${cliente.persona == null}">
                         <td th:text="${cliente.idCliente}"></td>
                         <td th:text="${cliente.tipo}"></td>
                         <td th:text="${cliente.cuit}"></td>
@@ -135,14 +92,9 @@
                         <td>
                             <div th:if="${cliente.persona == null}" >
                                 <a th:onclick="${}" class="btn btn-primary" 
-                                   th:href="@{/clientes/vincular_empresa/empresa/{id}(id=${cliente.idCliente})}">Vincular</a>
+                                   th:href="@{/clientes/vincular_empresa/persona/empresa/{id}(id=${cliente.idCliente})}">Vincular</a>
                             </div>
-                            <div th:if="${cliente.persona != null}">
-                            <a class="btn btn-warning"
-                               th:href="@{/clientes/desvincular_persona/{id} (id=${cliente.idCliente})}">Desvincular</a>
-                            </div>
-                            <a class="btn btn-info" th:href="@{/clientes/editar_empresa/{id} (id=${cliente.idCliente})}">Editar</a>
-                            <a class="btn btn-danger" th:href="@{/clientes/eliminar_empresa/{id} (id=${cliente.idCliente})}">Eliminar</a>
+                            
                         </td>
                     </tr>
                 </tbody>

@@ -70,15 +70,7 @@
                                 <label>DNI: </label>
                                 <input type="text" name="dni" th:field="*{dni}" placeholder="Digite el dni del cliente" required>
                             </div>
-                            <div class="form-group">
-                                <label>Tipo Impuesto Persona: </label>
-                                <select name="tipo">
-                                    <option th:each="valor : ${T(com.cristalis.app.modelo.TipoClienteEnum).values()}" 
-                                            th:value="${valor}"
-                                            th:text="${valor.name()}"
-                                            th:field="*{tipo}"></option>
-                                </select>
-                            </div>
+                            <h6>(Nota) Si es un particular, no llenar los campos de empresa</h6>
                             <div class="form-group">
                                 <label>Cuit: </label>
                                 <input type="text" name="cuit" th:field="*{cuit}" placeholder="Digite el cuit de la empresa">
@@ -92,6 +84,9 @@
                                 <label>Inicio Actividades(empresa): </label>
                                 <input type="date" name="fecha" th:field="*{fecha}">
                             </div>
+                            <h6>* Si es un particular elegir tipo de impuesto de la persona</h6> 
+                            <h6>** Si es una empresa elegir tipo para la empresa.
+                            Por defecto la persona es (Consumidor_final)</h6> 
                             <div class="form-group">
                                 <label>Tipo Impuesto Empresa: </label>
                                 <select name="tipo">
