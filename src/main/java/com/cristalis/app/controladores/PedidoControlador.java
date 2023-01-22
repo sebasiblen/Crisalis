@@ -178,7 +178,6 @@ public class PedidoControlador {
 
         Persona persona = personaServicio.obtenerPersonaPorID(id);
         pedidoTemp.setPersona(persona);
-
         pedidoServicio.guardarPedido(pedidoTemp);
         pedidoTemp = null;
         return "redirect:/pedidos";
@@ -187,17 +186,17 @@ public class PedidoControlador {
     @GetMapping("/pedidos/editar_pedido/editar_cliente/empresa/{id}")
     public String ActualizarEmpresaPedido(@PathVariable Long id) {
 
-        pedidoTemp.setPersona(null);
-        pedidoTemp.setEmpresa(null);
-
         Empresa empresa = empresaServicio.obtenerEmpresaPorID(id);
-        pedidoTemp.setEmpresa(empresa);
-        pedidoTemp.setPersona(empresa.getPersona());
-
-        pedidoServicio.guardarPedido(pedidoTemp);
+        if (empresa.getPersona() != null) {
+            pedidoTemp.setPersona(null);
+            pedidoTemp.setEmpresa(null);
+            
+            pedidoTemp.setEmpresa(empresa);
+            pedidoTemp.setPersona(empresa.getPersona());
+            pedidoServicio.guardarPedido(pedidoTemp);
+        }
         pedidoTemp = null;
         return "redirect:/pedidos";
     }
 
-    
 }

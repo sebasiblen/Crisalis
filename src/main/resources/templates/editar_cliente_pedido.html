@@ -64,12 +64,20 @@
                             <div>
                                 <h2>Cliente</h2>
                                 <br>
-                                <div><b>Nombres: </b><span th:text="${pedido.persona.nombre}"></span></div>
-                                <div><b>Apellidos: </b><span th:text="${pedido.persona.apellido}"></span></div>
-                                <div><b>Documento: </b><span th:text="${pedido.persona.dni}"></span></div>
-                                <div><b>Razon Social: </b><span th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.razonSocial} : '--'" ></span></div>
-                                <div><b>Cuit: </b><span th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.cuit} : '--'" ></span></div>
-                                <div><b>Fecha de inicio actividades: </b><span th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.fecha} : '--'" ></span></div>
+                                <div th:if="${pedido.persona != null}">
+                                    <div><b>Nombres: </b><span th:text="${pedido.persona.nombre}"></span></div>
+                                    <div><b>Apellidos: </b><span th:text="${pedido.persona.apellido}"></span></div>
+                                    <div><b>Documento: </b><span th:text="${pedido.persona.dni}"></span></div>
+
+                                </div>
+                                <div th:if="${pedido.empresa != null}">
+                                    <!--                                <div><b>Razon Social: </b><span th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.razonSocial} : '--'" ></span></div>
+                                                                    <div><b>Cuit: </b><span th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.cuit} : '--'" ></span></div>
+                                                                    <div><b>Fecha de inicio actividades: </b><span th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.fecha} : '--'" ></span></div>-->
+                                    <div><b>Razon Social: </b><span th:text="${pedido.empresa.razonSocial}"></span></div>
+                                    <div><b>Cuit: </b><span th:text="${pedido.empresa.cuit}"></span></div>
+                                    <div><b>Fecha inicio de actividades: </b><span th:text="${pedido.empresa.fecha}"></span></div>
+                                </div>
                             </div>
 
 
@@ -99,7 +107,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                                  
+
                             <br>
                             <br>
                             <div class="container">
