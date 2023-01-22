@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <meta charset="utf-8">
+        <title>Inicio</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+              crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+              integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+              crossorigin="anonymous">
+    </head>
+    <body>
+
+
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed"
+                            data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                            aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span> <span
+                            class="icon-bar"></span> <span class="icon-bar"></span> <span
+                            class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#" th:href="@{/}">Home</a>
+                </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/pedidos}">Pedidos</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/clientes}">Clientes</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/productos}">Productos</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/servicios}">Servicios</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Cerrar
+                                sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <div class="container">
+
+            <div class="container">
+                <div><b>ID PEDIDO: </b><span th:text="${pedido.idPedido}"></span></div>
+                <div><b>FECHA DEL PEDIDO: </b><span th:text="${pedido.fecha}"></span></div>
+            </div>
+            <div>
+                <h2>Cliente</h2>
+                <br>
+                <div><b>Nombres: </b><span th:text="${pedido.persona.nombre}"></span></div>
+                <div><b>Apellidos: </b><span th:text="${pedido.persona.apellido}"></span></div>
+                <div><b>Documento: </b><span th:text="${pedido.persona.dni}"></span></div>
+                <div><b>Razon Social: </b><span th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.razonSocial} : '--'" ></span></div>
+                <div><b>Cuit: </b><span th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.cuit} : '--'" ></span></div>
+                <div><b>Fecha de inicio actividades: </b><span th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.fecha} : '--'" ></span></div>
+            </div>
+            <div class="container">
+                <br>
+                <br>
+                <h2>Items del pedido</h2>
+                <br>
+
+                <table class="table table-bordered">
+                    <thead >
+                        <tr>
+                            <th>Descripcion</th>
+                            <th>Unidades</th>
+                            <th>Precio</th>
+                            <th>Mantenimiento</th>
+                            <th>Garantia (años)</th>
+                            <th>IVA</th>
+                            <th>IIBB</th>
+                            <th>subtotal</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr th:each="item : ${itemsPedido}">
+                            <td th:text="${item.descripcion}"></td>
+                            <td th:text="${item.unidades}"></td>
+                            <td th:text="${item.precio}"></td>
+                            <td th:text="${item.mantenimiento}"></td>
+                            <td th:text="${item.garantia}"></td>
+                            <td th:text="${item.IVA}"></td>
+                            <td th:text="${item.IIBB}"></td>
+                            <td th:text="${item.subtotal}"></td>
+                            <td th:text="${item.total}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="container">
+                <div><b>Descuentos/Pedido :</b><span th:text="${pedido.descuento}"></span></div>
+                <div><b>Subtotal/Pedido :</b><span th:text="${pedido.subtotal}"></span></div>
+                <div><b>Total/Pedido :</b><span th:text="${pedido.total}"></span></div>
+            </div>
+        </div>
+    </div>
+
+
+
+    
+    <!-- Latest compiled and minified JavaScript -->
+    <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+</body>
+</html>

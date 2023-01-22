@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <meta charset="utf-8">
+        <title>Inicio</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+              crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+              integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+              crossorigin="anonymous">
+    </head>
+    <body>
+
+
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed"
+                            data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                            aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span> <span
+                            class="icon-bar"></span> <span class="icon-bar"></span> <span
+                            class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#" th:href="@{/}">Home</a>
+                </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/pedidos}">Pedidos</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/clientes}">Clientes</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/productos}">Productos</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/servicios}">Servicios</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Cerrar
+                                sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <div class="container">
+            <h6 sec:authentication="principal.username"></h6>  
+            <a class="btn btn-success" th:href="@{/pedidos}" >Volver al pedido</a>
+            <br>
+            <h4>
+                Agregar al carrito
+            </h4>
+            <br> <br>
+            <div class="container">
+                <h5>Listado de productos</h5>
+                <table class="table table-bordered">
+                    <thead >
+                        <tr>
+                            <th>Descripcion</th>
+                            <th>Preccio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="producto : ${productos}">
+                            <td th:text="${producto.descripcion}"></td>
+                            <td th:text="${producto.precio}"></td>
+                            <td>
+                                <a th:href="@{/carrito/producto/{id} (id=${producto.idBien})}" th:object="${producto}" class="btn btn-success"> Agregar</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+
+
+            <br> <br>
+            <div class="container">
+                <h5>Listado de servicios</h5>
+                <table class="table table-bordered">
+                    <thead >
+                        <tr>
+                            <th>Descripcion</th>
+                            <th>Preccio</th>
+                            <th>Mantenimiento</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="servicio : ${servicios}">
+                            <td th:text="${servicio.descripcion}"></td>
+                            <td th:text="${servicio.precio}"></td>
+                            <td th:text="${servicio.mantenimiento}"></td>
+                            <td>
+                                <a th:href="@{carrito/servicio/{id} (id=${servicio.idBien})}" th:object="${servicio}" class="btn btn-success"> Agregar</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <br> <br>
+        <div class="container">
+            <h5>Listado de Items</h5>
+            <a th:href="@{/pedidos/confirmacion}" th:object="${item}" class="btn btn-warning">Confirmar Pedido</a>
+            <br>
+            <br>
+            <table class="table table-bordered">
+                <thead >
+                    <tr>
+                        <th>Descripcion</th>
+                        <th>Unidades</th>
+                        <th>Precio</th>
+                        <th>Mantenimiento</th>
+                        <th>Garantia (años)</th>
+                        <th>IVA</th>
+                        <th>IIBB</th>
+                        <th>subtotal</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <tr th:each="item : ${items}">
+                        <td th:text="${item.descripcion}"></td>
+                        <td th:text="${item.unidades}"></td>
+                        <td th:text="${item.precio}"></td>
+                        <td th:text="${item.mantenimiento}"></td>
+                        <td th:text="${item.garantia}"></td>
+                        <td th:text="${item.IVA}"></td>
+                        <td th:text="${item.IIBB}"></td>
+                        <td th:text="${item.subtotal}"></td>
+                        <td th:text="${item.total}"></td>
+                        
+                        <td>
+                            <a th:href="@{carrito/eliminar/{id} (id=${item.idItem})}" th:object="${item}" class="btn btn-danger"> Eliminar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

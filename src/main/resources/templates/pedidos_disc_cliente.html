@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <meta charset="utf-8">
+        <title>Inicio</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+              crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+              integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+              crossorigin="anonymous">
+    </head>
+    <body>
+
+
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed"
+                            data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                            aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span> <span
+                            class="icon-bar"></span> <span class="icon-bar"></span> <span
+                            class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#" th:href="@{/}">Home</a>
+                </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/pedidos}">Pedidos</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/clientes}">Clientes</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/productos}">Productos</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/servicios}">Servicios</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Cerrar
+                                sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <div class="container">
+            <br>
+            <br>
+            
+            <div class="container">
+                <h1>Listado de pedidos asociados al cliente</h1>
+                <table class="table table-bordered">
+                    <thead >
+                        <tr>
+                            <th>ID</th>
+                            <th>Descuento</th>
+                            <th>subtotal</th>
+                            <th>Total</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Empresa</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr th:each="pedido : ${pedidos}">
+                            <td th:text="${pedido.idPedido}"></td>
+                            <td th:text="${pedido.descuento}"></td>
+                            <td th:text="${pedido.subtotal}"></td>
+                            <td th:text="${pedido.total}"></td>
+                            <td th:text="${pedido.persona ne null} ? ${pedido.persona.nombre}"></td>
+                            <td th:text="${pedido.persona ne null} ? ${pedido.persona.apellido}"></td>
+                            <!--<td th:text="${pedido.persona.dni}"></td>-->
+                            <td th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.razonSocial} : ' '" ></td>
+                            <!--<td th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.cuit} : ' '" ></td>-->
+                            <!--<td th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.fecha} : ' '" ></td>-->
+                            <td>
+                                <a th:href="@{/pedidos/detalles/{id}
+                                   (id=${pedido.idPedido})}" th:object="${pedido}" 
+                                   class="btn btn-info"> Detalles</a> 
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>    
+            </div>
+
+
+
+
+
+            <script type="text/javascript">
+                function limpiarCampos(){
+                window.location='/pedidos';
+                }
+            </script>
+            <!-- Latest compiled and minified JavaScript -->
+            <script
+                src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    </body>
+</html>

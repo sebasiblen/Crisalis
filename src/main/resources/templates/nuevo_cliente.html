@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <meta charset="utf-8">
+        <title>Inicio</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+              crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+              integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+              crossorigin="anonymous">
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed"
+                            data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                            aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span> <span
+                            class="icon-bar"></span> <span class="icon-bar"></span> <span
+                            class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#" th:href="@{/}">Home</a>
+                </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/pedidos}">Pedidos</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/clientes}">Clientes</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/productos}">Productos</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/servicios}">Servicios</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Cerrar
+                                sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <br>
+        <br>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 container justyfi-conter-center card">
+                    <h1 class="text-center">Registro Cliente</h1>
+                    <div class="card-body">
+                        <form th:action="@{/clientes/formulario}" th:object="${cliente}" method="POST">
+                            <div class="form-group">
+                                <label>Nombre: </label>
+                                <input type="text" name="nombre" th:field="*{nombre}" placeholder="Digite el nombre del cliente" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Apellido: </label>
+                                <input type="text" name="apellido" th:field="*{apellido}" placeholder="Digite el apellido del cliente"required>
+                            </div>
+                            <div class="form-group">
+                                <label>DNI: </label>
+                                <input type="text" name="dni" th:field="*{dni}" placeholder="Digite el dni del cliente" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo Impuesto Persona: </label>
+                                <select name="tipo">
+                                    <option th:each="valor : ${T(com.cristalis.app.modelo.TipoClienteEnum).values()}" 
+                                            th:value="${valor}"
+                                            th:text="${valor.name()}"
+                                            th:field="*{tipo}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Cuit: </label>
+                                <input type="text" name="cuit" th:field="*{cuit}" placeholder="Digite el cuit de la empresa">
+                            </div>
+                            <div class="form-group">
+                                <label>Razon socal: </label>
+                                <input type="text" name="razon" th:field="*{razonSocial}" placeholder="Digite el nombre de la  empresa">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Inicio Actividades(empresa): </label>
+                                <input type="date" name="fecha" th:field="*{fecha}">
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo Impuesto Empresa: </label>
+                                <select name="tipo">
+                                    <option th:each="valor : ${T(com.cristalis.app.modelo.TipoClienteEnum).values()}" 
+                                            th:value="${valor}"
+                                            th:text="${valor.name()}"
+                                            th:field="*{tipo}"></option>
+                                </select>
+                            </div>
+                            <div class="box-footer">
+                                <button class="btn btn-success">Guardar</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Latest compiled and minified JavaScript -->
+        <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    </body>
+</html>
