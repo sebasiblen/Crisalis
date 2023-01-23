@@ -4,6 +4,7 @@
  */
 package com.cristalis.app.controladores;
 
+import com.cristalis.app.controladores.DTO.ItemDTO;
 import com.cristalis.app.modelo.Empresa;
 import com.cristalis.app.modelo.Item;
 import com.cristalis.app.modelo.Pedido;
@@ -153,9 +154,42 @@ public class PedidoControlador {
         modelo.addAttribute("pedido", pedido);
         return "editar_pedido";
     }
-
+    
     /**
-     * EDITAR EL CLIENTE DEL PEDIDO (ETAPAS : 0 )
+     * EDITAR ITEMS DEL PEDIDO
+     * @param id
+     * @param modelo
+     * @return 
+     */
+    @GetMapping("/pedidos/editar_pedido/editar_items/{id}")
+    public String EditarItemsPedidoFormulario(@PathVariable Long id,Model modelo){
+        pedidoTemp = pedidoServicio.obtenerPedidoPorID(id);
+        modelo.addAttribute("pedido", pedidoTemp);
+        modelo.addAttribute("items", pedidoTemp.getItems());
+        return "editar_items_pedido";
+    }
+    
+    @GetMapping("/pedidos/editar_pedido/editar_items/item/{id}")
+    public String EditarItemSeleccionado(@PathVariable Long id, Model modelo){
+        Item item = itemServicio.obtenerItemPorID(id);
+        modelo.addAttribute("item", item);
+        return "editar_item_seleccionado_pedido";
+    }
+    
+    @PostMapping("/pedidos/editar_pedido/editar_items/item/{id}")
+    public String ActualizarItemSeleccionado(@PathVariable Long id, @ModelAttribute Item item){
+        Item itemActualizado = itemServicio.obtenerItemPorID(id);
+        itemActualizado.setMantenimiento(item.getMantenimiento());
+        itemActualizado.setGarantia(item.getGarantia());
+        itemActualizado.setUnidades(item.getUnidades());
+        
+        itemServicio.guardarItem(itemActualizado);
+        var v = pedidoTemp.getIdPedido();
+        return "redirect:/pedidos/editar_pedido/editar_items/"+v;
+    }
+    
+    /**
+     * EDITAR EL CLIENTE DEL PEDIDO
      *
      * @param id
      * @param modelo

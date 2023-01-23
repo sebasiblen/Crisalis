@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cristalis.app.modelo;
 
 import java.io.Serializable;
@@ -98,21 +94,27 @@ public class Item implements Serializable {
     
     
     public double Total() {
-        if (this.producto != null
-                && this.producto.getTipo_impuesto()==TipoImpuestoEnum.GRAVADO) {
+        if (this.producto.getTipo_impuesto()==TipoImpuestoEnum.GRAVADO) {
             this.total += ((this.producto.getPrecio()
                     + (this.producto.getPrecio() * this.IVA)
                     + (this.producto.getPrecio() * this.IIBB)) * this.unidades);
             if (this.garantia > 0) {
                 this.total += (this.producto.getPrecio() * 0.02) * this.garantia;
             }
+        }else {
+            this.IVA = 0;
+            this.IIBB = 0;
         }
+        
         if (this.servicio != null
                 && this.servicio.getTipo_impuesto()==TipoImpuestoEnum.GRAVADO) {
             this.total += ((this.servicio.getPrecio()
                     + (this.servicio.getPrecio() * this.IVA)
                     + (this.servicio.getPrecio() * this.IIBB)
                     + this.servicio.getMantenimiento()) * this.unidades);
+        }else {
+            this.IVA = 0;
+            this.IIBB = 0;
         }
         return this.total;
     }
