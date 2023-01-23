@@ -53,12 +53,11 @@ public class Item implements Serializable {
     @OneToOne
     @JoinColumn(name = "id_servicio", referencedColumnName = "idBien")
     private Servicio servicio;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="pedido_id")
+    @JoinColumn(name = "pedido_id")
     private Pedido pedido;
-    
-    
+
     // constructores
     public Item() {
         this.unidades = 1;
@@ -69,18 +68,20 @@ public class Item implements Serializable {
         this.producto = producto;
         this.IIBB = 0.035;
         this.subtotal = SubTotal();
+        this.total = Total();
     }
 
     public Item(Servicio servicio) {
         this.servicio = servicio;
         this.IIBB = 0.035;
         this.subtotal = SubTotal();
+        this.total = Total();
     }
-    
-    
+
     /**
      * Subtotales de los productos , sin(IMPUESTOS)
-     * @return 
+     *
+     * @return
      */
     public double SubTotal() {
         if (this.producto != null) {
@@ -91,30 +92,21 @@ public class Item implements Serializable {
         }
         return this.subtotal;
     }
-    
-    
+
     public double Total() {
-        if (this.producto.getTipo_impuesto()==TipoImpuestoEnum.GRAVADO) {
+        if (this.producto != null) {
             this.total += ((this.producto.getPrecio()
                     + (this.producto.getPrecio() * this.IVA)
                     + (this.producto.getPrecio() * this.IIBB)) * this.unidades);
             if (this.garantia > 0) {
                 this.total += (this.producto.getPrecio() * 0.02) * this.garantia;
             }
-        }else {
-            this.IVA = 0;
-            this.IIBB = 0;
         }
-        
-        if (this.servicio != null
-                && this.servicio.getTipo_impuesto()==TipoImpuestoEnum.GRAVADO) {
-            this.total += ((this.servicio.getPrecio()
-                    + (this.servicio.getPrecio() * this.IVA)
-                    + (this.servicio.getPrecio() * this.IIBB)
-                    + this.servicio.getMantenimiento()) * this.unidades);
-        }else {
-            this.IVA = 0;
-            this.IIBB = 0;
+        if (this.servicio != null) {
+        this.total += ((this.servicio.getPrecio()
+                + (this.servicio.getPrecio() * this.IVA)
+                + (this.servicio.getPrecio() * this.IIBB)
+                + this.servicio.getMantenimiento()) * this.unidades);
         }
         return this.total;
     }

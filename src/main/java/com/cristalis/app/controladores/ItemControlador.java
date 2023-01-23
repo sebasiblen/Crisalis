@@ -55,6 +55,7 @@ public class ItemControlador {
         Producto p = productoServicios.obtenerProductoPorID(id);
         item.setProducto(p);
         item.setSubtotal(item.SubTotal());
+        item.setTotal(item.Total());
         itemServicios.agregarItemAOrden(item);
         itemServicios.guardarItem(item);
         return "redirect:/carrito";
@@ -74,6 +75,7 @@ public class ItemControlador {
         Servicio s = servServicios.obtenerServicioPorID(id);
         item.setServicio(s);
         item.setSubtotal(item.SubTotal());
+        item.setTotal(item.Total());
         itemServicios.agregarItemAOrden(item);
         itemServicios.guardarItem(item);
         return "redirect:/carrito";
