@@ -66,12 +66,25 @@
             <div>
                 <h2>Cliente</h2>
                 <br>
-                <div><b>Nombres: </b><span th:text="${pedido.persona.nombre}"></span></div>
-                <div><b>Apellidos: </b><span th:text="${pedido.persona.apellido}"></span></div>
-                <div><b>Documento: </b><span th:text="${pedido.persona.dni}"></span></div>
-                <div><b>Razon Social: </b><span th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.razonSocial} : '--'" ></span></div>
-                <div><b>Cuit: </b><span th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.cuit} : '--'" ></span></div>
-                <div><b>Fecha de inicio actividades: </b><span th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.fecha} : '--'" ></span></div>
+                <div th:if="${pedido.persona ne null}">
+                    <div><b>Nombres: </b><span th:text="${pedido.persona.nombre}"></span></div>
+                    <div><b>Apellidos: </b><span th:text="${pedido.persona.apellido}"></span></div>
+                    <div><b>Documento: </b><span th:text="${pedido.persona.dni}"></span></div>
+                    <div><b>Tipo Comprador </b><span th:text="${pedido.persona.tipo}"></span></div>
+                </div>
+                <div th:if="${pedido.empresa ne null}">
+                    <div><b>Razon Social: </b><span th:text="${pedido.empresa ne null} ? ${pedido.empresa.razonSocial} : '--'" ></span></div>
+                    <div><b>Cuit: </b><span th:text="${pedido.empresa ne null} ? ${pedido.empresa.cuit} : '--'" ></span></div>
+                    <div><b>Fecha de inicio actividades: </b><span th:text="${pedido.empresa ne null} ? ${pedido.empresa.fecha} : '--'" ></span></div>
+                    <div><b>Tipo Cliente: </b><span th:text="${pedido.empresa ne null} ? ${pedido.empresa.tipo} : '--'" ></span></div>
+                    
+                    <br>
+                    <h2>Responsable asociado</h2>
+                        <div><b>Nombre: </b><span th:text="${pedido.empresa.persona.nombre}"></span></div>
+                        <div><b>Apellidos: </b><span th:text="${pedido.empresa.persona.apellido}"></span></div>
+                        <div><b>Documento: </b><span th:text="${pedido.empresa.persona.dni}"></span></div>
+                    <br>
+                </div>
             </div>
             <div class="container">
                 <br>
@@ -101,15 +114,15 @@
                             <td th:text="${item.precio}"></td>
                             <td th:text="${item.mantenimiento}"></td>
                             <td th:text="${item.garantia}"></td>
-                            <td th:text="${item.IVA}"></td>
-                            <td th:text="${item.IIBB}"></td>
-                            <td th:text="${item.subtotal}"></td>
-                            <td th:text="${item.total}"></td>
+                            <td th:text="${pedido.IVA}"></td>
+                            <td th:text="${pedido.IIBB}"></td>
+                            <td th:text="${pedido.subtotal}"></td>
+                            <td th:text="${pedido.total}"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            
+
             <div class="container">
                 <div><b>Descuentos/Pedido :</b><span th:text="${pedido.descuento}"></span></div>
                 <div><b>Subtotal/Pedido :</b><span th:text="${pedido.subtotal}"></span></div>
@@ -120,7 +133,7 @@
 
 
 
-    
+
     <!-- Latest compiled and minified JavaScript -->
     <script
         src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"

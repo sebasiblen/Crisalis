@@ -29,15 +29,14 @@ public interface PedidoRepositorio extends JpaRepository<Pedido, Long> {
         @palabra VARCHAR (255)
         AS
         BEGIN
-            select * from pedido p, cliente c 
-            where (((c.apellido like '%'+ @palabra + '%') 
-            or (c.dni like '%'+ @palabra +'%')) 
-            AND c.id_cliente = p.persona_id)
+            select * from pedido p, cliente c
+            where (c.apellido like '%'+ @palabra + '%' AND c.id_cliente = p.persona_id)
+            OR (c.razon_social like '%'+ @palabra +'%' AND c.id_cliente = p.empresa_id)
         END
      */
     @Procedure
     public List<Pedido> sp_pedidos_disc_cliente(@Param("palabra") String cliente);
-    
+
     /*
         CREATE PROC sp_pedidos_disc_servicio
         @palabra VARCHAR (255)
@@ -46,10 +45,10 @@ public interface PedidoRepositorio extends JpaRepository<Pedido, Long> {
             select * from pedido p, item i, servicio s
         where ((s.descripcion like '%'+ 'er' + '%')AND (i.id_servicio > 0 and i.pedido_id = p.id_pedido))
         END
-    */
+     */
     @Procedure
     public List<Pedido> sp_pedidos_disc_servicio(@Param("palabra") String servicio);
-    
+
     /*
         CREATE PROC sp_pedidos_disc_producto
         @palabra VARCHAR (255)
@@ -58,7 +57,7 @@ public interface PedidoRepositorio extends JpaRepository<Pedido, Long> {
             select * from pedido p, item i, producto prod
         where ((prod.descripcion like '%'+ 'er' + '%')AND (i.id_producto > 0 and i.pedido_id = p.id_pedido))
         END
-    */
+     */
     @Procedure
     public List<Pedido> sp_pedidos_disc_producto(@Param("palabra") String producto);
 

@@ -130,10 +130,7 @@
                         <th>Precio</th>
                         <th>Mantenimiento</th>
                         <th>Garantia (años)</th>
-                        <th>IVA</th>
-                        <th>IIBB</th>
-                        <th>subtotal</th>
-                        <th>Total</th>
+                        <th>Subtotal</th>
                     </tr>
                 </thead>
                 
@@ -144,11 +141,7 @@
                         <td th:text="${item.precio}"></td>
                         <td th:text="${item.mantenimiento}"></td>
                         <td th:text="${item.garantia}"></td>
-                        <td th:text="${item.IVA}"></td>
-                        <td th:text="${item.IIBB}"></td>
                         <td th:text="${item.subtotal}"></td>
-                        <td th:text="${item.total}"></td>
-                        
                         <td>
                             <a th:href="@{carrito/eliminar/{id} (id=${item.idItem})}" th:object="${item}" class="btn btn-danger"> Eliminar</a>
                         </td>

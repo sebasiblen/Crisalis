@@ -37,12 +37,6 @@ public class Item implements Serializable {
     private double mantenimiento;
     @Column(name = "subtotal")
     private double subtotal;
-    @Column(name = "IVA")
-    private double IVA;
-    @Column(name = "IIBB")
-    private double IIBB;
-    @Column(name = "total")
-    private double total;
 
     // Un item correspone a un producto
     @OneToOne(cascade = CascadeType.ALL)
@@ -61,21 +55,16 @@ public class Item implements Serializable {
     // constructores
     public Item() {
         this.unidades = 1;
-        this.IIBB = 0.035;
     }
 
     public Item(Producto producto) {
         this.producto = producto;
-        this.IIBB = 0.035;
-        this.subtotal = SubTotal();
-        this.total = Total();
+        SubTotal();
     }
 
     public Item(Servicio servicio) {
         this.servicio = servicio;
-        this.IIBB = 0.035;
-        this.subtotal = SubTotal();
-        this.total = Total();
+        SubTotal();
     }
 
     /**
@@ -91,23 +80,5 @@ public class Item implements Serializable {
             this.subtotal += (this.servicio.getPrecio() + this.servicio.getMantenimiento()) * this.unidades;
         }
         return this.subtotal;
-    }
-
-    public double Total() {
-        if (this.producto != null) {
-            this.total += ((this.producto.getPrecio()
-                    + (this.producto.getPrecio() * this.IVA)
-                    + (this.producto.getPrecio() * this.IIBB)) * this.unidades);
-            if (this.garantia > 0) {
-                this.total += (this.producto.getPrecio() * 0.02) * this.garantia;
-            }
-        }
-        if (this.servicio != null) {
-        this.total += ((this.servicio.getPrecio()
-                + (this.servicio.getPrecio() * this.IVA)
-                + (this.servicio.getPrecio() * this.IIBB)
-                + this.servicio.getMantenimiento()) * this.unidades);
-        }
-        return this.total;
     }
 }

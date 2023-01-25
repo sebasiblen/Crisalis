@@ -136,6 +136,7 @@ public class PedidoControlador {
         }
         List<Pedido> pedidos = pedidoServicio.pedidoDiscriminadoPorCliente(cliente);
         modelo.addAttribute("pedidos", pedidos);
+        modelo.addAttribute("pedido", p);
         return "pedidos_disc_cliente";
     }
 
@@ -183,6 +184,9 @@ public class PedidoControlador {
         itemActualizado.setUnidades(item.getUnidades());
         
         itemServicio.guardarItem(itemActualizado);
+        
+        // falta actualiar los valores del pedido - tras la edicion del item
+        
         var v = pedidoTemp.getIdPedido();
         return "redirect:/pedidos/editar_pedido/editar_items/"+v;
     }

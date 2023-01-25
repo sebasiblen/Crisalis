@@ -60,10 +60,10 @@ public class IItemServicio implements ItemServicio {
         dto.setUnidades(item.getUnidades());
         dto.setGarantia(item.getGarantia());
         dto.setMantenimiento(item.getMantenimiento());
-        dto.setSubtotal(item.getSubtotal());
-        dto.setIVA(item.getIVA());
-        dto.setIIBB(item.getIIBB());
-        dto.setTotal(item.getTotal());
+//        dto.setSubtotal(item.getSubtotal());
+//        dto.setIVA(item.getIVA());
+//        dto.setIIBB(item.getIIBB());
+//        dto.setTotal(item.getTotal());
         dto.setProducto(item.getProducto());
         dto.setServicio(item.getServicio());
 

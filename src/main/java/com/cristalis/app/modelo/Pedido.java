@@ -37,6 +37,10 @@ public class Pedido implements Serializable {
 
     @Column(name = "subtotal")
     private double subtotal;
+    @Column(name = "IVA")
+    private double IVA;
+    @Column(name = "IIBB")
+    private double IIBB;
     @Column(name = "descuento")
     private double descuento;
     @Column(name = "total")
@@ -69,22 +73,20 @@ public class Pedido implements Serializable {
         this.fecha = new Date();
         this.persona = persona;
         this.items = items;
-        this.subtotal = SubtotalDelPedido();
         CalcularImpuestosSegunElTipoDelCliente();
-        this.total = PrecioFinalDelPedido();
         this.descuento = AplicarDescuentos();
-//        CrearDTOdeLosItems();
+        this.subtotal = SubtotalDelPedido();
+        Total();
     }
 
     public Pedido(Empresa empresa, List<Item> items) {
         this.fecha = new Date();
         this.empresa = empresa;
         this.items = items;
-        this.subtotal = SubtotalDelPedido();
         CalcularImpuestosSegunElTipoDelCliente();
-        this.total = PrecioFinalDelPedido();
         this.descuento = AplicarDescuentos();
-//        CrearDTOdeLosItems();
+        this.subtotal = SubtotalDelPedido();
+        Total();
     }
 
     /**
@@ -107,9 +109,6 @@ public class Pedido implements Serializable {
                 dto.setGarantia(item.getGarantia());
                 dto.setMantenimiento(item.getMantenimiento());
                 dto.setSubtotal(item.getSubtotal());
-                dto.setIVA(item.getIVA());
-                dto.setIIBB(item.getIIBB());
-                dto.setTotal(item.getTotal());
                 dto.setProducto(item.getProducto());
                 dto.setServicio(item.getServicio());
 
@@ -158,7 +157,7 @@ public class Pedido implements Serializable {
     private double PrecioFinalDelPedido() {
         double precioFinal = 0.0;
         for (ItemDTO item : CrearDTOdeLosItems()) {
-            precioFinal += item.getTotal();
+            precioFinal += this.total;
         }
         return precioFinal;
     }
@@ -230,28 +229,17 @@ public class Pedido implements Serializable {
      * Asignacion de los porcentajes de iva
      */
     public void CalcularImpuestosSegunElTipoDelCliente() {
-        double iva = 0;
         if (this.empresa != null) {
             switch (this.empresa.getTipo()) {
                 case EXPORTADOR:
-                    iva = 0.37;
-                    for (Item item : items) {
-                        item.setIVA(iva);
-                        item.Total();
-                    }
+                    this.IVA = 0.37;
+                    this.IIBB = 0.035;
                     break;
                 case HOTEL_SERVICIO_ALOJAMIENTO_TURISTA:
-                    iva = 0.37;
-                    for (Item item : items) {
-                        item.setIVA(iva);
-                        item.Total();
-                    }
+                    this.IVA = 0.37;
+                    this.IIBB = 0.035;
                     break;
                 case EXENTO:
-                    for (Item item : items) {
-                        item.setIVA(iva);
-                        item.Total();
-                    }
                     break;
                 default:
                     throw new AssertionError();
@@ -259,18 +247,12 @@ public class Pedido implements Serializable {
         } else {
             switch (this.persona.getTipo()) {
                 case MONOTRIBUTISTA:
-                    iva = 0.27;
-                    for (Item item : items) {
-                        item.setIVA(iva);
-                        item.Total();
-                    }
+                    this.IVA = 0.27;
+                    this.IIBB = 0.035;
                     break;
                 case CONSUMIDOR_FINAL:
-                    iva = 0.21;
-                    for (Item item : items) {
-                        item.setIVA(iva);
-                        item.Total();
-                    }
+                    this.IVA = 0.21;
+                    this.IIBB = 0.035;
                     break;
                 default:
                     throw new AssertionError();
@@ -279,11 +261,34 @@ public class Pedido implements Serializable {
     }
 
     public void AgregarImpuestosExtras() {
-        double impuestoFinal = 0;
         for (Impuesto impuesto : impuestos) {
-            impuestoFinal += impuesto.getPorcentaje();
+            this.total = this.total + (this.total * impuesto.getPorcentaje());
         }
-        this.total = this.total + (this.total * impuestoFinal);
+    }
 
+    /**
+     * Subtotales de los productos , sin(IMPUESTOS)
+     *
+     * @return
+     */
+    public double Total() {
+        for (Item item : items) {
+            if (item.getProducto() != null) {
+                this.total += ((item.getProducto().getPrecio()
+                        + (item.getProducto().getPrecio() * this.IVA)
+                        + (item.getProducto().getPrecio() * this.IIBB)) * item.getUnidades());
+                if (item.getGarantia() > 0) {
+                    this.total += (item.getProducto().getPrecio() * 0.02) * item.getGarantia();
+                }
+            }
+            if (item.getServicio() != null) {
+                this.total += ((item.getServicio().getPrecio()
+                        + (item.getServicio().getPrecio() * this.IVA)
+                        + (item.getServicio().getPrecio() * this.IIBB)
+                        + item.getServicio().getMantenimiento()) * item.getUnidades());
+            }
+        }
+
+        return this.total;
     }
 }

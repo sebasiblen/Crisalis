@@ -60,7 +60,7 @@
         <div class="container">
             <br>
             <br>
-            
+
             <div class="container">
                 <h1>Listado de pedidos asociados al cliente</h1>
                 <table class="table table-bordered">
@@ -70,11 +70,17 @@
                             <th>Descuento</th>
                             <th>subtotal</th>
                             <th>Total</th>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Empresa</th>
-                            <th></th>
-                        </tr>
+                            <div th:if="${pedido.persona ne null}">
+                                <th th:if="${pedido.persona ne null}" th:text="Nombre">Nombre</th>
+                                <th th:if="${pedido.persona ne null}" th:text="Apellido"></th>
+                                <th th:text="${pedido.persona.empresa ne null} ? 'Empresa' : 'Empresa'" ></th>
+                            </div>
+                            <div th:if="${pedido.empresa ne null}">
+                                <th th:if="${pedido.empresa ne null}" th:text="'Razon Social'"></th>
+                                <th th:if="${pedido.empresa ne null}" th:text="Cuit"></th>
+                            </div>
+                    <th></th>
+                    </tr>
                     </thead>
 
                     <tbody>
@@ -83,18 +89,27 @@
                             <td th:text="${pedido.descuento}"></td>
                             <td th:text="${pedido.subtotal}"></td>
                             <td th:text="${pedido.total}"></td>
-                            <td th:text="${pedido.persona ne null} ? ${pedido.persona.nombre}"></td>
-                            <td th:text="${pedido.persona ne null} ? ${pedido.persona.apellido}"></td>
-                            <!--<td th:text="${pedido.persona.dni}"></td>-->
-                            <td th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.razonSocial} : ' '" ></td>
-                            <!--<td th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.cuit} : ' '" ></td>-->
-                            <!--<td th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.fecha} : ' '" ></td>-->
-                            <td>
-                                <a th:href="@{/pedidos/detalles/{id}
-                                   (id=${pedido.idPedido})}" th:object="${pedido}" 
-                                   class="btn btn-info"> Detalles</a> 
-                            </td>
-                        </tr>
+                    <div th:if="${pedido.persona ne null}">
+                        <td th:text="${pedido.persona ne null} ? ${pedido.persona.nombre} : ''" ></td>
+                        <td th:text="${pedido.persona ne null} ? ${pedido.persona.apellido} : ''"></td>
+                        <!--<td th:text="${pedido.persona.dni}"></td>-->
+                        <td th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.razonSocial} : ''" ></td>
+                        <!--<td th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.cuit} : ' '" ></td>-->
+                        <!--<td th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.fecha} : ' '" ></td>-->
+                    </div>
+                    <div th:if="${pedido.empresa ne null}">
+                        <td th:text="${pedido.empresa ne null} ? ${pedido.empresa.razonSocial} : '--'" ></td>
+                        <td th:text="${pedido.empresa ne null} ? ${pedido.empresa.cuit} : '--'" ></td>
+                        <!--<td th:text="${pedido.persona.dni}"></td>-->
+                        <!--<td th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.cuit} : ' '" ></td>-->
+                        <!--<td th:text="${pedido.persona.empresa ne null} ? ${pedido.persona.empresa.fecha} : ' '" ></td>-->
+                    </div>
+                    <td>
+                        <a th:href="@{/pedidos/detalles/{id}
+                           (id=${pedido.idPedido})}" th:object="${pedido}" 
+                           class="btn btn-info"> Detalles</a> 
+                    </td>
+                    </tr>
                     </tbody>
                 </table>    
             </div>
