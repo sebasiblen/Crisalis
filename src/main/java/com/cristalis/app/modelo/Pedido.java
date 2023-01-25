@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
@@ -59,7 +60,7 @@ public class Pedido implements Serializable {
     private Empresa empresa;
 
     // Un pedido le corresponden muchos items
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany(mappedBy = "pedido", fetch = FetchType.EAGER)
     private List<Item> items;
 
     @OneToMany(mappedBy = "pedido")
@@ -77,6 +78,7 @@ public class Pedido implements Serializable {
         this.descuento = AplicarDescuentos();
         this.subtotal = SubtotalDelPedido();
         Total();
+//        AgregarImpuestosExtras();
     }
 
     public Pedido(Empresa empresa, List<Item> items) {
@@ -87,11 +89,12 @@ public class Pedido implements Serializable {
         this.descuento = AplicarDescuentos();
         this.subtotal = SubtotalDelPedido();
         Total();
+//        AgregarImpuestosExtras();
     }
 
     /**
      * Paso todos los items que le fueron asignados al pedido a DTO.
-     *
+     * para ver en detalles
      * @return
      */
     public List<ItemDTO> CrearDTOdeLosItems() {
@@ -150,19 +153,6 @@ public class Pedido implements Serializable {
     }
 
     /**
-     * Precio TOTAL del pedido.
-     *
-     * @return
-     */
-    private double PrecioFinalDelPedido() {
-        double precioFinal = 0.0;
-        for (ItemDTO item : CrearDTOdeLosItems()) {
-            precioFinal += this.total;
-        }
-        return precioFinal;
-    }
-
-    /**
      * Devuelve un boolean si fue solicitado un Servicio en el pedido.
      *
      * @return
@@ -212,7 +202,7 @@ public class Pedido implements Serializable {
      *
      * @return
      */
-    private double AplicarDescuentos() {
+    public double AplicarDescuentos() {
 
         double descuentoA = CalcularTopeDescuento();
 
@@ -226,7 +216,7 @@ public class Pedido implements Serializable {
     }
 
     /**
-     * Asignacion de los porcentajes de iva
+     * Asignacion de los porcentajes de iva dependiendo el tipo de comprador
      */
     public void CalcularImpuestosSegunElTipoDelCliente() {
         if (this.empresa != null) {
@@ -236,7 +226,7 @@ public class Pedido implements Serializable {
                     this.IIBB = 0.035;
                     break;
                 case HOTEL_SERVICIO_ALOJAMIENTO_TURISTA:
-                    this.IVA = 0.37;
+                    this.IVA = 0.35;
                     this.IIBB = 0.035;
                     break;
                 case EXENTO:
@@ -260,6 +250,9 @@ public class Pedido implements Serializable {
         }
     }
 
+    /**
+     * Impuestos extras que se quieran agregar
+     */
     public void AgregarImpuestosExtras() {
         for (Impuesto impuesto : impuestos) {
             this.total = this.total + (this.total * impuesto.getPorcentaje());
@@ -267,9 +260,8 @@ public class Pedido implements Serializable {
     }
 
     /**
-     * Subtotales de los productos , sin(IMPUESTOS)
-     *
-     * @return
+     * Costo total del pedido (con IVA y IIBB) despendiendo el tipo de comprador
+     * @return 
      */
     public double Total() {
         for (Item item : items) {
@@ -285,7 +277,7 @@ public class Pedido implements Serializable {
                 this.total += ((item.getServicio().getPrecio()
                         + (item.getServicio().getPrecio() * this.IVA)
                         + (item.getServicio().getPrecio() * this.IIBB)
-                        + item.getServicio().getMantenimiento()) * item.getUnidades());
+                        + item.getServicio().getMantenimiento()));
             }
         }
 

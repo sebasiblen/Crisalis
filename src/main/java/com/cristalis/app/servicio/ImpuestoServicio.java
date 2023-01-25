@@ -23,17 +23,4 @@ public interface ImpuestoServicio {
     
     public void eliminarImpuesto(Long id);
     
-    // Lista de impuestos para asociar al pedido
-    public List<Impuesto> orden_impuestos();
-    
-    public void agregarImpuesto(Impuesto impuesto);
-    
-    public void borrarOrdenImpuesto();
-    
-    public void borrarImpuestoDeOrden(Impuesto impuesto);
-    
-    
-    
-    // Filtro
-    public List<Impuesto> filtrarImpuestosPorDescripcion(String descripcion);
 }

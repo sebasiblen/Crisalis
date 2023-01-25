@@ -128,6 +128,9 @@
                                 <a th:href="@{pedidos/ver/{id}
                                    (id=${pedido.idPedido})}" th:object="${pedido}" 
                                    class="btn btn-info"> Ver</a> 
+                                <a th:href="@{pedidos/impuestos_extras/{id}
+                                   (id=${pedido.idPedido})}" th:object="${pedido}" 
+                                   class="btn btn-secundary">Impuestos</a> 
                             </td>
                         </tr>
                     </tbody>

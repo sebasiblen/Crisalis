@@ -7,6 +7,7 @@ package com.cristalis.app.controladores;
 import com.cristalis.app.modelo.Item;
 import com.cristalis.app.modelo.Producto;
 import com.cristalis.app.modelo.Servicio;
+import com.cristalis.app.servicio.ImpuestoServicio;
 import com.cristalis.app.servicio.ItemServicio;
 import com.cristalis.app.servicio.ProductoServicio;
 import com.cristalis.app.servicio.ServServicio;
@@ -36,7 +37,7 @@ public class ItemControlador {
     public String Carrito(Model modelo) {
         modelo.addAttribute("productos", productoServicios.listadoProductos());
         modelo.addAttribute("servicios", servServicios.listadoServicios());
-        //orden actual
+        //orden actual de items
         modelo.addAttribute("items", itemServicios.orden());
         return "carrito";
     }
@@ -78,7 +79,7 @@ public class ItemControlador {
         itemServicios.guardarItem(item);
         return "redirect:/carrito";
     }
-
+    
     /**
      * Al eliminar el item de la liste que se va creando, lo tengo que eliminar
      * de la lista de items de la orden y del repo.

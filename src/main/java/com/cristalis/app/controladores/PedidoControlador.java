@@ -154,43 +154,41 @@ public class PedidoControlador {
         modelo.addAttribute("pedido", pedido);
         return "editar_pedido";
     }
-    
+
     /**
      * EDITAR ITEMS DEL PEDIDO
+     *
      * @param id
      * @param modelo
-     * @return 
+     * @return
      */
     @GetMapping("/pedidos/editar_pedido/editar_items/{id}")
-    public String EditarItemsPedidoFormulario(@PathVariable Long id,Model modelo){
+    public String EditarItemsPedidoFormulario(@PathVariable Long id, Model modelo) {
         pedidoTemp = pedidoServicio.obtenerPedidoPorID(id);
         modelo.addAttribute("pedido", pedidoTemp);
         modelo.addAttribute("items", pedidoTemp.getItems());
         return "editar_items_pedido";
     }
-    
+
     @GetMapping("/pedidos/editar_pedido/editar_items/item/{id}")
-    public String EditarItemSeleccionado(@PathVariable Long id, Model modelo){
+    public String EditarItemSeleccionado(@PathVariable Long id, Model modelo) {
         Item item = itemServicio.obtenerItemPorID(id);
         modelo.addAttribute("item", item);
         return "editar_item_seleccionado_pedido";
     }
-    
+
     @PostMapping("/pedidos/editar_pedido/editar_items/item/{id}")
-    public String ActualizarItemSeleccionado(@PathVariable Long id, @ModelAttribute Item item){
+    public String ActualizarItemSeleccionado(@PathVariable Long id, @ModelAttribute Item item) {
         Item itemActualizado = itemServicio.obtenerItemPorID(id);
         itemActualizado.setMantenimiento(item.getMantenimiento());
         itemActualizado.setGarantia(item.getGarantia());
         itemActualizado.setUnidades(item.getUnidades());
-        
+
         itemServicio.guardarItem(itemActualizado);
-        
-        // falta actualiar los valores del pedido - tras la edicion del item
-        
         var v = pedidoTemp.getIdPedido();
-        return "redirect:/pedidos/editar_pedido/editar_items/"+v;
+        return "redirect:/pedidos/editar_pedido/editar_items/" + v;
     }
-    
+
     /**
      * EDITAR EL CLIENTE DEL PEDIDO
      *
@@ -212,9 +210,12 @@ public class PedidoControlador {
 
         pedidoTemp.setEmpresa(null);
         pedidoTemp.setPersona(null);
-
+        pedidoTemp.setTotal(0.0);
         Persona persona = personaServicio.obtenerPersonaPorID(id);
         pedidoTemp.setPersona(persona);
+        pedidoTemp.CalcularImpuestosSegunElTipoDelCliente();
+        pedidoTemp.Total();
+        pedidoTemp.AplicarDescuentos();
         pedidoServicio.guardarPedido(pedidoTemp);
         pedidoTemp = null;
         return "redirect:/pedidos";
@@ -227,9 +228,12 @@ public class PedidoControlador {
         if (empresa.getPersona() != null) {
             pedidoTemp.setPersona(null);
             pedidoTemp.setEmpresa(null);
-            
+            pedidoTemp.setTotal(0.0);
             pedidoTemp.setEmpresa(empresa);
             pedidoTemp.setPersona(empresa.getPersona());
+            pedidoTemp.CalcularImpuestosSegunElTipoDelCliente();
+            pedidoTemp.Total();
+            pedidoTemp.AplicarDescuentos();
             pedidoServicio.guardarPedido(pedidoTemp);
         }
         pedidoTemp = null;

@@ -54,9 +54,6 @@
 
         <br>
         <br>
-        <br>
-        <br>
-
         <div class="container">
 
             <div class="container">
@@ -66,7 +63,7 @@
             <div>
                 <h2>Cliente</h2>
                 <br>
-                <div th:if="${pedido.persona ne null}">
+                <div th:if="${pedido.persona != null} and ${pedido.persona.empresa == null}">
                     <div><b>Nombres: </b><span th:text="${pedido.persona.nombre}"></span></div>
                     <div><b>Apellidos: </b><span th:text="${pedido.persona.apellido}"></span></div>
                     <div><b>Documento: </b><span th:text="${pedido.persona.dni}"></span></div>
@@ -86,6 +83,7 @@
                     <br>
                 </div>
             </div>
+            
             <div class="container">
                 <br>
                 <br>
@@ -103,7 +101,6 @@
                             <th>IVA</th>
                             <th>IIBB</th>
                             <th>subtotal</th>
-                            <th>Total</th>
                         </tr>
                     </thead>
 
@@ -116,8 +113,7 @@
                             <td th:text="${item.garantia}"></td>
                             <td th:text="${pedido.IVA}"></td>
                             <td th:text="${pedido.IIBB}"></td>
-                            <td th:text="${pedido.subtotal}"></td>
-                            <td th:text="${pedido.total}"></td>
+                            <td th:text="${item.subtotal}"></td>
                         </tr>
                     </tbody>
                 </table>
