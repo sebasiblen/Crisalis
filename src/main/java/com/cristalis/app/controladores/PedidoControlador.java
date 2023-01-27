@@ -5,10 +5,12 @@
 package com.cristalis.app.controladores;
 
 import com.cristalis.app.modelo.Empresa;
+import com.cristalis.app.modelo.Impuesto;
 import com.cristalis.app.modelo.Item;
 import com.cristalis.app.modelo.Pedido;
 import com.cristalis.app.modelo.Persona;
 import com.cristalis.app.servicio.EmpresaServicio;
+import com.cristalis.app.servicio.ImpuestoServicio;
 import com.cristalis.app.servicio.ItemServicio;
 import com.cristalis.app.servicio.PedidoServicio;
 import com.cristalis.app.servicio.PersonaServicio;
@@ -38,7 +40,8 @@ public class PedidoControlador {
     private EmpresaServicio empresaServicio;
     @Autowired
     private ItemServicio itemServicio;
-
+    @Autowired
+    private ImpuestoServicio impuestoServicio;
     /*
         Pedido para actualizar
      */
@@ -240,4 +243,51 @@ public class PedidoControlador {
         return "redirect:/pedidos";
     }
 
+    @GetMapping("/pedidos/impuestos_extras/{id}")
+    public String ImpuestosExtra(@PathVariable Long id, Model modelo) {
+        pedidoTemp = pedidoServicio.obtenerPedidoPorID(id);
+        modelo.addAttribute("impuestos", impuestoServicio.listadoImpuestos());
+        modelo.addAttribute("orden", impuestoServicio.orden());
+        return "impuesto_extra";
+    }
+
+    // Agregar Impuesto
+    @GetMapping("/pedidos/impuestos_extras/agregar_impuesto/{id}")
+    public String AgregarImpuestosExtraOrden(@PathVariable Long id,
+            Model modelo) {
+        modelo.addAttribute("impuesto", impuestoServicio.obtenerImpuestoPorID(id));
+        return "nuevo_impuesto_extra";
+    }
+
+    // Agregar a la orden de impuestos
+    @PostMapping("/pedidos/impuestos_extras/agregar_impuesto/{id}")
+    public String OrdenImpuestos(@PathVariable Long id) {
+        Impuesto i = impuestoServicio.obtenerImpuestoPorID(id);
+        impuestoServicio.agregarImpuesto(i);
+        var v = pedidoTemp.getIdPedido();
+        return "redirect:/pedidos/impuestos_extras/" + v;
+    }
+
+    @GetMapping("/pedidos/eliminar_orden/{id}")
+    public String EliminarImpuestoOrden(@PathVariable Long id, Model modelo) {
+        Impuesto i = impuestoServicio.obtenerImpuestoPorID(id);
+        impuestoServicio.eliminarImpuestoOrden(i);
+        var v = pedidoTemp.getIdPedido();
+        return "redirect:/pedidos/impuestos_extras/" + v;
+    }
+
+    @GetMapping("/pedidos/confirmar_impuestos")
+    public String ConfirmarImpuestosExtras() {
+        pedidoTemp.setImpuestos(impuestoServicio.orden());
+        pedidoTemp.AgregarImpuestosExtras();
+        pedidoServicio.guardarPedido(pedidoTemp);
+        impuestoServicio.limpiarOrden();
+        return "redirect:/pedidos";
+    }
+
+    @GetMapping("/pedidos/cancelar_orden")
+    public String CancelarImpuestosExtras() {
+        impuestoServicio.limpiarOrden();
+        return "redirect:/pedidos";
+    }
 }

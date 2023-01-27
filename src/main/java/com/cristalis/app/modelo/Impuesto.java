@@ -7,8 +7,6 @@ package com.cristalis.app.modelo;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -46,5 +44,11 @@ public class Impuesto implements Serializable {
         this.porcentaje = porcentaje;
         this.pedido = pedido;
     }
-
+    
+    public void setPorcentaje(double porcentaje){
+        if (porcentaje > 0) {
+            this.porcentaje = (porcentaje / 100);
+        }
+        this.porcentaje = porcentaje;
+    }
 }

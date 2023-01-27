@@ -142,7 +142,8 @@
                         <td th:text="${item.garantia}"></td>
                         <td th:text="${item.subtotal}"></td>
                         <td>
-                            <a th:href="@{carrito/eliminar/{id} (id=${item.idItem})}" th:object="${item}" class="btn btn-danger"> Eliminar</a>
+                            <a th:href="@{carrito/eliminar/{id} (id=${item.idItem})}"
+                               th:object="${item}" class="btn btn-danger"> Eliminar</a>
                         </td>
                     </tr>
                 </tbody>

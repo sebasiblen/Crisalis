@@ -6,6 +6,7 @@ package com.cristalis.app.servicio;
 
 import com.cristalis.app.modelo.Impuesto;
 import com.cristalis.app.repositorio.ImpuestoRepositorio;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,9 @@ public class IImpuesto implements ImpuestoServicio {
 
     @Autowired
     private ImpuestoRepositorio repositorio;
-
+    
+    public List<Impuesto> listaImpuestos = new ArrayList<>();
+    
     @Override
     public List<Impuesto> listadoImpuestos() {
         return repositorio.findAll();
@@ -43,6 +46,27 @@ public class IImpuesto implements ImpuestoServicio {
     @Override
     public Impuesto actualizarImpuesto(Impuesto impuesto) {
         return repositorio.save(impuesto);
+    }
+
+    @Override
+    public List<Impuesto> orden() {
+        return listaImpuestos;
+    }
+
+    
+    @Override
+    public void limpiarOrden() {
+        listaImpuestos.clear();
+    }
+
+    @Override
+    public void agregarImpuesto(Impuesto impuesto) {
+        listaImpuestos.add(impuesto);
+    }
+
+    @Override
+    public void eliminarImpuestoOrden(Impuesto impuesto) {
+        listaImpuestos.remove(impuesto);
     }
 
 }
