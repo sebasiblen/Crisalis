@@ -1,157 +1,182 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-    <head>
-        <meta charset="utf-8">
-        <title>Inicio</title>
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet"
-              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-              crossorigin="anonymous">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+>
+  <head>
+    <meta charset="utf-8" />
+    <title>Crisalis</title>
+    <link rel="stylesheet" type="text/css" href="/css/estilos.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;300;400&display=swap"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&family=Work+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <nav>
+      <!-- 
+        <div class="logo">
+            <div class="im-lg"></div>
+        </div> -->
+      <div class="direcciones">
+        <ul>
+          <li sec:authorize="isAuthenticated()">
+            <a class="hvr-underline-from-center" th:href="@{/}">Home</a>
+          </li>
+          <li sec:authorize="isAuthenticated()">
+            <a class="hvr-underline-from-center" th:href="@{/pedidos}"
+              >Pedidos</a
+            >
+          </li>
+          <li sec:authorize="isAuthenticated()">
+            <a class="hvr-underline-from-center" th:href="@{/clientes}"
+              >Clientes</a
+            >
+          </li>
+          <li sec:authorize="isAuthenticated()">
+            <a class="hvr-underline-from-center" th:href="@{/productos}"
+              >Productos</a
+            >
+          </li>
+          <li sec:authorize="isAuthenticated()">
+            <a class="hvr-underline-from-center" th:href="@{/servicios}"
+              >Servicios</a
+            >
+          </li>
+          <li sec:authorize="isAuthenticated()">
+            <a class="hvr-underline-from-center" th:href="@{/impuestos}"
+              >Impuestos</a
+            >
+          </li>
+          <li sec:authorize="isAuthenticated()">
+            <a class="hvr-underline-from-center" th:href="@{/logout}"
+              >Cerrar sesión</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <h1>Pedidos</h1>
+    <header>
+      <div class="contenedor-col">
+        
 
-        <!-- Optional theme -->
-        <link rel="stylesheet"
-              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-              integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
-              crossorigin="anonymous">
-    </head>
-    <body>
+        <form class="filtros-form" th:action="@{/pedidos}">
+          <input
+            type="text"
+            name="palabra"
+            id="palabra"
+            th:value="${palabra}"
+            placeholder="Cliente Apellido"
+          />
 
+          <input
+            type="text"
+            name="palabraProducto"
+            id="palabraProducto"
+            th:value="${palabraProducto}"
+            placeholder="Producto Descripcion"
+          />
 
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed"
-                            data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-                            aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span> <span
-                            class="icon-bar"></span> <span class="icon-bar"></span> <span
-                            class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#" th:href="@{/}">Home</a>
-                </div>
-                <div id="navbar" class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li sec:authorize="isAuthenticated()"><a th:href="@{/pedidos}">Pedidos</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav">
-                        <li sec:authorize="isAuthenticated()"><a th:href="@{/clientes}">Clientes</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav">
-                        <li sec:authorize="isAuthenticated()"><a th:href="@{/productos}">Productos</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav">
-                        <li sec:authorize="isAuthenticated()"><a th:href="@{/servicios}">Servicios</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav">
-                        <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Cerrar
-                                sesión</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+          <input
+            type="text"
+            name="palabraServicio"
+            id="palabraServicio"
+            th:value="${palabraServicio}"
+            placeholder="Servicio Descripcion"
+          />
 
-        <br>
-        <br>
-        <br>
-        <br>
+          <button type="submit" class="btn-primario" value="Buscar">
+            Buscar
+          </button>
+          <button
+            type="button"
+            class="btn-secundario"
+            value="Limpiar"
+            onclick="limpiarCampos()"
+          >
+            Limpiar
+          </button>
+        </form>
 
-        <div class="container">
-            <h6 sec:authentication="principal.username"></h6>
-            <br>
-            <h4>
-                Realizar un pedido
-            </h4>
-            <br> <br>
-            <div class="container">
-                <a class="btn btn-success" th:href="@{/carrito}">Nuevo pedido</a>
-            </div>
-            <br>
-            <br>
-            <form class="form-inline" th:action="@{/pedidos}">
-                <div class="form-group">
-                    <label>Filtrar Pedido  :  </label>
-                </div>
-                <div class="form-group" >
-                    <input type="text" name="palabra" 
-                           class="form-control" id="palabra" 
-                           th:value="${palabra}" 
-                           placeholder="Cliente Apellido">
-                </div>
-                <div class="form-group" >
-                    <input type="text" name="palabraProducto" 
-                           class="form-control" id="palabraProducto" 
-                           th:value="${palabraProducto}" 
-                           placeholder="Producto Descripcion">
-                </div>
-                <div class="form-group" >
-                    <input type="text" name="palabraServicio" 
-                           class="form-control" id="palabraServicio" 
-                           th:value="${palabraServicio}" 
-                           placeholder="Servicio Descripcion">
-                </div>
-                <input type="submit" class="btn btn-info mb-2" value="Buscar">
-                <input type="button" class="btn btn-info mb-2" value="Limpiar" onclick="limpiarCampos()">
-            </form>
+        <div class="contenedor-col">
+          <div class="funcionalidades">
+            <button class="btn-primario">
+              <a th:href="@{/carrito}">Nuevo</a>
+            </button>
+          </div>
 
-           
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Descuento</th>
+                <th>subtotal</th>
+                <th>Total</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
 
-            <br>
-            <br>
-            <div class="container">
-                <table class="table table-bordered">
-                    <thead >
-                        <tr>
-                            <th>ID</th>
-                            <th>Descuento</th>
-                            <th>subtotal</th>
-                            <th>Total</th>
-                            <th></th>
-                        </tr>
-                    </thead>
+            <tbody>
+              <tr th:each="pedido : ${pedidos}">
+                <td th:text="${pedido.idPedido}">1ASDASDASDASD</td>
+                <td th:text="${pedido.descuento}">2ASDASDASDASD</td>
+                <td th:text="${pedido.subtotal}">3ASDASDASDASD</td>
+                <td th:text="${pedido.total}">4ASDASDASDASD</td>
 
-                    <tbody>
-                        <tr th:each="pedido : ${pedidos}">
-                            <td th:text="${pedido.idPedido}"></td>
-                            <td th:text="${pedido.descuento}"></td>
-                            <td th:text="${pedido.subtotal}"></td>
-                            <td th:text="${pedido.total}"></td>
-                            
-                            <td>
-                                <a th:href="@{pedidos/{id}
-                                   (id=${pedido.idPedido})}" th:object="${pedido}" 
-                                   class="btn btn-danger"> Eliminar</a> 
-                                <a th:href="@{pedidos/editar_pedido/{id}
-                                   (id=${pedido.idPedido})}" th:object="${pedido}" 
-                                   class="btn btn-warning"> Editar</a> 
-                                <a th:href="@{pedidos/ver/{id}
-                                   (id=${pedido.idPedido})}" th:object="${pedido}" 
-                                   class="btn btn-info"> Ver</a> 
-                                <a th:href="@{pedidos/impuestos_extras/{id}
-                                   (id=${pedido.idPedido})}" th:object="${pedido}" 
-                                   class="btn btn-secundary">Impuestos</a> 
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                <td>
+                  <button class="btn-secundario">
+                    <a
+                      th:href="@{pedidos/{id} (id=${pedido.idPedido})}"
+                      th:object="${pedido}"
+                    >
+                      Eliminar</a
+                    >
+                  </button>
+                  <button class="btn-secundario">
+                    <a
+                      th:href="@{pedidos/editar_pedido/{id}
+                               (id=${pedido.idPedido})}"
+                      th:object="${pedido}"
+                    >
+                      Editar</a
+                    >
+                  </button>
+                  <button class="btn-secundario">
+                    <a
+                      th:href="@{pedidos/ver/{id}
+                               (id=${pedido.idPedido})}"
+                      th:object="${pedido}"
+                    >
+                      Ver</a
+                    >
+                  </button>
+                  <button class="btn-secundario">
+                    <a
+                      th:href="@{pedidos/impuestos_extras/{id}
+                               (id=${pedido.idPedido})}"
+                      th:object="${pedido}"
+                      >Impuestos</a
+                    >
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
 
-        <div class="container">
-        </div>
-
-
-
-        <script type="text/javascript">
-            function limpiarCampos(){
-            window.location='/pedidos';
-            }
-        </script>
-        <!-- Latest compiled and minified JavaScript -->
-        <script
-            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
-    </body>
+      <script type="text/javascript">
+        function limpiarCampos() {
+          window.location = "/pedidos";
+        }
+      </script>
+    </header>
+  </body>
 </html>

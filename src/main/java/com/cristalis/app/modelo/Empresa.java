@@ -5,6 +5,9 @@
 package com.cristalis.app.modelo;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -81,5 +84,5 @@ public class Empresa extends Cliente implements Serializable {
 
         return servicios;
     }
-
+    
 }

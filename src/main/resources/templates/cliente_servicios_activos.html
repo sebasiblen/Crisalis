@@ -65,38 +65,59 @@
                 </ul>
             </div>
         </nav>
-        <h1>Servicios</h1>
+        <h1>Servicios del Cliente</h1>
         <header>
             <div class="contenedor-col">
 
-                <button class="btn-primario"><a th:href="@{/servicios/nuevo}" class="btn btn-success">Nuevo</a></button>
+                <div class="info-pedido"><b>ID Cliente: </b><span th:text="${cliente.idCliente}"></span></div>
 
                 <table>
+                    <h3>Servicios Contratados</h3>
                     <thead>
                         <tr>
-                            <th>Impuesto</th>
+                            <th>ID</th>
                             <th>Descripcion</th>
-                            <th>Precio</th>
-                            <th>Costo Mantenimiento</th>
-                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="servicio : ${servicios}">
-                            <td th:text="${servicio.tipo_impuesto}"></td>
+                        <tr th:each="servicio : ${listaServiciosActivos}">
+                            <td th:text="${servicio.idBien}"></td>
                             <td th:text="${servicio.descripcion}"></td>
-                            <td th:text="${servicio.precio}"></td>
-                            <td th:text="${servicio.mantenimiento}"></td>
-                            <td>
-                                <button class="btn-secundario"><a th:href="@{/servicios/editar/{id}(id=${servicio.idBien})}" >Editar</a></button>
-                                <button class="btn-secundario"><a th:href="@{/servicios/{id}(id=${servicio.idBien})}" class="btn btn-danger">Eliminar</a></button>
-                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <table>
+                    <h3>Servicios Vencidos</h3>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Descripcion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="servicio : ${vencidos}">
+                            <td th:text="${servicio.idBien}"></td>
+                            <td th:text="${servicio.descripcion}"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
+
+
+            <!-- Latest compiled and minified JavaScript -->
+            <script type="text/javascript">
+                function limpiarCampos(){
+                window.location='/clientes';
+                }
+            </script>
+
+
+
         </header>
+        <!-- Latest compiled and minified JavaScript -->
 
     </body>
 </html>

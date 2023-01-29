@@ -6,6 +6,7 @@ package com.cristalis.app.servicio;
 
 import com.cristalis.app.modelo.Empresa;
 import com.cristalis.app.modelo.Persona;
+import com.cristalis.app.modelo.Servicio;
 import com.cristalis.app.repositorio.PersonaRepositorio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,12 @@ public class IPersonaServicio implements PersonaServicio {
             return repositorio.findAll(palabraClave);
         }
         return repositorio.findAll();
+    }
+
+    @Override
+    public List<Servicio> listadoServiciosContratoados(Long id) {
+        Persona p = repositorio.findById(id).orElse(null);
+        return p.ServiciosContratados();
     }
 
 }

@@ -5,10 +5,7 @@
 package com.cristalis.app.modelo;
 
 import java.io.Serializable;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import lombok.Data;
 
 /**
@@ -20,7 +17,7 @@ import lombok.Data;
 public class Servicio extends Bien implements Serializable {
 
     private double mantenimiento;
-
+    
     public Servicio() {
     }
 

@@ -5,6 +5,7 @@
 package com.cristalis.app.servicio;
 
 import com.cristalis.app.modelo.Persona;
+import com.cristalis.app.modelo.Servicio;
 import java.util.List;
 
 /**
@@ -26,5 +27,7 @@ public interface PersonaServicio {
     public Persona actualizarPersona(Persona persona);
 
     public void eliminarPersona(Long id);
+    
+    public List<Servicio> listadoServiciosContratoados(Long id);
 
 }

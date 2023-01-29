@@ -5,7 +5,12 @@
 package com.cristalis.app.modelo;
 
 import java.io.Serializable;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import static java.time.temporal.ChronoUnit.DAYS;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -68,14 +73,41 @@ public class Persona extends Cliente implements Serializable {
         List<Servicio> servicios = new ArrayList<>();
 
         for (Pedido pedido : pedidos) {
+            
             for (Item item : pedido.getItems()) {
                 if (item.getServicio() != null) {
                     servicios.add(item.getServicio());
                 }
             }
+            
         }
         
         return servicios;
     }
 
+    public List<Servicio> VencimientoServicio() {
+       
+        List<Servicio> serviciosVencidos = new ArrayList<>();
+        
+        Date fechaActual = new Date();
+        
+        for (Pedido pedido : pedidos) {
+            Date fechaPedido = pedido.getFecha();
+            
+            long dif = fechaActual.getTime() - fechaPedido.getTime();
+            
+            if (dif > 31) {
+                
+                for (Item item : pedido.getItems()) {
+                    if (item.getServicio() != null) {
+                        
+                        serviciosVencidos.add(item.getServicio());
+                    }
+                }
+                
+            }
+        }
+        
+        return serviciosVencidos;
+    }
 }

@@ -8,9 +8,11 @@ import com.cristalis.app.controladores.DTO.ClienteRegistroDTO;
 import com.cristalis.app.modelo.Empresa;
 import com.cristalis.app.modelo.Pedido;
 import com.cristalis.app.modelo.Persona;
+import com.cristalis.app.modelo.Servicio;
 import com.cristalis.app.modelo.TipoClienteEnum;
 import com.cristalis.app.servicio.EmpresaServicio;
 import com.cristalis.app.servicio.PersonaServicio;
+import com.cristalis.app.servicio.ServServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -33,7 +35,9 @@ public class ClienteControlador {
 
     @Autowired
     private EmpresaServicio empresaServicio;
-
+    
+    @Autowired
+    private ServServicio servServicio;
     /*
         Empresa Temporal para la vinculacion
         Persona Temporal para la vinculacion
@@ -242,6 +246,35 @@ public class ClienteControlador {
         return "redirect:/clientes";
     }
     
+    /**
+     * Servicios activos de persona fisica
+     * @param id
+     * @param modelo
+     * @return 
+     */
+    @GetMapping("/clientes/servicios_activos/persona/{id}")
+    public String ServiciosActivosCliente(@PathVariable Long id, Model modelo){
+        personaTemp = personaServicio.obtenerPersonaPorID(id);
+        modelo.addAttribute("cliente", personaServicio.obtenerPersonaPorID(id));
+        modelo.addAttribute("listaServiciosActivos", personaTemp.ServiciosContratados());
+        
+        return "cliente_servicios_activos";
+    }
     
+    
+    /**
+     * Servicios Activos de una empresa
+     * @param id
+     * @param modelo
+     * @return 
+     */
+    @GetMapping("/clientes/servicios_activos/empresa/{id}")
+    public String ServiciosActivosClienteEmpresa(@PathVariable Long id, Model modelo){
+        empresaTemp = empresaServicio.obtenerEmpresaPorID(id);
+        modelo.addAttribute("cliente", empresaServicio.obtenerEmpresaPorID(id));
+        modelo.addAttribute("listaServiciosActivos", empresaTemp.ServiciosContratados());
+
+        return "cliente_servicios_activos";
+    }
     
 }
