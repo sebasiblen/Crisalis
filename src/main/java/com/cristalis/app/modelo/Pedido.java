@@ -78,7 +78,6 @@ public class Pedido implements Serializable {
         this.descuento = AplicarDescuentos();
         this.subtotal = SubtotalDelPedido();
         Total();
-//        AgregarImpuestosExtras();
     }
 
     public Pedido(Empresa empresa, List<Item> items) {
@@ -89,12 +88,12 @@ public class Pedido implements Serializable {
         this.descuento = AplicarDescuentos();
         this.subtotal = SubtotalDelPedido();
         Total();
-//        AgregarImpuestosExtras();
     }
 
     /**
-     * Paso todos los items que le fueron asignados al pedido a DTO.
-     * para ver en detalles
+     * Paso todos los items que le fueron asignados al pedido a DTO. para ver en
+     * detalles
+     *
      * @return
      */
     public List<ItemDTO> CrearDTOdeLosItems() {
@@ -144,14 +143,14 @@ public class Pedido implements Serializable {
      *
      * @return
      */
-    private double SubtotalDelPedido() {
+    public double SubtotalDelPedido() {
         double subtotalPedido = 0.0;
         for (ItemDTO item : CrearDTOdeLosItems()) {
             subtotalPedido += item.getSubtotal();
         }
         return subtotalPedido;
     }
-
+    
     /**
      * Devuelve un boolean si fue solicitado un Servicio en el pedido.
      *
@@ -261,11 +260,13 @@ public class Pedido implements Serializable {
 
     /**
      * Costo total del pedido (con IVA y IIBB) despendiendo el tipo de comprador
-     * @return 
+     *
+     * @return
      */
     public double Total() {
         for (Item item : items) {
-            if (item.getProducto() != null) {
+            if (item.getProducto() != null
+                    && (item.getProducto().getTipo_impuesto() != TipoImpuestoEnum.EXCLUIDO)) {
                 this.total += ((item.getProducto().getPrecio()
                         + (item.getProducto().getPrecio() * this.IVA)
                         + (item.getProducto().getPrecio() * this.IIBB)) * item.getUnidades());
@@ -273,7 +274,7 @@ public class Pedido implements Serializable {
                     this.total += (item.getProducto().getPrecio() * 0.02) * item.getGarantia();
                 }
             }
-            if (item.getServicio() != null) {
+            if (item.getServicio() != null && (item.getServicio().getTipo_impuesto() != TipoImpuestoEnum.EXCLUIDO)) {
                 this.total += ((item.getServicio().getPrecio()
                         + (item.getServicio().getPrecio() * this.IVA)
                         + (item.getServicio().getPrecio() * this.IIBB)

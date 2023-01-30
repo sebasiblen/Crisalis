@@ -131,14 +131,21 @@ public class PedidoControlador {
     public String PedidosAsociadosAlCliente(@PathVariable Long id, Model modelo) {
         Pedido p = pedidoServicio.obtenerPedidoPorID(id);
         String cliente = null;
+        Long identificador = null;
         if (p.getEmpresa() != null) {
             cliente = p.getEmpresa().getRazonSocial();
+            identificador = p.getEmpresa().getIdCliente();
+            System.out.println("DI EMPRESA: " + identificador);
         }
         if (p.getPersona() != null) {
             cliente = p.getPersona().getApellido();
+            identificador = p.getPersona().getIdCliente();
+            System.out.println("DI PRESONA: " + identificador);
         }
         List<Pedido> pedidos = pedidoServicio.pedidoDiscriminadoPorCliente(cliente);
+        List<Pedido> pedidosAsociados = pedidoServicio.pedidoAsociadoAlCliente(String.valueOf(identificador));
         modelo.addAttribute("pedidos", pedidos);
+        modelo.addAttribute("pedidosAsociados", pedidosAsociados);
         modelo.addAttribute("pedido", p);
         return "pedidos_disc_cliente";
     }
@@ -166,7 +173,7 @@ public class PedidoControlador {
      * @return
      */
     @GetMapping("/pedidos/editar_pedido/editar_items/{id}")
-    public String EditarItemsPedidoFormulario(@PathVariable Long id, Model modelo) {
+    public String EditarItemsPedidoPanel(@PathVariable Long id, Model modelo) {
         pedidoTemp = pedidoServicio.obtenerPedidoPorID(id);
         modelo.addAttribute("pedido", pedidoTemp);
         modelo.addAttribute("items", pedidoTemp.getItems());
@@ -186,12 +193,13 @@ public class PedidoControlador {
         itemActualizado.setMantenimiento(item.getMantenimiento());
         itemActualizado.setGarantia(item.getGarantia());
         itemActualizado.setUnidades(item.getUnidades());
-
+        itemActualizado.SubTotal();
         itemServicio.guardarItem(itemActualizado);
         var v = pedidoTemp.getIdPedido();
+        pedidoTemp = null;
         return "redirect:/pedidos/editar_pedido/editar_items/" + v;
     }
-
+    
     /**
      * EDITAR EL CLIENTE DEL PEDIDO
      *
@@ -219,6 +227,7 @@ public class PedidoControlador {
         pedidoTemp.CalcularImpuestosSegunElTipoDelCliente();
         pedidoTemp.Total();
         pedidoTemp.AplicarDescuentos();
+        pedidoTemp.AgregarImpuestosExtras();
         pedidoServicio.guardarPedido(pedidoTemp);
         pedidoTemp = null;
         return "redirect:/pedidos";
@@ -237,6 +246,7 @@ public class PedidoControlador {
             pedidoTemp.CalcularImpuestosSegunElTipoDelCliente();
             pedidoTemp.Total();
             pedidoTemp.AplicarDescuentos();
+            pedidoTemp.AgregarImpuestosExtras();
             pedidoServicio.guardarPedido(pedidoTemp);
         }
         pedidoTemp = null;

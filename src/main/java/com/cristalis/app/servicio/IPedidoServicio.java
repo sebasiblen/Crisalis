@@ -59,4 +59,9 @@ public class IPedidoServicio implements PedidoServicio {
         return repositorio.sp_pedidos_disc_producto(producto);
     }
 
+    @Override
+    public List<Pedido> pedidoAsociadoAlCliente(String cliente) {
+        return repositorio.sp_pedidos_asociados(cliente);
+    }
+
 }

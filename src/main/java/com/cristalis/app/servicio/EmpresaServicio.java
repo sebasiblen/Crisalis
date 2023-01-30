@@ -4,7 +4,6 @@
  */
 package com.cristalis.app.servicio;
 
-import com.cristalis.app.modelo.Cliente;
 import com.cristalis.app.modelo.Empresa;
 import java.util.List;
 
@@ -15,7 +14,9 @@ import java.util.List;
 public interface EmpresaServicio {
 
     public List<Empresa> listadoEmpresas();
-
+    
+    public List<Empresa> filtrarEmpresas(String palabraClave);
+    
     public Empresa guardarEmpresa(Empresa empresa);
 
     public Empresa obtenerEmpresaPorID(Long id);

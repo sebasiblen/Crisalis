@@ -51,7 +51,7 @@ public class ClienteControlador {
     @GetMapping("/clientes")
     public String VistaClientes(Model modelo, @Param("palabraClave") String palabraClave) {
         modelo.addAttribute("personas", personaServicio.filtrarPersonas(palabraClave));
-        modelo.addAttribute("empresas", empresaServicio.listadoEmpresas());
+        modelo.addAttribute("empresas", empresaServicio.filtrarEmpresas(palabraClave));
         return "clientes";
     }
 

@@ -5,9 +5,6 @@
 package com.cristalis.app.modelo;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +13,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -51,7 +49,7 @@ public class Empresa extends Cliente implements Serializable {
     @JoinColumn(name = "persona_id")
     private Persona persona;
 
-    @OneToMany(mappedBy = "empresa")
+    @OneToMany(mappedBy = "empresa", fetch = FetchType.EAGER)
     private List<Pedido> pedidos;
 
     public Empresa() {

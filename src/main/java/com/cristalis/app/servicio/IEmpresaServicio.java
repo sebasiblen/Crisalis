@@ -25,7 +25,15 @@ public class IEmpresaServicio implements EmpresaServicio {
     public List<Empresa> listadoEmpresas() {
         return repositorio.findAll();
     }
-
+    
+    @Override
+    public List<Empresa> filtrarEmpresas(String palabraClave) {
+        if (palabraClave != null) {
+            return repositorio.findAll(palabraClave);
+        }
+        return repositorio.findAll();
+    }
+    
     @Override
     public Empresa guardarEmpresa(Empresa empresa) {
         return repositorio.save(empresa);

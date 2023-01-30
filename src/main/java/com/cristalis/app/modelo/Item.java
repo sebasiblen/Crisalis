@@ -48,7 +48,7 @@ public class Item implements Serializable {
     @JoinColumn(name = "id_servicio", referencedColumnName = "idBien")
     private Servicio servicio;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
 
@@ -73,6 +73,7 @@ public class Item implements Serializable {
      * @return
      */
     public double SubTotal() {
+        this.subtotal = 0.0;
         if (this.producto != null) {
             this.subtotal += (this.producto.getPrecio() * this.unidades);
         }

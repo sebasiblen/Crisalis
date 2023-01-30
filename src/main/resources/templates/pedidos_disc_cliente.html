@@ -90,7 +90,7 @@
                 </thead>
 
                 <tbody>
-                    <tr th:each="pedido : ${pedidos}">
+                    <tr th:each="pedido : ${pedidosAsociados}">
                         <td th:text="${pedido.idPedido}"></td>
                         <td th:text="${pedido.descuento}"></td>
                         <td th:text="${pedido.subtotal}"></td>

@@ -15,6 +15,8 @@ public interface PedidoServicio {
     
     public List<Pedido> listadoPedidos();
     
+    public List<Pedido> pedidoAsociadoAlCliente(String cliente);
+    
     public List<Pedido> pedidoDiscriminadoPorCliente(String cliente);
     
     public List<Pedido> pedidoDiscriminadoPorServicio(String servicio);
