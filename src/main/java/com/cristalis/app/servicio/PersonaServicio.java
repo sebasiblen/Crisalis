@@ -28,7 +28,7 @@ public interface PersonaServicio {
 
     public void eliminarPersona(Long id);
     
-    public List<Servicio> listadoServiciosContratoados(Long id);
+    public List<Servicio> listadoServiciosContratados(Long id);
     
     public List<Servicio> listadoServiciosVencidos(Long id);
 

@@ -81,7 +81,7 @@ public class IPersonaServicio implements PersonaServicio {
     }
 
     @Override
-    public List<Servicio> listadoServiciosContratoados(Long id) {
+    public List<Servicio> listadoServiciosContratados(Long id) {
         
         Persona p = repositorio.findById(id).orElse(null);
         

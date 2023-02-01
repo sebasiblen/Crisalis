@@ -28,4 +28,5 @@ public interface PedidoServicio {
     public Pedido obtenerPedidoPorID(Long id);
     
     public void eliminarPedido(Long id);
+    
 }
