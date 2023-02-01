@@ -254,9 +254,11 @@ public class ClienteControlador {
      */
     @GetMapping("/clientes/servicios_activos/persona/{id}")
     public String ServiciosActivosCliente(@PathVariable Long id, Model modelo){
-        personaTemp = personaServicio.obtenerPersonaPorID(id);
-        modelo.addAttribute("cliente", personaServicio.obtenerPersonaPorID(id));
-        modelo.addAttribute("listaServiciosActivos", personaTemp.ServiciosContratados());
+        
+        modelo.addAttribute("cliente", 
+                personaServicio.obtenerPersonaPorID(id));
+        modelo.addAttribute("listaServiciosActivos", 
+                personaServicio.listadoServiciosContratoados(id));
         
         return "cliente_servicios_activos";
     }
