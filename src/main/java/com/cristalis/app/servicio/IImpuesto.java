@@ -20,9 +20,9 @@ public class IImpuesto implements ImpuestoServicio {
 
     @Autowired
     private ImpuestoRepositorio repositorio;
-    
+
     public List<Impuesto> listaImpuestos = new ArrayList<>();
-    
+
     @Override
     public List<Impuesto> listadoImpuestos() {
         return repositorio.findAll();
@@ -53,7 +53,6 @@ public class IImpuesto implements ImpuestoServicio {
         return listaImpuestos;
     }
 
-    
     @Override
     public void limpiarOrden() {
         listaImpuestos.clear();

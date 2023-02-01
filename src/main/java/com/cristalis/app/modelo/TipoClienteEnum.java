@@ -11,9 +11,8 @@ package com.cristalis.app.modelo;
 public enum TipoClienteEnum {
     
     CONSUMIDOR_FINAL,
-    RELACION_DE_DEPENDENCIA,
     MONOTRIBUTISTA,
-    RESPONSABLE_INSCRIPTO,
+    
     EXENTO,
     EXPORTADOR,
     HOTEL_SERVICIO_ALOJAMIENTO_TURISTA;

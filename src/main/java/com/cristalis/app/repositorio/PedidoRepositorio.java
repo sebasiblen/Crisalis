@@ -61,7 +61,17 @@ WHERE (i.id_servicio = s.id_bien AND p.id_pedido = i.pedido_id AND s.descripcion
     @Procedure
     public List<Pedido> sp_pedidos_disc_producto(@Param("palabra") String producto);
 
-    // Pedidos asociados
+    /*
+        CREATE PROC sp_pedidos_asociados
+            @palabra VARCHAR (255)
+        AS
+        BEGIN
+            select *
+            from pedido p
+            where p.empresa_id = @palabra
+            OR p.persona_id = @palabra
+        END
+    */
     @Procedure
     public List<Pedido> sp_pedidos_asociados(@Param("palabra") String cliente);
 }

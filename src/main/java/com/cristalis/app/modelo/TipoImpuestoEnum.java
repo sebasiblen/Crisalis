@@ -8,5 +8,4 @@ public enum TipoImpuestoEnum {
 
     GRAVADO,
     EXCENTO,
-    EXCLUIDO;
 }

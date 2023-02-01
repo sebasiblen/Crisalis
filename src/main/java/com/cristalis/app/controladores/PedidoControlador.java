@@ -14,6 +14,7 @@ import com.cristalis.app.servicio.ImpuestoServicio;
 import com.cristalis.app.servicio.ItemServicio;
 import com.cristalis.app.servicio.PedidoServicio;
 import com.cristalis.app.servicio.PersonaServicio;
+import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,12 +136,10 @@ public class PedidoControlador {
         if (p.getEmpresa() != null) {
             cliente = p.getEmpresa().getRazonSocial();
             identificador = p.getEmpresa().getIdCliente();
-            System.out.println("DI EMPRESA: " + identificador);
         }
         if (p.getPersona() != null) {
             cliente = p.getPersona().getApellido();
             identificador = p.getPersona().getIdCliente();
-            System.out.println("DI PRESONA: " + identificador);
         }
         List<Pedido> pedidos = pedidoServicio.pedidoDiscriminadoPorCliente(cliente);
         List<Pedido> pedidosAsociados = pedidoServicio.pedidoAsociadoAlCliente(String.valueOf(identificador));
@@ -156,6 +155,7 @@ public class PedidoControlador {
         modelo.addAttribute("pedido", pedidoSeleccionado);
         modelo.addAttribute("itemsPedido", pedidoSeleccionado.CrearDTOdeLosItems());
         modelo.addAttribute("impuestos", pedidoSeleccionado.CrearDTOImpuestosExtra());
+
         return "detalles_pedido";
     }
 
@@ -194,7 +194,7 @@ public class PedidoControlador {
         itemActualizado.setMantenimiento(item.getMantenimiento());
         itemActualizado.setGarantia(item.getGarantia());
         itemActualizado.setUnidades(item.getUnidades());
-        itemActualizado.SubTotal();
+//        itemActualizado.SubTotal();
         itemServicio.guardarItem(itemActualizado);
         
         Pedido p = pedidoServicio.obtenerPedidoPorID(pedidoTemp.getIdPedido());
@@ -299,18 +299,30 @@ public class PedidoControlador {
 
     @GetMapping("/pedidos/confirmar_impuestos")
     public String ConfirmarImpuestosExtras() {
-        pedidoTemp.setImpuestos(impuestoServicio.orden());
-        for (Impuesto impuesto : impuestoServicio.orden()) {
-            impuesto.setPedido(pedidoTemp);
-        }
-        pedidoTemp.AgregarImpuestosExtras();
-        pedidoServicio.guardarPedido(pedidoTemp);
+        
+        /**
+         * 
+         * EL METODO LIMPIAR ORDEN ME BORRA LA LISTA
+         * Y PORMAS QUE GUARDE EN UNA NUEVA LISTA NO SE ME ACTUALIZA
+         * EL PEDIDO 
+         */
+        
+        
+        // Es necesario pasarlo a una lista local para que no me borre
+        // la lista de impuestos, ya que se eliminan al limpiar la orden.
+        List<Impuesto> impuestosLista = impuestoServicio.orden();
         impuestoServicio.limpiarOrden();
+        Pedido p = pedidoServicio.obtenerPedidoPorID(pedidoTemp.getIdPedido());
+        p.setImpuestos(impuestosLista);
+        p.AgregarImpuestosExtras();
+        pedidoServicio.guardarPedido(p);
+        System.out.println("IMPOUESOTS : " + p.getImpuestos().toString());
+        
         return "redirect:/pedidos";
     }
 
     @GetMapping("/pedidos/cancelar_orden")
-    public String CancelarImpuestosExtras() {
+    public String CancelarOrdenImpuestosExtras() {
         impuestoServicio.limpiarOrden();
         return "redirect:/pedidos";
     }

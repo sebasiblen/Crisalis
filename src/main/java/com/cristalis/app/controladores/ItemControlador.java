@@ -7,7 +7,6 @@ package com.cristalis.app.controladores;
 import com.cristalis.app.modelo.Item;
 import com.cristalis.app.modelo.Producto;
 import com.cristalis.app.modelo.Servicio;
-import com.cristalis.app.servicio.ImpuestoServicio;
 import com.cristalis.app.servicio.ItemServicio;
 import com.cristalis.app.servicio.ProductoServicio;
 import com.cristalis.app.servicio.ServServicio;
@@ -55,7 +54,7 @@ public class ItemControlador {
     public String NuevoItem(@ModelAttribute("item") Item item, @PathVariable Long id) {
         Producto p = productoServicios.obtenerProductoPorID(id);
         item.setProducto(p);
-        item.setSubtotal(item.SubTotal());
+        itemServicios.Subtotal(item);
         itemServicios.agregarItemAOrden(item);
         itemServicios.guardarItem(item);
         return "redirect:/carrito";
@@ -74,7 +73,7 @@ public class ItemControlador {
     public String NuevoItemServ(@ModelAttribute("item") Item item, @PathVariable Long id) {
         Servicio s = servServicios.obtenerServicioPorID(id);
         item.setServicio(s);
-        item.setSubtotal(item.SubTotal());
+        itemServicios.Subtotal(item);
         itemServicios.agregarItemAOrden(item);
         itemServicios.guardarItem(item);
         return "redirect:/carrito";

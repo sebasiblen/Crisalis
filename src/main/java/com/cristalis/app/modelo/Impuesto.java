@@ -7,7 +7,6 @@ package com.cristalis.app.modelo;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,9 +29,8 @@ public class Impuesto implements Serializable {
     private String descripcion;
     @Column(name = "porcentaje")
     private double porcentaje;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pedido_id")
+    @ManyToOne
+    @JoinColumn(name = "id_pedido")
     private Pedido pedido;
 
     public Impuesto() {
@@ -42,7 +40,6 @@ public class Impuesto implements Serializable {
     public Impuesto(String descripcion, double porcentaje, Pedido pedido) {
         this.descripcion = descripcion;
         this.porcentaje = porcentaje;
-        this.pedido = pedido;
     }
     
     public void setPorcentaje(double porcentaje){

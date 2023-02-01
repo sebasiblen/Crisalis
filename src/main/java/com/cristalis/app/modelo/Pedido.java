@@ -172,7 +172,11 @@ public class Pedido implements Serializable {
         }
         return subtotalPedido;
     }
-
+    
+    /**
+     * Actualiza el subtotal del pedido
+     * @return 
+     */
     public double ActualizarSubtotalDelPedido() {
         this.subtotal = 0.0;
         for (Item item : items) {

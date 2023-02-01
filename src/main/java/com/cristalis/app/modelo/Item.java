@@ -59,27 +59,25 @@ public class Item implements Serializable {
 
     public Item(Producto producto) {
         this.producto = producto;
-        SubTotal();
     }
 
     public Item(Servicio servicio) {
         this.servicio = servicio;
-        SubTotal();
     }
 
-    /**
-     * Subtotales de los productos , sin(IMPUESTOS)
-     *
-     * @return
-     */
-    public double SubTotal() {
-        this.subtotal = 0.0;
-        if (this.producto != null) {
-            this.subtotal += (this.producto.getPrecio() * this.unidades);
-        }
-        if (this.servicio != null) {
-            this.subtotal += (this.servicio.getPrecio() + this.servicio.getMantenimiento()) * this.unidades;
-        }
-        return this.subtotal;
+    public Item(String descripcion, double precio, int unidades, int garantia, Producto producto) {
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.unidades = unidades;
+        this.garantia = garantia;
+        this.producto = producto;
     }
+
+    public Item(String descripcion, double precio, double mantenimiento, Servicio servicio) {
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.mantenimiento = mantenimiento;
+        this.servicio = servicio;
+    }
+    
 }

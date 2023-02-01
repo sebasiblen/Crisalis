@@ -6,6 +6,8 @@ package com.cristalis.app.servicio;
 
 import com.cristalis.app.controladores.DTO.ItemDTO;
 import com.cristalis.app.modelo.Item;
+import com.cristalis.app.modelo.Producto;
+import com.cristalis.app.modelo.Servicio;
 import com.cristalis.app.repositorio.ItemRepositorio;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,4 +99,19 @@ public class IItemServicio implements ItemServicio {
         ordenActual.remove(item);
     }
 
+
+    @Override
+    public void Subtotal(Item item) {
+        double subtotal = 0.0;
+        if (item.getProducto() != null) {
+            subtotal += (item.getProducto().getPrecio() * item.getUnidades());
+            item.setSubtotal(subtotal);
+        }
+        if (item.getServicio() != null) {
+            subtotal += (item.getServicio().getPrecio() + 
+                    item.getServicio().getMantenimiento()) * 
+                    item.getUnidades();
+            item.setSubtotal(subtotal);
+        }
+    }
 }
