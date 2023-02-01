@@ -1,132 +1,149 @@
 <!DOCTYPE html>
 <html
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
->
-  <head>
-    <meta charset="utf-8" />
-    <title>Crisalis</title>
-    <link rel="stylesheet" type="text/css" href="/css/estilos.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;300;400&display=swap"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&family=Work+Sans:wght@200;300;400&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <nav>
-      <!-- 
-        <div class="logo">
-            <div class="im-lg"></div>
-        </div> -->
-      <div class="direcciones">
-        <ul>
-          <li sec:authorize="isAuthenticated()">
-            <a class="hvr-underline-from-center" th:href="@{/}">Home</a>
-          </li>
-          <li sec:authorize="isAuthenticated()">
-            <a class="hvr-underline-from-center" th:href="@{/pedidos}"
-              >Pedidos</a
-            >
-          </li>
-          <li sec:authorize="isAuthenticated()">
-            <a class="hvr-underline-from-center" th:href="@{/clientes}"
-              >Clientes</a
-            >
-          </li>
-          <li sec:authorize="isAuthenticated()">
-            <a class="hvr-underline-from-center" th:href="@{/productos}"
-              >Productos</a
-            >
-          </li>
-          <li sec:authorize="isAuthenticated()">
-            <a class="hvr-underline-from-center" th:href="@{/servicios}"
-              >Servicios</a
-            >
-          </li>
-          <li sec:authorize="isAuthenticated()">
-            <a class="hvr-underline-from-center" th:href="@{/impuestos}"
-              >Impuestos</a
-            >
-          </li>
-          <li sec:authorize="isAuthenticated()">
-            <a class="hvr-underline-from-center" th:href="@{/logout}"
-              >Cerrar sesión</a
-            >
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <h1>Detalles de pedido</h1>
-    <header>
-        <div class="contenedor-col">
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+    >
+    <head>
+        <meta charset="utf-8" />
+        <title>Crisalis</title>
+        <link rel="stylesheet" type="text/css" href="/css/estilos.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+            />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;300;400&display=swap"
+            />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&family=Work+Sans:wght@200;300;400&display=swap"
+            rel="stylesheet"
+            />
+    </head>
+    <body>
+        <nav>
+            <!-- 
+              <div class="logo">
+                  <div class="im-lg"></div>
+              </div> -->
+            <div class="direcciones">
+                <ul>
+                    <li sec:authorize="isAuthenticated()">
+                        <a class="hvr-underline-from-center" th:href="@{/}">Home</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a class="hvr-underline-from-center" th:href="@{/pedidos}"
+                           >Pedidos</a
+                        >
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a class="hvr-underline-from-center" th:href="@{/clientes}"
+                           >Clientes</a
+                        >
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a class="hvr-underline-from-center" th:href="@{/productos}"
+                           >Productos</a
+                        >
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a class="hvr-underline-from-center" th:href="@{/servicios}"
+                           >Servicios</a
+                        >
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a class="hvr-underline-from-center" th:href="@{/impuestos}"
+                           >Impuestos</a
+                        >
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a class="hvr-underline-from-center" th:href="@{/logout}"
+                           >Cerrar sesión</a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <h1>Detalles de pedido</h1>
+        <header>
+            <div class="contenedor-col">
 
-            <div class="info-pedido">
-                <div><b>ID PEDIDO: </b><span th:text="${pedido.idPedido}"></span></div>
-                <div><b>FECHA DEL PEDIDO: </b><span th:text="${pedido.fecha}"></span></div>
-            
+                <div class="info-pedido">
+                    <div><b>ID PEDIDO: </b><span th:text="${pedido.idPedido}"></span></div>
+                    <div><b>FECHA DEL PEDIDO: </b><span th:text="${pedido.fecha}"></span></div>
 
-                <h2>Cliente</h2>
-               
-                <div th:if="(${pedido.persona != null} and ${pedido.persona.empresa == null}) or (${pedido.persona ne null} and ${pedido.persona.empresa ne null})">
-                    <div><b>Nombres: </b><span th:text="${pedido.persona.nombre}"></span></div>
-                    <div><b>Apellidos: </b><span th:text="${pedido.persona.apellido}"></span></div>
-                    <div><b>Documento: </b><span th:text="${pedido.persona.dni}"></span></div>
-                    <div><b>Tipo Comprador </b><span th:text="${pedido.persona.tipo}"></span></div>
-                </div>
-                <div th:if="${pedido.empresa ne null}">
-                    <div><b>Razon Social: </b><span th:text="${pedido.empresa ne null} ? ${pedido.empresa.razonSocial} : '--'" ></span></div>
-                    <div><b>Cuit: </b><span th:text="${pedido.empresa ne null} ? ${pedido.empresa.cuit} : '--'" ></span></div>
-                    <div><b>Fecha de inicio actividades: </b><span th:text="${pedido.empresa ne null} ? ${pedido.empresa.fecha} : '--'" ></span></div>
-                    <div><b>Tipo Cliente: </b><span th:text="${pedido.empresa ne null} ? ${pedido.empresa.tipo} : '--'" ></span></div>
 
-                    <h2>Responsable asociado</h2>
+                    <h2>Cliente</h2>
+
+                    <div th:if="(${pedido.persona != null} and ${pedido.persona.empresa == null}) or (${pedido.persona ne null} and ${pedido.persona.empresa ne null})">
+                        <div><b>Nombres: </b><span th:text="${pedido.persona.nombre}"></span></div>
+                        <div><b>Apellidos: </b><span th:text="${pedido.persona.apellido}"></span></div>
+                        <div><b>Documento: </b><span th:text="${pedido.persona.dni}"></span></div>
+                        <div><b>Tipo Comprador </b><span th:text="${pedido.persona.tipo}"></span></div>
+                    </div>
+                    <div th:if="${pedido.empresa ne null}">
+                        <div><b>Razon Social: </b><span th:text="${pedido.empresa ne null} ? ${pedido.empresa.razonSocial} : '--'" ></span></div>
+                        <div><b>Cuit: </b><span th:text="${pedido.empresa ne null} ? ${pedido.empresa.cuit} : '--'" ></span></div>
+                        <div><b>Fecha de inicio actividades: </b><span th:text="${pedido.empresa ne null} ? ${pedido.empresa.fecha} : '--'" ></span></div>
+                        <div><b>Tipo Cliente: </b><span th:text="${pedido.empresa ne null} ? ${pedido.empresa.tipo} : '--'" ></span></div>
+
+                        <h2>Responsable asociado</h2>
                         <div><b>Nombre: </b><span th:text="${pedido.empresa.persona.nombre}"></span></div>
                         <div><b>Apellidos: </b><span th:text="${pedido.empresa.persona.apellido}"></span></div>
                         <div><b>Documento: </b><span th:text="${pedido.empresa.persona.dni}"></span></div>
-                  
+
+                    </div>
                 </div>
-            </div>
-            
+
                 <h2>Items del pedido</h2>
-                    <table class="table table-bordered">
-                        <thead >
-                            <tr>
-                                <th>Descripcion</th>
-                                <th>Unidades</th>
-                                <th>Precio</th>
-                                <th>Mantenimiento</th>
-                                <th>Garantia (años)</th>
-                                <th>IVA</th>
-                                <th>IIBB</th>
-                                <th>subtotal</th>
-                            </tr>
-                        </thead>
+                <table class="table table-bordered">
+                    <thead >
+                        <tr>
+                            <th>Descripcion</th>
+                            <th>Unidades</th>
+                            <th>Precio</th>
+                            <th>Mantenimiento</th>
+                            <th>Garantia (años)</th>
+                            <th>IVA</th>
+                            <th>IIBB</th>
+                            <th>subtotal</th>
+                        </tr>
+                    </thead>
 
-                        <tbody>
-                            <tr th:each="item : ${itemsPedido}">
-                                <td th:text="${item.descripcion}"></td>
-                                <td th:text="${item.unidades}"></td>
-                                <td th:text="${item.precio}"></td>
-                                <td th:text="${item.mantenimiento}"></td>
-                                <td th:text="${item.garantia}"></td>
-                                <td th:text="${pedido.IVA}"></td>
-                                <td th:text="${pedido.IIBB}"></td>
-                                <td th:text="${item.subtotal}"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <tbody>
+                        <tr th:each="item : ${itemsPedido}">
+                            <td th:text="${item.descripcion}"></td>
+                            <td th:text="${item.unidades}"></td>
+                            <td th:text="${item.precio}"></td>
+                            <td th:text="${item.mantenimiento}"></td>
+                            <td th:text="${item.garantia}"></td>
+                            <td th:text="${pedido.IVA}"></td>
+                            <td th:text="${pedido.IIBB}"></td>
+                            <td th:text="${item.subtotal}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h2>Impuestos extras del pedido</h2>
+                <table >
+                    <thead >
+                        <tr>
+                            <th>ID</th>
+                            <th>Descripcion</th>
+                            <th>Porcentaje</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr th:each="impuesto : ${impuestos}">
+                            <td th:text="${impuesto.idImpuesto}"></td>
+                            <td th:text="${impuesto.descripcion}"></td>
+                            <td th:text="${impuesto.porcentaje}"></td>
+                        </tr>
+                    </tbody>
+                </table>
 
 
-                     
                 <div class="info-pedido">
                     <div><b>Descuentos/Pedido :</b><span th:text="${pedido.descuento}"></span></div>
                     <div><b>Subtotal/Pedido :</b><span th:text="${pedido.subtotal}"></span></div>
@@ -135,5 +152,5 @@
             </div>
         </div>
     </header>
-  </body>
+</body>
 </html>

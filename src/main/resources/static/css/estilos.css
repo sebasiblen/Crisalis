@@ -76,9 +76,9 @@ nav {
 }
 
 .nav-contenedor {
-    width: 100%;
+    width: 90%;
     height: auto;
-    display: inline-block;
+    display: inline-flex;
 }
 
 nav .logo {
@@ -171,9 +171,10 @@ header {
 /* TABLAS */
 /*   CONTENEDORES PARA  */
 .contenedor-fila {
-    width: 90vw;
+    width: 90%;
     max-height: 100%;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     flex-direction: row;
@@ -182,7 +183,7 @@ header {
 }
 
 .contenedor-col {
-    width: 90vw;
+    width: 90%;
     max-height: 100%;
     display: flex;
     align-items: center;

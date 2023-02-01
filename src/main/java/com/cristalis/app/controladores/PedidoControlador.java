@@ -155,6 +155,7 @@ public class PedidoControlador {
         Pedido pedidoSeleccionado = pedidoServicio.obtenerPedidoPorID(id);
         modelo.addAttribute("pedido", pedidoSeleccionado);
         modelo.addAttribute("itemsPedido", pedidoSeleccionado.CrearDTOdeLosItems());
+        modelo.addAttribute("impuestos", pedidoSeleccionado.CrearDTOImpuestosExtra());
         return "detalles_pedido";
     }
 
@@ -195,7 +196,17 @@ public class PedidoControlador {
         itemActualizado.setUnidades(item.getUnidades());
         itemActualizado.SubTotal();
         itemServicio.guardarItem(itemActualizado);
-        var v = pedidoTemp.getIdPedido();
+        
+        Pedido p = pedidoServicio.obtenerPedidoPorID(pedidoTemp.getIdPedido());
+        p.setTotal(0.0);
+        p.setSubtotal(0.0);
+        p.ActualizarSubtotalDelPedido();
+        p.Total();
+        p.ActualizarDescuentoDelPedido();
+        
+        pedidoServicio.guardarPedido(p);
+        
+        var v = p.getIdPedido();
         pedidoTemp = null;
         return "redirect:/pedidos/editar_pedido/editar_items/" + v;
     }
@@ -289,6 +300,9 @@ public class PedidoControlador {
     @GetMapping("/pedidos/confirmar_impuestos")
     public String ConfirmarImpuestosExtras() {
         pedidoTemp.setImpuestos(impuestoServicio.orden());
+        for (Impuesto impuesto : impuestoServicio.orden()) {
+            impuesto.setPedido(pedidoTemp);
+        }
         pedidoTemp.AgregarImpuestosExtras();
         pedidoServicio.guardarPedido(pedidoTemp);
         impuestoServicio.limpiarOrden();

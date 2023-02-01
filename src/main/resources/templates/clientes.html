@@ -1,259 +1,267 @@
 <!DOCTYPE html>
 <html
-    xmlns:th="http://www.thymeleaf.org"
-    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-    >
-    <head>
-        <meta charset="utf-8" />
-        <title>Crisalis</title>
-        <link rel="stylesheet" type="text/css" href="/css/estilos.css" />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-            />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;300;400&display=swap"
-            />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&family=Work+Sans:wght@200;300;400&display=swap"
-            rel="stylesheet"
-            />
-    </head>
-    <body>
-        <nav>
-            <!-- 
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+>
+  <head>
+    <meta charset="utf-8" />
+    <title>Crisalis</title>
+    <link rel="stylesheet" type="text/css" href="/css/estilos.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;300;400&display=swap"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&family=Work+Sans:wght@200;300;400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav>
+      <!-- 
                 <div class="logo">
                     <div class="im-lg"></div>
                 </div> -->
-            <div class="direcciones">
-                <ul>
-                    <li sec:authorize="isAuthenticated()">
-                        <a class="hvr-underline-from-center" th:href="@{/}">Home</a>
-                    </li>
-                    <li sec:authorize="isAuthenticated()">
-                        <a class="hvr-underline-from-center" th:href="@{/pedidos}"
-                           >Pedidos</a
-                        >
-                    </li>
-                    <li sec:authorize="isAuthenticated()">
-                        <a class="hvr-underline-from-center" th:href="@{/clientes}"
-                           >Clientes</a
-                        >
-                    </li>
-                    <li sec:authorize="isAuthenticated()">
-                        <a class="hvr-underline-from-center" th:href="@{/productos}"
-                           >Productos</a
-                        >
-                    </li>
-                    <li sec:authorize="isAuthenticated()">
-                        <a class="hvr-underline-from-center" th:href="@{/servicios}"
-                           >Servicios</a
-                        >
-                    </li>
-                    <li sec:authorize="isAuthenticated()">
-                        <a class="hvr-underline-from-center" th:href="@{/impuestos}"
-                           >Impuestos</a
-                        >
-                    </li>
-                    <li sec:authorize="isAuthenticated()">
-                        <a class="hvr-underline-from-center" th:href="@{/logout}"
-                           >Cerrar sesión</a
-                        >
-                    </li>
-                </ul>
-            </div>
-        </nav>
+      <div class="direcciones">
+        <ul>
+          <li sec:authorize="isAuthenticated()">
+            <a class="hvr-underline-from-center" th:href="@{/}">Home</a>
+          </li>
+          <li sec:authorize="isAuthenticated()">
+            <a class="hvr-underline-from-center" th:href="@{/pedidos}"
+              >Pedidos</a
+            >
+          </li>
+          <li sec:authorize="isAuthenticated()">
+            <a class="hvr-underline-from-center" th:href="@{/clientes}"
+              >Clientes</a
+            >
+          </li>
+          <li sec:authorize="isAuthenticated()">
+            <a class="hvr-underline-from-center" th:href="@{/productos}"
+              >Productos</a
+            >
+          </li>
+          <li sec:authorize="isAuthenticated()">
+            <a class="hvr-underline-from-center" th:href="@{/servicios}"
+              >Servicios</a
+            >
+          </li>
+          <li sec:authorize="isAuthenticated()">
+            <a class="hvr-underline-from-center" th:href="@{/impuestos}"
+              >Impuestos</a
+            >
+          </li>
+          <li sec:authorize="isAuthenticated()">
+            <a class="hvr-underline-from-center" th:href="@{/logout}"
+              >Cerrar sesión</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
 
-        <h1>Clientes</h1>
-        <header>
-            <div class="contenedor-col">
-                <button class="btn-primario">
-                    <a th:href="@{/clientes/formulario}">Nuevo Cliente</a>
+    <h1>Clientes</h1>
+    <header>
+      <div class="contenedor-col">
+        <button class="btn-primario">
+          <a th:href="@{/clientes/formulario}">Nuevo Cliente</a>
+        </button>
+
+        <h3>Listado Personas</h3>
+
+        <form class="filtros-form" th:action="@{/clientes}">
+          <input
+            type="text"
+            name="palabraClave"
+            class="form-control"
+            id="palabraClave"
+            th:value="${palabraClave}"
+            placeholder="Apellido o DNI"
+            required
+          />
+
+          <button type="submit" class="btn-primario" value="Buscar">
+            Buscar
+          </button>
+
+          <button
+            type="button"
+            class="btn-secundario"
+            value="Limpiar"
+            onclick="limpiarCampos()"
+          >
+            Limpiar
+          </button>
+        </form>
+
+        <div class="contenedor-col">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Dni</th>
+                <th>Tipo Comprador</th>
+                <th>Empresa</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="persona : ${personas}">
+                <td th:text="${persona.idCliente}"></td>
+                <td th:text="${persona.nombre}"></td>
+                <td th:text="${persona.apellido}"></td>
+                <td th:text="${persona.dni}"></td>
+                <td th:text="${persona.tipo}"></td>
+                <!--th:if="${cliente.empresa ne null}"-->
+                <!--${post.body ne null} ? ${post.body} : '(no content)'"-->
+                <td
+                  th:text="${persona.empresa ne null} ? ${persona.empresa.razonSocial} : ' '"
+                ></td>
+                <td>
+                  <button
+                    class="btn-secundario"
+                    th:if="${persona.empresa == null}"
+                  >
+                    <a
+                      th:href="@{/clientes/vincular_empresa/persona/{id} (id=${persona.idCliente})}"
+                      >Vincular</a
+                    >
+                  </button>
+                  <button
+                    class="btn-secundario"
+                    th:if="${persona.empresa != null}"
+                  >
+                    <a
+                      class="btn btn-warning"
+                      th:href="@{/clientes/desvincular_empresa/{id} (id=${persona.idCliente})}"
+                      >Desvincular</a
+                    >
+                  </button>
+                  <button class="btn-secundario">
+                    <a
+                      th:href="@{/clientes/editar_persona/{id} (id=${persona.idCliente})}"
+                      >Editar</a
+                    >
+                  </button>
+                  <button class="btn-secundario">
+                    <a
+                      th:href="@{/clientes/eliminar_persona/{id} (id=${persona.idCliente})}"
+                      >Eliminar</a
+                    >
+                  </button>
+                  <button class="btn-secundario">
+                    <a
+                      th:href="@{/clientes/servicios_activos/persona/{id} (id=${persona.idCliente})}"
+                      >Servicios</a
+                    >
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="contenedor-col">
+        <form class="filtros-form" th:action="@{/clientes}">
+          <input
+            type="text"
+            name="palabraClave"
+            class="form-control"
+            id="palabraClave"
+            th:value="${palabraClave}"
+            placeholder="Cuit o RazonSocial"
+            required
+          />
+
+          <button type="submit" class="btn-primario" value="Buscar">
+            Buscar
+          </button>
+
+          <button
+            type="button"
+            class="btn-secundario"
+            value="Limpiar"
+            onclick="limpiarCampos()"
+          >
+            Limpiar
+          </button>
+        </form>
+        <table>
+          <thead>
+            <h3>Listado Empresas</h3>
+            <tr>
+              <th>ID</th>
+              <th>Tipo Comprador</th>
+              <th>Cuit</th>
+              <th>RazonSocial</th>
+              <th>Inicio Actividades</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="cliente : ${empresas}">
+              <td th:text="${cliente.idCliente}"></td>
+              <td th:text="${cliente.tipo}"></td>
+              <td th:text="${cliente.cuit}"></td>
+              <td th:text="${cliente.razonSocial}"></td>
+              <td th:text="${cliente.fecha}"></td>
+              <td>
+                <button
+                  class="btn-secundario"
+                  th:if="${cliente.persona == null}"
+                >
+                  <a
+                    th:onclick="${}"
+                    class="btn btn-primary"
+                    th:href="@{/clientes/vincular_empresa/empresa/{id}(id=${cliente.idCliente})}"
+                    >Vincular</a
+                  >
                 </button>
+                <button
+                  class="btn-secundario"
+                  th:if="${cliente.persona != null}"
+                >
+                  <a
+                    class="btn btn-warning"
+                    th:href="@{/clientes/desvincular_persona/{id} (id=${cliente.idCliente})}"
+                    >Desvincular</a
+                  >
+                </button>
+                <button class="btn-secundario">
+                  <a
+                    class="btn btn-info"
+                    th:href="@{/clientes/editar_empresa/{id} (id=${cliente.idCliente})}"
+                    >Editar</a
+                  >
+                </button>
+                <button class="btn-secundario">
+                  <a
+                    class="btn btn-warning"
+                    th:href="@{/clientes/servicios_activos/empresa/{id} (id=${cliente.idCliente})}"
+                    >Servicios</a
+                  >
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </header>
+    <!-- Latest compiled and minified JavaScript -->
 
-                <h3>Listado Personas</h3>
-
-                <form class="filtros-form" th:action="@{/clientes}">
-                    <input
-                        type="text"
-                        name="palabraClave"
-                        class="form-control"
-                        id="palabraClave"
-                        th:value="${palabraClave}"
-                        placeholder="Apellido o DNI"
-                        required
-                        />
-
-                    <button type="submit" class="btn-primario" value="Buscar">
-                        Buscar
-                    </button>
-
-                    <button
-                        type="button"
-                        class="btn-secundario"
-                        value="Limpiar"
-                        onclick="limpiarCampos()"
-                        >
-                        Limpiar
-                    </button>
-                </form>
-
-                <div class="contenedor-col">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Dni</th>
-                                <th>Tipo Comprador</th>
-                                <th>Empresa</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="persona : ${personas}">
-                                <td th:text="${persona.idCliente}"></td>
-                                <td th:text="${persona.nombre}"></td>
-                                <td th:text="${persona.apellido}"></td>
-                                <td th:text="${persona.dni}"></td>
-                                <td th:text="${persona.tipo}"></td>
-                                <!--th:if="${cliente.empresa ne null}"-->
-                                <!--${post.body ne null} ? ${post.body} : '(no content)'"-->
-                                <td
-                                    th:text="${persona.empresa ne null} ? ${persona.empresa.razonSocial} : ' '"
-                                    ></td>
-                                <td>
-                                    <div th:if="${persona.empresa == null}">
-                                        <button class="btn-secundario">
-                                            <a
-                                                th:href="@{/clientes/vincular_empresa/persona/{id} (id=${persona.idCliente})}"
-                                                >Vincular</a
-                                            >
-                                        </button>
-                                    </div>
-                                    <div th:if="${persona.empresa != null}">
-                                        <button class="btn-secundario">
-                                            <a
-                                                class="btn btn-warning"
-                                                th:href="@{/clientes/desvincular_empresa/{id} (id=${persona.idCliente})}"
-                                                >Desvincular</a
-                                            >
-                                        </button>
-                                    </div>
-                                    <button class="btn-secundario">
-                                        <a
-                                            th:href="@{/clientes/editar_persona/{id} (id=${persona.idCliente})}"
-                                            >Editar</a
-                                        >
-                                    </button>
-                                    <button class="btn-secundario">
-                                        <a
-                                            th:href="@{/clientes/eliminar_persona/{id} (id=${persona.idCliente})}"
-                                            >Eliminar</a
-                                        >
-                                    </button>
-                                    <button class="btn-secundario">
-                                        <a
-                                            th:href="@{/clientes/servicios_activos/persona/{id} (id=${persona.idCliente})}"
-                                            >Servicios activos</a
-                                        >
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="contenedor-col">
-                
-                
-                <form class="filtros-form" th:action="@{/clientes}">
-                    <input
-                        type="text"
-                        name="palabraClave"
-                        class="form-control"
-                        id="palabraClave"
-                        th:value="${palabraClave}"
-                        placeholder="Cuit o RazonSocial"
-                        required
-                        />
-
-                    <button type="submit" class="btn-primario" value="Buscar">
-                        Buscar
-                    </button>
-
-                    <button
-                        type="button"
-                        class="btn-secundario"
-                        value="Limpiar"
-                        onclick="limpiarCampos()"
-                        >
-                        Limpiar
-                    </button>
-                </form>
-                <table>
-                    <thead>
-                    <h3>Listado Empresas</h3>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tipo Comprador</th>
-                        <th>Cuit</th>
-                        <th>RazonSocial</th>
-                        <th>Inicio Actividades</th>
-                        <th>Acciones</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="cliente : ${empresas}">
-                            <td th:text="${cliente.idCliente}"></td>
-                            <td th:text="${cliente.tipo}"></td>
-                            <td th:text="${cliente.cuit}"></td>
-                            <td th:text="${cliente.razonSocial}"></td>
-                            <td th:text="${cliente.fecha}"></td>
-                            <td>
-                                <div th:if="${cliente.persona == null}">
-                                    <button class="btn-secundario"><a
-                                            th:onclick="${}"
-                                            class="btn btn-primary"
-                                            th:href="@{/clientes/vincular_empresa/empresa/{id}(id=${cliente.idCliente})}"
-                                            >Vincular</a
-                                        ></button>
-                                </div>
-                                <div th:if="${cliente.persona != null}">
-                                    <button class="btn-secundario"><a
-                                            class="btn btn-warning"
-                                            th:href="@{/clientes/desvincular_persona/{id} (id=${cliente.idCliente})}"
-                                            >Desvincular</a
-                                        ></button>
-                                </div>
-                                <button class="btn-secundario"><a
-                                        class="btn btn-info"
-                                        th:href="@{/clientes/editar_empresa/{id} (id=${cliente.idCliente})}"
-                                        >Editar</a
-                                    ></button>
-                                <button class="btn-secundario"><a
-                                        class="btn btn-warning"
-                                        th:href="@{/clientes/servicios_activos/empresa/{id} (id=${cliente.idCliente})}"
-                                        >Servicios activos</a
-                                    ></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-        </header>
-        <!-- Latest compiled and minified JavaScript -->
-
-        <script type="text/javascript">
-            function limpiarCampos() {
-            window.location = "/clientes";
-            }
-        </script>
-
-    </body>
+    <script type="text/javascript">
+      function limpiarCampos() {
+        window.location = "/clientes";
+      }
+    </script>
+  </body>
 </html>

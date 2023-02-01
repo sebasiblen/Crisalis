@@ -4,6 +4,7 @@
  */
 package com.cristalis.app.modelo;
 
+import com.cristalis.app.controladores.DTO.ImpuestoDTO;
 import com.cristalis.app.controladores.DTO.ItemDTO;
 import static com.cristalis.app.modelo.TipoClienteEnum.*;
 import java.io.Serializable;
@@ -63,7 +64,7 @@ public class Pedido implements Serializable {
     @OneToMany(mappedBy = "pedido", fetch = FetchType.EAGER)
     private List<Item> items;
 
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany(mappedBy = "pedido", fetch = FetchType.EAGER)
     private List<Impuesto> impuestos;
 
     public Pedido() {
@@ -121,6 +122,27 @@ public class Pedido implements Serializable {
         return listaDTO;
     }
 
+    public List<ImpuestoDTO> CrearDTOImpuestosExtra() {
+
+        List<ImpuestoDTO> listaDto = new ArrayList<>();
+
+        if (!this.impuestos.isEmpty()) {
+
+            for (Impuesto imp : impuestos) {
+
+                ImpuestoDTO dto = new ImpuestoDTO();
+
+                dto.setIdImpuesto(imp.getIdImpuesto());
+                dto.setDescripcion(imp.getDescripcion());
+                dto.setPorcentaje(imp.getPorcentaje());
+
+                listaDto.add(dto);
+            }
+
+        }
+        return listaDto;
+    }
+
     /**
      * Devuleve los productos que están en el pedido.
      *
@@ -143,14 +165,34 @@ public class Pedido implements Serializable {
      *
      * @return
      */
-    public double SubtotalDelPedido() {
+    private double SubtotalDelPedido() {
         double subtotalPedido = 0.0;
         for (ItemDTO item : CrearDTOdeLosItems()) {
             subtotalPedido += item.getSubtotal();
         }
         return subtotalPedido;
     }
+
+    public double ActualizarSubtotalDelPedido() {
+        this.subtotal = 0.0;
+        for (Item item : items) {
+            this.subtotal += item.getSubtotal();
+        }
+        return this.subtotal;
+    }
     
+    public void ActualizarDescuentoDelPedido(){
+        
+        this.descuento = 0.0;
+        double topeDesc = CalcularTopeDescuento();
+        if (topeDesc <= 2500) {
+            this.total -= topeDesc;
+        } else {
+            this.total -= 2500;
+            topeDesc = 2500;
+        }
+        this.descuento = topeDesc;
+    }
     /**
      * Devuelve un boolean si fue solicitado un Servicio en el pedido.
      *
@@ -264,21 +306,33 @@ public class Pedido implements Serializable {
      * @return
      */
     public double Total() {
+        this.total = 0.0;
         for (Item item : items) {
-            if (item.getProducto() != null
-                    && (item.getProducto().getTipo_impuesto() != TipoImpuestoEnum.EXCLUIDO)) {
-                this.total += ((item.getProducto().getPrecio()
-                        + (item.getProducto().getPrecio() * this.IVA)
-                        + (item.getProducto().getPrecio() * this.IIBB)) * item.getUnidades());
+
+            if (item.getProducto() != null) {
+                if (item.getProducto().getTipo_impuesto() == TipoImpuestoEnum.GRAVADO) {
+                    this.total += ((item.getProducto().getPrecio()
+                            + (item.getProducto().getPrecio() * this.IVA)
+                            + (item.getProducto().getPrecio() * this.IIBB)) * item.getUnidades());
+                } else {
+                    this.total += item.getProducto().getPrecio() * item.getUnidades();
+                }
+
                 if (item.getGarantia() > 0) {
                     this.total += (item.getProducto().getPrecio() * 0.02) * item.getGarantia();
                 }
             }
-            if (item.getServicio() != null && (item.getServicio().getTipo_impuesto() != TipoImpuestoEnum.EXCLUIDO)) {
-                this.total += ((item.getServicio().getPrecio()
-                        + (item.getServicio().getPrecio() * this.IVA)
-                        + (item.getServicio().getPrecio() * this.IIBB)
-                        + item.getServicio().getMantenimiento()));
+
+            if (item.getServicio() != null) {
+                if (item.getServicio().getTipo_impuesto() == TipoImpuestoEnum.GRAVADO) {
+                    this.total += ((item.getServicio().getPrecio()
+                            + (item.getServicio().getPrecio() * this.IVA)
+                            + (item.getServicio().getPrecio() * this.IIBB)
+                            + item.getServicio().getMantenimiento()));
+                } else {
+                    this.total += ((item.getServicio().getPrecio() + item.getServicio().getMantenimiento())
+                            * item.getUnidades());
+                }
             }
         }
 
