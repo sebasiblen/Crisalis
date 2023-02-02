@@ -1,16 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package com.cristalis.app.servicio;
 
+import com.cristalis.app.controladores.DTO.ImpuestoDTO;
+import com.cristalis.app.controladores.DTO.ItemDTO;
 import com.cristalis.app.modelo.Pedido;
 import java.util.List;
 
-/**
- *
- * @author Educacion
- */
 public interface PedidoServicio {
     
     public List<Pedido> listadoPedidos();
@@ -29,4 +23,27 @@ public interface PedidoServicio {
     
     public void eliminarPedido(Long id);
     
+    public List<ItemDTO> crearDTOdeLosItems(Pedido pedido);
+    
+    public List<ImpuestoDTO> crearDTOImpuestosExtra(Pedido pedido);
+    
+    public List<ItemDTO> productosEnPedidoActual(Pedido pedido);
+    
+    public void subtotalDelPedido(Pedido pedido);
+    
+    public void actualizarSubtotalDelPedido(Pedido pedido);
+    
+    public void actualizarDescuentoDelPedido(Pedido pedido);
+    
+    public boolean estaAlgunServicioEnOrden(Pedido pedido);
+    
+    public double calcularTopeDescuento(Pedido pedido);
+    
+    public void aplicarDescuentos(Pedido pedido);
+    
+    public void CalcularImpuestosSegunElTipoDelCliente(Pedido pedido);
+    
+    public void AgregarImpuestosExtras(Pedido pedido);
+    
+    public void Total(Pedido pedido);
 }

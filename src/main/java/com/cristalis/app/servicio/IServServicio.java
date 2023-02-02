@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cristalis.app.servicio;
 
 import com.cristalis.app.modelo.Servicio;
@@ -10,13 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author Educacion
- */
 @Service
-public class IServServicio implements ServServicio{
-    
+public class IServServicio implements ServServicio {
+
     @Autowired
     private ServicioRepositorio repositorio;
 
@@ -44,6 +36,5 @@ public class IServServicio implements ServServicio{
     public void eliminarServicio(Long id) {
         repositorio.deleteById(id);
     }
-    
-    
+
 }

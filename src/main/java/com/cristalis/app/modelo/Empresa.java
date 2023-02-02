@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cristalis.app.modelo;
 
 import java.io.Serializable;
@@ -21,10 +17,6 @@ import javax.persistence.Temporal;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- *
- * @author Educacion
- */
 @Data
 @Entity
 @DiscriminatorValue("Empresa")
@@ -44,7 +36,7 @@ public class Empresa extends Cliente implements Serializable {
     @Column(name = "tipo_comprador", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private TipoClienteEnum tipo;
-    
+
     @OneToOne
     @JoinColumn(name = "persona_id")
     private Persona persona;
@@ -68,19 +60,4 @@ public class Empresa extends Cliente implements Serializable {
         this.fecha = fecha;
         this.tipo = tipo;
     }
-
-    public List<Servicio> ServiciosContratados() {
-        List<Servicio> servicios = new ArrayList<>();
-
-        for (Pedido pedido : pedidos) {
-            for (Item item : pedido.getItems()) {
-                if (item.getServicio() != null) {
-                    servicios.add(item.getServicio());
-                }
-            }
-        }
-
-        return servicios;
-    }
-    
 }

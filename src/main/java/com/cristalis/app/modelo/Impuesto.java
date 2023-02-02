@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cristalis.app.modelo;
 
 import java.io.Serializable;
@@ -14,10 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.Data;
 
-/**
- *
- * @author Educacion
- */
 @Data
 @Entity
 public class Impuesto implements Serializable {
@@ -39,13 +31,6 @@ public class Impuesto implements Serializable {
 
     public Impuesto(String descripcion, double porcentaje, Pedido pedido) {
         this.descripcion = descripcion;
-        this.porcentaje = porcentaje;
-    }
-    
-    public void setPorcentaje(double porcentaje){
-        if (porcentaje > 0) {
-            this.porcentaje = (porcentaje / 100);
-        }
         this.porcentaje = porcentaje;
     }
 }

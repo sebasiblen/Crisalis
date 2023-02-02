@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cristalis.app.controladores.DTO;
 
 import com.cristalis.app.modelo.TipoClienteEnum;
@@ -12,10 +8,6 @@ import javax.persistence.Enumerated;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- *
- * @author Educacion
- */
 @Data
 public class ClienteRegistroDTO implements Serializable {
 
@@ -30,9 +22,6 @@ public class ClienteRegistroDTO implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private TipoClienteEnum tipo;
 
-    
-    
-    
     public ClienteRegistroDTO() {
     }
 

@@ -12,10 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-/**
- *
- * @author seba
- */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -27,35 +23,35 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         /*
             Hashea texto plano en este caso la pw que ingresa el usuario
-        */
+         */
         return new BCryptPasswordEncoder();
     }
-    
+
     /**
      * Valida que los datos que recibo son correctos
-     * @return 
+     *
+     * @return
      */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        
+
         DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
         /*
         UserDetailService permite facilitar la busqueda
         y buscar por email en este caso. Y obtener los datos.
-        */
+         */
         auth.setUserDetailsService(usuarioServicio);
         /*
             Permite guardar la pass codificada
-        */
+         */
         auth.setPasswordEncoder(passwordEncoder());
         return auth;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        
+
         // Permisos a las rutas que puede acceder
-        
         http.authorizeRequests().antMatchers(
                 "/registro**",
                 "/js/**",
@@ -69,7 +65,7 @@ public class SecurityConfig {
                 .and()
                 .logout()
                 .invalidateHttpSession(true) // invalidar request
-                .clearAuthentication(true) 
+                .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout")
                 .permitAll();

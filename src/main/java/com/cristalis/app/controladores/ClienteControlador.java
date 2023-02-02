@@ -27,10 +27,9 @@ public class ClienteControlador {
 
     @Autowired
     private ServServicio servServicio;
-    /*
-        Empresa Temporal para la vinculacion
-        Persona Temporal para la vinculacion
-     */
+
+    /*Empresa Temporal para la vinculacion
+      Persona Temporal para la vinculacion*/
     Empresa empresaTemp = null;
     Persona personaTemp = null;
 
@@ -239,11 +238,11 @@ public class ClienteControlador {
      */
     @GetMapping("/clientes/servicios_activos/persona/{id}")
     public String ServiciosActivosCliente(@PathVariable Long id, Model modelo) {
-
+        Persona persona = personaServicio.obtenerPersonaPorID(id);
         modelo.addAttribute("cliente",
-                personaServicio.obtenerPersonaPorID(id));
+                persona);
         modelo.addAttribute("listaServiciosActivos",
-                personaServicio.listadoServiciosContratados(id));
+                personaServicio.listadoServiciosContratados(persona));
 
         return "cliente_servicios_activos";
     }
@@ -257,9 +256,10 @@ public class ClienteControlador {
      */
     @GetMapping("/clientes/servicios_activos/empresa/{id}")
     public String ServiciosActivosClienteEmpresa(@PathVariable Long id, Model modelo) {
-        modelo.addAttribute("cliente", empresaServicio.obtenerEmpresaPorID(id));
+        Empresa empresa = empresaServicio.obtenerEmpresaPorID(id);
+        modelo.addAttribute("cliente", empresa);
         modelo.addAttribute("listaServiciosActivos",
-                empresaServicio.listadoServiciosContratados(id));
+                empresaServicio.listadoServiciosContratados(empresa));
 
         return "cliente_servicios_activos";
     }

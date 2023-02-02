@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cristalis.app.servicio;
 
 import com.cristalis.app.modelo.Empresa;
@@ -16,10 +12,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author Educacion
- */
 @Service
 public class IPersonaServicio implements PersonaServicio {
 
@@ -81,51 +73,37 @@ public class IPersonaServicio implements PersonaServicio {
     }
 
     @Override
-    public List<Servicio> listadoServiciosContratados(Long id) {
-        
-        Persona p = repositorio.findById(id).orElse(null);
-        
+    public List<Servicio> listadoServiciosContratados(Persona p) {
+
         List<Servicio> servicios = new ArrayList<>();
-        
         for (Pedido pedido : p.getPedidos()) {
-            
             for (Item item : pedido.getItems()) {
                 if (item.getServicio() != null) {
                     servicios.add(item.getServicio());
                 }
             }
-            
         }
-        
+
         return servicios;
     }
 
     @Override
-    public List<Servicio> listadoServiciosVencidos(Long id) {
-        
-        Persona p = repositorio.findById(id).orElse(null);
-        
+    public List<Servicio> listadoServiciosVencidos(Persona p) {
+
         List<Servicio> serviciosVencidos = new ArrayList<>();
-        
         Date fechaActual = new Date();
-        
         for (Pedido pedido : p.getPedidos()) {
             Date fechaPedido = pedido.getFecha();
-            
             long dif = fechaActual.getTime() - fechaPedido.getTime();
-            
             if (dif > 31) {
-                
                 for (Item item : pedido.getItems()) {
                     if (item.getServicio() != null) {
-                        
                         serviciosVencidos.add(item.getServicio());
                     }
                 }
-                
             }
         }
-        
+
         return serviciosVencidos;
     }
 

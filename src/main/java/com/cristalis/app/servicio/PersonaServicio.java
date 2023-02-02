@@ -1,23 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package com.cristalis.app.servicio;
 
 import com.cristalis.app.modelo.Persona;
 import com.cristalis.app.modelo.Servicio;
 import java.util.List;
 
-/**
- *
- * @author Educacion
- */
 public interface PersonaServicio {
 
     public List<Persona> listadoPersonas();
-    
+
     public List<Persona> filtrarPersonas(String palabraClave);
-    
+
     public Persona guardarPersona(Persona persona);
 
     public Persona obtenerPersonaPorID(Long id);
@@ -27,9 +19,9 @@ public interface PersonaServicio {
     public Persona actualizarPersona(Persona persona);
 
     public void eliminarPersona(Long id);
-    
-    public List<Servicio> listadoServiciosContratados(Long id);
-    
-    public List<Servicio> listadoServiciosVencidos(Long id);
+
+    public List<Servicio> listadoServiciosContratados(Persona persona);
+
+    public List<Servicio> listadoServiciosVencidos(Persona persona);
 
 }

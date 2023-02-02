@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cristalis.app.controladores.DTO;
 
 import com.cristalis.app.modelo.Producto;
@@ -9,12 +5,8 @@ import com.cristalis.app.modelo.Servicio;
 import java.io.Serializable;
 import lombok.Data;
 
-/**
- *
- * @author Educacion
- */
 @Data
-public class ItemDTO implements Serializable{
+public class ItemDTO implements Serializable {
 
     private Long idItem;
     private String descripcion;

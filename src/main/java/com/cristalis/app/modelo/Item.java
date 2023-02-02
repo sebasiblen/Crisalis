@@ -13,10 +13,6 @@ import javax.persistence.OneToOne;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
-/**
- *
- * @author Educacion
- */
 @Data
 @Entity
 public class Item implements Serializable {
@@ -79,5 +75,5 @@ public class Item implements Serializable {
         this.mantenimiento = mantenimiento;
         this.servicio = servicio;
     }
-    
+
 }

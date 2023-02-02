@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/registro")
 public class RegistroUsuarioControlador {
 
-    
     private UsuarioServicio usuarioServicio;
-    
- 
+
     public RegistroUsuarioControlador(UsuarioServicio usuarioServicio) {
         this.usuarioServicio = usuarioServicio;
     }

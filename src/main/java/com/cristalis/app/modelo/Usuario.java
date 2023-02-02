@@ -13,10 +13,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import lombok.Data;
 
-/**
- *
- * @author seba
- */
 @Data
 @Entity
 public class Usuario implements Serializable {
@@ -29,10 +25,10 @@ public class Usuario implements Serializable {
     private String apellido;
     private String password;
     private String email;
-    
+
     /*
     *   Relaciones 
-    */
+     */
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "usuarios_roles",

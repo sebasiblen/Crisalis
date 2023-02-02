@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cristalis.app.controladores;
 
 import com.cristalis.app.modelo.Impuesto;
@@ -14,10 +10,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-/**
- *
- * @author Educacion
- */
 @Controller
 public class ImpuestoControlador {
 
@@ -53,7 +45,11 @@ public class ImpuestoControlador {
     public String ActualizarImpuesto(@ModelAttribute("impuesto") Impuesto impuesto, @PathVariable Long id) {
         Impuesto impuestoActualizado = impuestoServicio.obtenerImpuestoPorID(id);
         impuestoActualizado.setDescripcion(impuesto.getDescripcion());
-        impuestoActualizado.setPorcentaje(impuesto.getPorcentaje());
+        double porcentaje = 0.0;
+        if (impuesto.getPorcentaje() > 1) {
+            porcentaje  = impuesto.getPorcentaje() / 100;
+        }
+        impuestoActualizado.setPorcentaje(porcentaje);
         impuestoServicio.actualizarImpuesto(impuestoActualizado);
         return "redirect:/impuestos";
     }

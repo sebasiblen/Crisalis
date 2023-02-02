@@ -10,14 +10,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-/**
- *
- * @author Educacion
- */
 @Controller
 public class ServicioController {
-    
-     @Autowired
+
+    @Autowired
     private ServServicio servicioServicio;
 
     @GetMapping("/servicios")

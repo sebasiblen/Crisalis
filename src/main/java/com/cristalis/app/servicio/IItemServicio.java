@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cristalis.app.servicio;
 
 import com.cristalis.app.controladores.DTO.ItemDTO;
@@ -14,10 +10,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author Educacion
- */
 @Service
 public class IItemServicio implements ItemServicio {
 
@@ -37,8 +29,7 @@ public class IItemServicio implements ItemServicio {
     public Item guardarItem(Item item) {
         return repositorio.save(item);
     }
-    
-    
+
     @Override
     public Item obtenerItemPorID(Long id) {
         return repositorio.findById(id).orElse(null);
@@ -62,10 +53,6 @@ public class IItemServicio implements ItemServicio {
         dto.setUnidades(item.getUnidades());
         dto.setGarantia(item.getGarantia());
         dto.setMantenimiento(item.getMantenimiento());
-//        dto.setSubtotal(item.getSubtotal());
-//        dto.setIVA(item.getIVA());
-//        dto.setIIBB(item.getIIBB());
-//        dto.setTotal(item.getTotal());
         dto.setProducto(item.getProducto());
         dto.setServicio(item.getServicio());
 
@@ -99,7 +86,6 @@ public class IItemServicio implements ItemServicio {
         ordenActual.remove(item);
     }
 
-
     @Override
     public void Subtotal(Item item) {
         double subtotal = 0.0;
@@ -108,9 +94,9 @@ public class IItemServicio implements ItemServicio {
             item.setSubtotal(subtotal);
         }
         if (item.getServicio() != null) {
-            subtotal += (item.getServicio().getPrecio() + 
-                    item.getServicio().getMantenimiento()) * 
-                    item.getUnidades();
+            subtotal += (item.getServicio().getPrecio()
+                    + item.getServicio().getMantenimiento())
+                    * item.getUnidades();
             item.setSubtotal(subtotal);
         }
     }

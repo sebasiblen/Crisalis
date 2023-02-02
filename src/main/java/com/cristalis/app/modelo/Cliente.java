@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.cristalis.app.modelo;
 
 import java.io.Serializable;
@@ -15,10 +11,6 @@ import javax.persistence.InheritanceType;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
-/**
- *
- * @author Educacion
- */
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
