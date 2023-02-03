@@ -127,4 +127,8 @@ public class IItemServicio implements ItemServicio {
             productoServicio.guardarProducto(p);
         }
     }
+
+    @Override
+    public void desactivarServicio(Item item) {
+    }
 }

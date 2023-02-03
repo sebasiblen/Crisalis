@@ -406,6 +406,7 @@ public class PedidoControlador {
                 ItemImpuesto itBDD = itemImpuestoServicio.obtenerItemImpuestoPorID(itemImpuesto.getIdItemImpuesto());
                 itBDD.setPedido(p);
             }
+            p.setItemImpuestos(itemImpuestoServicio.orden());
         }
         
         

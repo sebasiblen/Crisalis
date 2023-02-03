@@ -33,7 +33,8 @@ public class Item implements Serializable {
     private double mantenimiento;
     @Column(name = "subtotal")
     private double subtotal;
-
+    @Column(name = "estado")
+    private String estado;
     // Un item correspone a un producto
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_producto", referencedColumnName = "idBien")

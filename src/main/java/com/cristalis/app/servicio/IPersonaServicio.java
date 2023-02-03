@@ -8,6 +8,7 @@ import com.cristalis.app.modelo.Servicio;
 import com.cristalis.app.repositorio.PersonaRepositorio;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class IPersonaServicio implements PersonaServicio {
 
     @Autowired
     private PersonaRepositorio repositorio;
+
+    @Autowired
+    private ServServicio servicio;
 
     @Override
     public List<Persona> listadoPersonas() {
@@ -72,14 +76,68 @@ public class IPersonaServicio implements PersonaServicio {
         return repositorio.findAll();
     }
 
+//    @Override
+//    public List<Servicio> listadoServiciosContratados(Persona p) {
+//
+//        List<Servicio> servicios = new ArrayList<>();
+//        for (Pedido pedido : p.getPedidos()) {
+//            for (Item item : pedido.getItems()) {
+//                if (item.getServicio() != null) {
+//                    servicios.add(item.getServicio());
+//                }
+//            }
+//        }
+//
+//        return servicios;
+//    }
+//    @Override
+//    public List<Servicio> listadoServiciosVencidos(Persona p) {
+//        
+//        
+//        // En teoria si el pedido que tiene el servicio se realizo hace mas de
+//        // un mes, se pasa el servicio a la lista de vencidos.
+//        List<Servicio> serviciosVencidos = new ArrayList<>();
+//        Date fechaActual = new Date();
+//        for (Pedido pedido : p.getPedidos()) {
+//            Date fechaPedido = pedido.getFecha();
+//            long dif = fechaActual.getTime() - fechaPedido.getTime();
+//            if (dif > 31) {
+//                for (Item item : pedido.getItems()) {
+//                    if (item.getServicio() != null) {
+//                        serviciosVencidos.add(item.getServicio());
+//                    }
+//                }
+//            }
+//        }
+//        
+//        // Para que no figure en el listado de contratados. Dado que ya expiró.
+//        for (Servicio venc : listadoServiciosVencidos(p)) {
+//            for (Servicio cont : listadoServiciosContratados(p)) {
+//                if (venc.equals(cont)) {
+//                    listadoServiciosContratados(p).remove(cont);
+//                }
+//            }
+//        }
+//        return serviciosVencidos;
+//    }
+//    @Override
+//    public void desactivarServicioContratado(Persona persona, Servicio servicio) {
+//        
+//        for (Servicio s : listadoServiciosContratados(persona)) {
+//            if (s.equals(servicio)) {
+//                listadoServiciosContratados(persona).remove(s);
+//                listadoServiciosVencidos(persona).add(servicio);
+//                guardarPersona(persona);
+//            }
+//        }
     @Override
-    public List<Servicio> listadoServiciosContratados(Persona p) {
-
-        List<Servicio> servicios = new ArrayList<>();
+    public List<Item> listadoServiciosContratados(Persona p) {
+        List<Item> servicios = new ArrayList<>();
         for (Pedido pedido : p.getPedidos()) {
             for (Item item : pedido.getItems()) {
                 if (item.getServicio() != null) {
-                    servicios.add(item.getServicio());
+                    item.setEstado("Activo");
+                    servicios.add(item);
                 }
             }
         }
@@ -88,23 +146,17 @@ public class IPersonaServicio implements PersonaServicio {
     }
 
     @Override
-    public List<Servicio> listadoServiciosVencidos(Persona p) {
+    public List<Item> listadoServiciosVencidos(Persona persona) {
+        return null;
+    }
 
-        List<Servicio> serviciosVencidos = new ArrayList<>();
-        Date fechaActual = new Date();
-        for (Pedido pedido : p.getPedidos()) {
-            Date fechaPedido = pedido.getFecha();
-            long dif = fechaActual.getTime() - fechaPedido.getTime();
-            if (dif > 31) {
-                for (Item item : pedido.getItems()) {
-                    if (item.getServicio() != null) {
-                        serviciosVencidos.add(item.getServicio());
-                    }
-                }
-            }
+    @Override
+    public Item desactivarServicio(Persona persona, Item item) {
+        
+        for (Item sc : listadoServiciosContratados(persona)) {
+            
         }
-
-        return serviciosVencidos;
+        return null;
     }
 
 }

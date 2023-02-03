@@ -21,9 +21,6 @@ public class Impuesto implements Serializable {
     private String descripcion;
     @Column(name = "porcentaje")
     private double porcentaje;
-    @ManyToOne
-    @JoinColumn(name = "id_pedido")
-    private Pedido pedido;
 
     public Impuesto() {
 

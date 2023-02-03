@@ -33,4 +33,6 @@ public interface ItemServicio {
 
     public void AdicionarItemDeStock(Item item);
     
+    public void desactivarServicio( Item item);
+    
 }

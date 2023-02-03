@@ -2,11 +2,13 @@ package com.cristalis.app.controladores;
 
 import com.cristalis.app.controladores.DTO.ClienteRegistroDTO;
 import com.cristalis.app.modelo.Empresa;
+import com.cristalis.app.modelo.Item;
 import com.cristalis.app.modelo.Persona;
+import com.cristalis.app.modelo.Servicio;
 import com.cristalis.app.modelo.TipoClienteEnum;
 import com.cristalis.app.servicio.EmpresaServicio;
+import com.cristalis.app.servicio.ItemServicio;
 import com.cristalis.app.servicio.PersonaServicio;
-import com.cristalis.app.servicio.ServServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -26,7 +28,7 @@ public class ClienteControlador {
     private EmpresaServicio empresaServicio;
 
     @Autowired
-    private ServServicio servServicio;
+    private ItemServicio itemServicio;
 
     /*Empresa Temporal para la vinculacion
       Persona Temporal para la vinculacion*/
@@ -237,16 +239,30 @@ public class ClienteControlador {
      * @return
      */
     @GetMapping("/clientes/servicios_activos/persona/{id}")
-    public String ServiciosActivosCliente(@PathVariable Long id, Model modelo) {
-        Persona persona = personaServicio.obtenerPersonaPorID(id);
+    public String ServiciosActivosClientePersona(@PathVariable Long id, Model modelo) {
+        personaTemp = personaServicio.obtenerPersonaPorID(id);
         modelo.addAttribute("cliente",
-                persona);
+                personaTemp);
         modelo.addAttribute("listaServiciosActivos",
-                personaServicio.listadoServiciosContratados(persona));
-
+                personaServicio.listadoServiciosContratados(personaTemp));
+        modelo.addAttribute("vencidos", personaServicio.listadoServiciosVencidos(personaTemp));
         return "cliente_servicios_activos";
     }
-
+    
+//    @GetMapping("/clientes/servicios_activos/persona/desactivar/{id}")
+//    public String DesactivarServicio(Model modelo, @PathVariable Long id){
+//        // Item seleccionado.
+//        Item servicio = itemServicio.obtenerItemPorID(id);
+//        // Nuevo estado a asignar
+//        String estado = "Desactivado";
+////        personaServicio.desactivarServicioContratado(personaTemp, servicio);
+//        personaServicio.guardarPersona(personaTemp);
+//        var v  = personaTemp.getIdCliente();
+//        System.out.println(v);
+//        personaTemp = null;
+//        return "redirect:/clientes/servicios_activos/persona/"+ v;
+//    }
+    
     /**
      * Servicios Activos de una empresa
      *
@@ -260,8 +276,11 @@ public class ClienteControlador {
         modelo.addAttribute("cliente", empresa);
         modelo.addAttribute("listaServiciosActivos",
                 empresaServicio.listadoServiciosContratados(empresa));
-
-        return "cliente_servicios_activos";
+        
+        var v = empresaTemp.getIdCliente();
+        empresaTemp = null;
+        return "redirect:/clientes/servicios_activos/persona/" + v;
     }
-
+    
+    
 }

@@ -69,20 +69,29 @@
         <header>
             <div class="contenedor-col">
 
-                <div class="info-pedido"><b>ID Cliente: </b><span th:text="${cliente.idCliente}"></span></div>
-
                 <table>
                     <h3>Servicios Contratados</h3>
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Descripcion</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="servicio : ${listaServiciosActivos}">
-                            <td th:text="${servicio.idBien}"></td>
                             <td th:text="${servicio.descripcion}"></td>
+                            <td th:text="${servicio.estado}"></td>
+                            </td>
+                            <td>
+                                <button class="btn-secundario">
+                                    <a
+                                        th:href="@{/clientes/servicios_activos/persona/desactivar/{id} 
+                                        (id=${servicio.idItem})}"
+                                        >Desactivar</a
+                                    >
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -100,6 +109,15 @@
                         <tr th:each="servicio : ${vencidos}">
                             <td th:text="${servicio.idBien}"></td>
                             <td th:text="${servicio.descripcion}"></td>
+                            <td>
+                                <button class="btn-secundario">
+                                    <a
+                                        th:href="@{/clientes/servicios_activos/persona/desactivar/{id} 
+                                        (id=${servicio.idBien})}"
+                                        >Activar</a
+                                    >
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
