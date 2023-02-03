@@ -104,12 +104,12 @@
                 </thead>
                 <tbody>
                     <tr th:each="impuesto : ${orden}">
-                        <td th:text="${impuesto.idImpuesto}"></td>
+                        <td th:text="${impuesto.idItemImpuesto}"></td>
                         <td th:text="${impuesto.descripcion}"></td>
                         <td th:text="${impuesto.porcentaje}"></td>
                         <td>
                             <button class="btn-secundario">
-                            <a th:href="@{/pedidos/eliminar_orden/{id} (id=${impuesto.idImpuesto})}" 
+                            <a th:href="@{/pedidos/eliminar_orden/{id} (id=${impuesto.idItemImpuesto})}" 
                             > Eliminar</a></button>
                         </td>
                     </tr>

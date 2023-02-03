@@ -15,12 +15,4 @@ public interface ImpuestoServicio {
 
     public void eliminarImpuesto(Long id);
 
-    // Listado de impuestos a agregar
-    public List<Impuesto> orden();
-
-    public void agregarImpuesto(Impuesto impuesto);
-
-    public void eliminarImpuestoOrden(Impuesto impuesto);
-
-    public void limpiarOrden();
 }

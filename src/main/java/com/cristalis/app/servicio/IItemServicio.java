@@ -3,7 +3,6 @@ package com.cristalis.app.servicio;
 import com.cristalis.app.controladores.DTO.ItemDTO;
 import com.cristalis.app.modelo.Item;
 import com.cristalis.app.modelo.Producto;
-import com.cristalis.app.modelo.Servicio;
 import com.cristalis.app.repositorio.ItemRepositorio;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +14,8 @@ public class IItemServicio implements ItemServicio {
 
     @Autowired
     private ItemRepositorio repositorio;
+    @Autowired
+    private ProductoServicio productoServicio;
 
     private List<ItemDTO> lista = new ArrayList<>();
 
@@ -98,6 +99,32 @@ public class IItemServicio implements ItemServicio {
                     + item.getServicio().getMantenimiento())
                     * item.getUnidades();
             item.setSubtotal(subtotal);
+        }
+    }
+
+    @Override
+    public void DescontarItemDeStock(Item item) {
+
+        if (item.getProducto() != null) {
+            int unidades = item.getUnidades();
+            Producto p = productoServicio.obtenerProductoPorID(item.getProducto().getIdBien());
+            int stockActual = p.getStock();
+            stockActual -= unidades;
+            p.setStock(stockActual);
+            productoServicio.guardarProducto(p);
+        }
+
+    }
+
+    @Override
+    public void AdicionarItemDeStock(Item item) {
+        if (item.getProducto() != null) {
+            int unidades = item.getUnidades();
+            Producto p = productoServicio.obtenerProductoPorID(item.getProducto().getIdBien());
+            int stockActual = p.getStock();
+            stockActual += unidades;
+            p.setStock(stockActual);
+            productoServicio.guardarProducto(p);
         }
     }
 }

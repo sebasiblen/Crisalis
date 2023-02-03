@@ -69,7 +69,9 @@
         <header>
             <div class="contenedor-col">
                 <h3>Agregar Producto a [Mi orden]</h3>
-                <form th:action="@{/carrito/producto/{id}(id=${producto.idBien})}" th:object="${producto}" method="POST">
+                <form th:action="@{/carrito/producto/{id}(id=${producto.idBien})}" 
+                      th:object="${producto}" 
+                      method="POST">
                     <div class="form-group">
                         <label>Descripcion: </label>
                         <input type="text" name="nombre" th:field="${producto.descripcion}" readonly>

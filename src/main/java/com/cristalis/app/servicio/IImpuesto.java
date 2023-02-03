@@ -39,25 +39,4 @@ public class IImpuesto implements ImpuestoServicio {
     public Impuesto actualizarImpuesto(Impuesto impuesto) {
         return repositorio.save(impuesto);
     }
-
-    @Override
-    public List<Impuesto> orden() {
-        return listaImpuestos;
-    }
-
-    @Override
-    public void limpiarOrden() {
-        listaImpuestos.clear();
-    }
-
-    @Override
-    public void agregarImpuesto(Impuesto impuesto) {
-        listaImpuestos.add(impuesto);
-    }
-
-    @Override
-    public void eliminarImpuestoOrden(Impuesto impuesto) {
-        listaImpuestos.remove(impuesto);
-    }
-
 }

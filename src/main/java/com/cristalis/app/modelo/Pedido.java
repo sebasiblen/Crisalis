@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.data.annotation.Id;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -52,8 +54,9 @@ public class Pedido implements Serializable {
     @OneToMany(mappedBy = "pedido", fetch = FetchType.EAGER)
     private List<Item> items;
 
-    @OneToMany(mappedBy = "pedido", fetch = FetchType.EAGER)
-    private List<Impuesto> impuestos;
+    @OneToMany(mappedBy = "pedido")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<ItemImpuesto> ItemImpuestos;
 
     public Pedido() {
 

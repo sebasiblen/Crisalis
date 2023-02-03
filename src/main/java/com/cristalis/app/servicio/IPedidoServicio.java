@@ -2,10 +2,9 @@ package com.cristalis.app.servicio;
 
 import com.cristalis.app.controladores.DTO.ImpuestoDTO;
 import com.cristalis.app.controladores.DTO.ItemDTO;
-import com.cristalis.app.modelo.Impuesto;
 import com.cristalis.app.modelo.Item;
+import com.cristalis.app.modelo.ItemImpuesto;
 import com.cristalis.app.modelo.Pedido;
-import com.cristalis.app.modelo.Persona;
 import static com.cristalis.app.modelo.TipoClienteEnum.CONSUMIDOR_FINAL;
 import static com.cristalis.app.modelo.TipoClienteEnum.EXENTO;
 import static com.cristalis.app.modelo.TipoClienteEnum.EXPORTADOR;
@@ -13,7 +12,6 @@ import static com.cristalis.app.modelo.TipoClienteEnum.HOTEL_SERVICIO_ALOJAMIENT
 import static com.cristalis.app.modelo.TipoClienteEnum.MONOTRIBUTISTA;
 import com.cristalis.app.modelo.TipoImpuestoEnum;
 import com.cristalis.app.repositorio.PedidoRepositorio;
-import com.cristalis.app.repositorio.PersonaRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,9 @@ public class IPedidoServicio implements PedidoServicio {
 
     @Autowired
     private EmpresaServicio empresaServicio;
+
+    @Autowired
+    private ItemServicio itemServicio;
 
     @Override
     public List<Pedido> listadoPedidos() {
@@ -103,13 +104,13 @@ public class IPedidoServicio implements PedidoServicio {
 
         List<ImpuestoDTO> listaDto = new ArrayList<>();
 
-        if (!p.getImpuestos().isEmpty()) {
+        if (!p.getItemImpuestos().isEmpty()) {
 
-            for (Impuesto imp : p.getImpuestos()) {
+            for (ItemImpuesto imp : p.getItemImpuestos()) {
 
                 ImpuestoDTO dto = new ImpuestoDTO();
 
-                dto.setIdImpuesto(imp.getIdImpuesto());
+                dto.setIdImpuesto(imp.getIdItemImpuesto());
                 dto.setDescripcion(imp.getDescripcion());
                 dto.setPorcentaje(imp.getPorcentaje());
 
@@ -258,7 +259,7 @@ public class IPedidoServicio implements PedidoServicio {
     @Override
     public void AgregarImpuestosExtras(Pedido p) {
         double total = p.getTotal();
-        for (Impuesto impuesto : p.getImpuestos()) {
+        for (ItemImpuesto impuesto : p.getItemImpuestos()) {
             total = total + (total * impuesto.getPorcentaje());
         }
         p.setTotal(total);
@@ -300,6 +301,20 @@ public class IPedidoServicio implements PedidoServicio {
                     p.setTotal(total);
                 }
             }
+        }
+    }
+
+    @Override
+    public void ActualizarStockVenta(Pedido pedido) {
+        for (Item item : pedido.getItems()) {
+            itemServicio.DescontarItemDeStock(item);
+        }
+    }
+
+    @Override
+    public void ActualizarStockAnulacion(Pedido pedido) {
+        for (Item item : pedido.getItems()) {
+            itemServicio.AdicionarItemDeStock(item);
         }
     }
 }

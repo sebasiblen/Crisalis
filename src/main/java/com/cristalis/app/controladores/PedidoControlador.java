@@ -1,12 +1,15 @@
 package com.cristalis.app.controladores;
 
+import com.cristalis.app.controladores.DTO.ImpuestoDTO;
 import com.cristalis.app.modelo.Empresa;
 import com.cristalis.app.modelo.Impuesto;
 import com.cristalis.app.modelo.Item;
+import com.cristalis.app.modelo.ItemImpuesto;
 import com.cristalis.app.modelo.Pedido;
 import com.cristalis.app.modelo.Persona;
 import com.cristalis.app.servicio.EmpresaServicio;
 import com.cristalis.app.servicio.ImpuestoServicio;
+import com.cristalis.app.servicio.ItemImpuestoServicio;
 import com.cristalis.app.servicio.ItemServicio;
 import com.cristalis.app.servicio.PedidoServicio;
 import com.cristalis.app.servicio.PersonaServicio;
@@ -34,6 +37,9 @@ public class PedidoControlador {
     private ItemServicio itemServicio;
     @Autowired
     private ImpuestoServicio impuestoServicio;
+    @Autowired
+    private ItemImpuestoServicio itemImpuestoServicio;
+
     /*
         Pedido para actualizar
      */
@@ -68,11 +74,13 @@ public class PedidoControlador {
         modelo.addAttribute("items", itemServicio.orden());
         return "confirmacion_pedido";
     }
-    
+
     /**
-     *  #### DETALLITO, EN EL CASO DE EXENTO, MUESTRA EL DESCUENTO QUE SE APLICARIA, [PENDIENTE]
+     * #### DETALLITO, EN EL CASO DE EXENTO, MUESTRA EL DESCUENTO QUE SE
+     * APLICARIA, [PENDIENTE]
+     *
      * @param id
-     * @return 
+     * @return
      */
     @GetMapping("/pedidos/confirmacion/{id}")
     public String AsignarClienteAlPedido(@PathVariable Long id) {
@@ -85,7 +93,7 @@ public class PedidoControlador {
             nuevoPedido = new Pedido(empresa, itemServicio.orden());
             //Se agrega el pedido a la empresa
             empresa.getPedidos().add(nuevoPedido);
-            
+
             for (Item it : itemServicio.orden()) {
                 if (!itemServicio.orden().isEmpty()) {
                     // Vincular items con el pedido
@@ -94,9 +102,9 @@ public class PedidoControlador {
                 }
             }
             pedidoServicio.CalcularImpuestosSegunElTipoDelCliente(nuevoPedido);
-            pedidoServicio.aplicarDescuentos(nuevoPedido);
             pedidoServicio.subtotalDelPedido(nuevoPedido);
             pedidoServicio.Total(nuevoPedido);
+            pedidoServicio.aplicarDescuentos(nuevoPedido);
             pedidoServicio.guardarPedido(nuevoPedido);
         } else {
             persona = personaServicio.obtenerPersonaPorID(id);
@@ -111,38 +119,48 @@ public class PedidoControlador {
                 }
             }
             pedidoServicio.CalcularImpuestosSegunElTipoDelCliente(nuevoPedido);
-            pedidoServicio.aplicarDescuentos(nuevoPedido);
             pedidoServicio.subtotalDelPedido(nuevoPedido);
             pedidoServicio.Total(nuevoPedido);
+            pedidoServicio.aplicarDescuentos(nuevoPedido);
             pedidoServicio.guardarPedido(nuevoPedido);
         }
+
+        // Stock post venta
+        pedidoServicio.ActualizarStockVenta(nuevoPedido);
         // Limpia la orden para realizar un nuevo pedido
         itemServicio.borrarOrdenActual();
         return "redirect:/pedidos";
     }
-    
+
     /**
      * Elimina un pedido
+     *
      * @param id
-     * @return 
+     * @return
      */
     @GetMapping("/pedidos/{id}")
     public String eliminarPedido(@PathVariable Long id) {
         Pedido p = pedidoServicio.obtenerPedidoPorID(id);
+        pedidoServicio.ActualizarStockAnulacion(p);
         for (Item item : p.getItems()) {
             item.setProducto(null);
             itemServicio.eliminarItem(item.getIdItem());
         }
+        for (ItemImpuesto itemImpuesto : p.getItemImpuestos()) {
+            itemImpuesto.setPedido(null);
+            itemImpuestoServicio.eliminarItemImpuestoOrden(itemImpuesto);
+        }
         pedidoServicio.eliminarPedido(id);
         return "redirect:/pedidos";
     }
-    
+
     /**
-     * En la vista de "VER" de pedidos.
-     * Me devuelve una lista con todos los pedidos asociados al id del cliente.
+     * En la vista de "VER" de pedidos. Me devuelve una lista con todos los
+     * pedidos asociados al id del cliente.
+     *
      * @param id
      * @param modelo
-     * @return 
+     * @return
      */
     @GetMapping("/pedidos/ver/{id}")
     @Transactional
@@ -162,19 +180,21 @@ public class PedidoControlador {
 
 //        List<Pedido> pedidos = pedidoServicio.pedidoDiscriminadoPorCliente(cliente);
 //        List<Pedido> pedidosAsociados = pedidoServicio.pedidoAsociadoAlCliente(String.valueOf(identificador));
-        modelo.addAttribute("pedidos", 
+        modelo.addAttribute("pedidos",
                 pedidoServicio.pedidoDiscriminadoPorCliente(cliente));
-        modelo.addAttribute("pedidosAsociados", 
+        modelo.addAttribute("pedidosAsociados",
                 pedidoServicio.pedidoAsociadoAlCliente(String.valueOf(identificador)));
         modelo.addAttribute("pedido", p);
         return "pedidos_disc_cliente";
     }
-    
+
     /**
-     * Muestra informacion detallada de los items, el cliente y datos del pedido.
+     * Muestra informacion detallada de los items, el cliente y datos del
+     * pedido.
+     *
      * @param id
      * @param modelo
-     * @return 
+     * @return
      */
     @GetMapping("/pedidos/detalles/{id}")
     public String DetallesPedido(@PathVariable Long id, Model modelo) {
@@ -186,12 +206,13 @@ public class PedidoControlador {
                 pedidoServicio.crearDTOImpuestosExtra(pedidoSeleccionado));
         return "detalles_pedido";
     }
-    
+
     /**
      * Vista de las posibles modificaciones que se pueden aplicar a un pedido.
+     *
      * @param id
      * @param modelo
-     * @return 
+     * @return
      */
     @GetMapping("/pedidos/editar_pedido/{id}")
     public String EditarPedidoFormulario(@PathVariable Long id, Model modelo) {
@@ -214,12 +235,13 @@ public class PedidoControlador {
         modelo.addAttribute("items", pedidoTemp.getItems());
         return "editar_items_pedido";
     }
-    
+
     /**
      * Modificar datos específicos de los items del pedido
+     *
      * @param id
      * @param modelo
-     * @return 
+     * @return
      */
     @GetMapping("/pedidos/editar_pedido/editar_items/item/{id}")
     public String EditarItemSeleccionado(@PathVariable Long id, Model modelo) {
@@ -228,9 +250,9 @@ public class PedidoControlador {
     }
 
     /**
-     * Guardar los cambios realizados en el item seleccionado.
-     * Actualizar los calculos del pedido luego de modificar algun item.
-     * 
+     * Guardar los cambios realizados en el item seleccionado. Actualizar los
+     * calculos del pedido luego de modificar algun item.
+     *
      * @param id
      * @param item
      * @return
@@ -244,7 +266,7 @@ public class PedidoControlador {
         itemActualizado.setUnidades(item.getUnidades());
         itemServicio.Subtotal(itemActualizado);
         itemServicio.guardarItem(itemActualizado);
-        
+
         // Acutalizar valores del pedido.
         Pedido p = pedidoServicio.obtenerPedidoPorID(pedidoTemp.getIdPedido());
         pedidoServicio.subtotalDelPedido(p);
@@ -272,14 +294,14 @@ public class PedidoControlador {
         modelo.addAttribute("empresas", empresaServicio.listadoEmpresas());
         return "editar_cliente_pedido";
     }
-    
+
     /**
-     * Reasignar un nuevo cliente de tipo PERSONA al pedido seleccionado.
-     * y acutalizar los valores del pedido, ya que puede cambiar el impeusto
+     * Reasignar un nuevo cliente de tipo PERSONA al pedido seleccionado. y
+     * acutalizar los valores del pedido, ya que puede cambiar el impeusto
      * dependiendo del tipo de cliente que sea la PERSONA.
-     * 
+     *
      * @param id
-     * @return 
+     * @return
      */
     @GetMapping("/pedidos/editar_pedido/editar_cliente/persona/{id}")
     public String ActualizarPersonaPedido(@PathVariable Long id) {
@@ -297,24 +319,24 @@ public class PedidoControlador {
         pedidoTemp = null;
         return "redirect:/pedidos";
     }
-    
+
     /**
-     * Reasignar un nuevo cliente de tipo EMPRESA al pedido seleccionado.
-     * y acutalizar los valores del pedido, ya que puede cambiar el impeusto
+     * Reasignar un nuevo cliente de tipo EMPRESA al pedido seleccionado. y
+     * acutalizar los valores del pedido, ya que puede cambiar el impeusto
      * dependiendo del tipo de cliente que sea la EMPRESA.
+     *
      * @param id
-     * @return 
+     * @return
      */
     @GetMapping("/pedidos/editar_pedido/editar_cliente/empresa/{id}")
     public String ActualizarEmpresaPedido(@PathVariable Long id) {
-        
+
         Empresa empresa = empresaServicio.obtenerEmpresaPorID(id);
         if (empresa.getPersona() != null) {
             pedidoTemp.setPersona(null);
             pedidoTemp.setEmpresa(null);
             pedidoTemp.setTotal(0.0);
             pedidoTemp.setEmpresa(empresa);
-            pedidoTemp.setPersona(empresa.getPersona());
             pedidoServicio.CalcularImpuestosSegunElTipoDelCliente(pedidoTemp);
             pedidoServicio.Total(pedidoTemp);
             pedidoServicio.aplicarDescuentos(pedidoTemp);
@@ -328,7 +350,7 @@ public class PedidoControlador {
     public String ImpuestosExtra(@PathVariable Long id, Model modelo) {
         pedidoTemp = pedidoServicio.obtenerPedidoPorID(id);
         modelo.addAttribute("impuestos", impuestoServicio.listadoImpuestos());
-        modelo.addAttribute("orden", impuestoServicio.orden());
+        modelo.addAttribute("orden", itemImpuestoServicio.orden());
         return "impuesto_extra";
     }
 
@@ -336,55 +358,74 @@ public class PedidoControlador {
     @GetMapping("/pedidos/impuestos_extras/agregar_impuesto/{id}")
     public String AgregarImpuestosExtraOrden(@PathVariable Long id,
             Model modelo) {
+        ItemImpuesto itemImpuesto = new ItemImpuesto();
         modelo.addAttribute("impuesto", impuestoServicio.obtenerImpuestoPorID(id));
+        modelo.addAttribute("itemImpuesto", itemImpuesto);
         return "nuevo_impuesto_extra";
     }
 
     // Agregar a la orden de impuestos
     @PostMapping("/pedidos/impuestos_extras/agregar_impuesto/{id}")
-    public String OrdenImpuestos(@PathVariable Long id) {
+    public String OrdenImpuestos(@PathVariable Long id,
+            @ModelAttribute("itemImpuesto") ItemImpuesto itemImpuesto) {
         Impuesto i = impuestoServicio.obtenerImpuestoPorID(id);
-        impuestoServicio.agregarImpuesto(i);
+        itemImpuesto.setImpuesto(i);
+        itemImpuestoServicio.agregarItemImpuestoOrden(itemImpuesto);
+        itemImpuestoServicio.guardarItemImpuesto(itemImpuesto);
         var v = pedidoTemp.getIdPedido();
         return "redirect:/pedidos/impuestos_extras/" + v;
-    }
-
-    @GetMapping("/pedidos/eliminar_orden/{id}")
-    public String EliminarImpuestoOrden(@PathVariable Long id, Model modelo) {
-        Impuesto i = impuestoServicio.obtenerImpuestoPorID(id);
-        impuestoServicio.eliminarImpuestoOrden(i);
-        var v = pedidoTemp.getIdPedido();
-        return "redirect:/pedidos/impuestos_extras/" + v;
-    }
-
-    @GetMapping("/pedidos/confirmar_impuestos")
-    public String ConfirmarImpuestosExtras() {
-
-        /**
-         *
-         * EL METODO LIMPIAR ORDEN ME BORRA LA LISTA Y PORMAS QUE GUARDE EN UNA
-         * NUEVA LISTA NO SE ME ACTUALIZA EL PEDIDO
-         */
-        // Es necesario pasarlo a una lista local para que no me borre
-        // la lista de impuestos, ya que se eliminan al limpiar la orden.
-        List<Impuesto> impuestosLista = impuestoServicio.orden();
-        impuestoServicio.limpiarOrden();
-        Pedido p = pedidoServicio.obtenerPedidoPorID(pedidoTemp.getIdPedido());
-        p.setImpuestos(impuestosLista);
-        pedidoServicio.guardarPedido(p);
-        System.out.println("IMPOUESOTS : " + p.getImpuestos().toString());
-
-        return "redirect:/pedidos";
     }
     
     /**
+     * Elimina los impuestos extras que se cargan en la orden
+     * @param id
+     * @param modelo
+     * @return 
+     */
+    @GetMapping("/pedidos/eliminar_orden/{id}")
+    public String EliminarImpuestoOrden(@PathVariable Long id, Model modelo) {
+        ItemImpuesto i = itemImpuestoServicio.obtenerItemImpuestoPorID(id);
+        itemImpuestoServicio.eliminarItemImpuestoOrden(i);
+        itemImpuestoServicio.eliminarItemImpuesto(id);
+        var v = pedidoTemp.getIdPedido();
+        return "redirect:/pedidos/impuestos_extras/" + v;
+    }
+    
+    /**
+     * Agrega la lista con los impuestos extras que fueron cargados en la orden
+     * al pedido, y calcula el nuevo total.
+     * @return 
+     */
+    @GetMapping("/pedidos/confirmar_impuestos")
+    public String ConfirmarImpuestosExtras() {
+
+        Pedido p = pedidoServicio.obtenerPedidoPorID(pedidoTemp.getIdPedido());
+        // Vincular la orden al pedido
+        if (!itemImpuestoServicio.orden().isEmpty()) {
+            for (ItemImpuesto itemImpuesto : itemImpuestoServicio.orden()) {
+                ItemImpuesto itBDD = itemImpuestoServicio.obtenerItemImpuestoPorID(itemImpuesto.getIdItemImpuesto());
+                itBDD.setPedido(p);
+            }
+        }
+        
+        
+        // NO ME CALCULA O NO ME ACTUALIZA EL NUEVO TOTAL ... REVISAR DESPUES DEL COMMIT
+        pedidoServicio.AgregarImpuestosExtras(p);
+        pedidoServicio.guardarPedido(p);
+        itemImpuestoServicio.limpiarOrden();
+        pedidoTemp = null;
+        return "redirect:/pedidos";
+    }
+
+    /**
      * Permite eliminar la lista de impuestos que se iban a adicionar sobre un
      * pedido.
-     * @return 
+     *
+     * @return
      */
     @GetMapping("/pedidos/cancelar_orden")
     public String CancelarOrdenImpuestosExtras() {
-        impuestoServicio.limpiarOrden();
+        itemImpuestoServicio.limpiarOrden();
         return "redirect:/pedidos";
     }
 }

@@ -46,4 +46,8 @@ public interface PedidoServicio {
     public void AgregarImpuestosExtras(Pedido pedido);
     
     public void Total(Pedido pedido);
+    
+    public void ActualizarStockVenta(Pedido pedido);
+    
+    public void ActualizarStockAnulacion(Pedido pedido);
 }

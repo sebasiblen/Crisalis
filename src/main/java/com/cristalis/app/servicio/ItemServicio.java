@@ -28,5 +28,9 @@ public interface ItemServicio {
     public List<ItemDTO> mostrarItemsDTO();
 
     public void Subtotal(Item item);
+    
+    public void DescontarItemDeStock(Item item);
 
+    public void AdicionarItemDeStock(Item item);
+    
 }
