@@ -65,39 +65,75 @@
                 </ul>
             </div>
         </nav>
-        <h1>Nuevo Producto</h1>
+        <h1>Servicios del Cliente</h1>
         <header>
-            <div class="container">
-                <h3 class="text-center">Registro Producto</h3>
-                <form th:action="@{/productos}" th:object="${producto}" method="POST">
-                    <div class="form-group">
-                        <label>Descripcion: </label>
-                        <input type="text" name="nombre" th:field="*{descripcion}"
-                               placeholder="Digite el nombre del producto"
-                               autocomplete="off">
-                    </div>
-                    <div class="form-group">
-                        <label>Precio: </label>
-                        <input type="text" name="precio" th:field="*{precio}" placeholder="Digite el precio" autocomplete="off">
-                    </div>
-                    <div class="form-group">
-                        <label>Stock: </label>
-                        <input type="text" name="precio" th:field="*{stock}" placeholder="Digite el precio" autocomplete="off">
-                    </div>
-                    <div class="form-group">
-                        <label>Tipo Impuesto: </label>
-                        <select name="tipo_impuesto">
-                            <option th:each="valor : ${T(com.cristalis.app.modelo.TipoImpuestoEnum).values()}" 
-                                    th:value="${valor}"
-                                    th:text="${valor.name()}"
-                                    th:field="*{tipo_impuesto}"></option>
-                        </select>
-                        <button class="btn-primario">Guardar</button>
-                    </div>
+            <div class="contenedor-col">
 
-                </form>
+                <table>
+                    <h3>Servicios Contratados</h3>
+                    <thead>
+                        <tr>
+                            <th>Descripcion</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="servicio : ${listaServiciosActivos}">
+                            <td th:text="${servicio.descripcion}"></td>
+                            <td th:text="${servicio.estado}"></td>
+                            </td>
+                            <td>
+                                <button class="btn-secundario">
+                                    <a
+                                        th:href="@{/clientes/servicios_activos/desactivar/persona/{id} 
+                                        (id=${servicio.idItem})}"
+                                        >Desactivar</a
+                                    >
+                                </button>
+                                <button class="btn-secundario">
+                                    <a
+                                        th:href="@{/clientes/servicios_activos/activar/persona/{id} 
+                                        (id=${servicio.idItem})}"
+                                        >Activar</a
+                                    >
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <table>
+                    <h3>Servicios Vencidos</h3>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Descripcion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="servicio : ${vencidos}">
+                            <td th:text="${servicio.idItem != null} ? ${servicio.idItem} : '--'"></td>
+                            <td th:text="${servicio.descripcion ne null} ? ${servicio.descripcion} : '--' "></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
+
+
+            <!-- Latest compiled and minified JavaScript -->
+            <script type="text/javascript">
+                function limpiarCampos(){
+                window.location='/clientes';
+                }
+            </script>
+
+
+
         </header>
+        <!-- Latest compiled and minified JavaScript -->
+
     </body>
 </html>

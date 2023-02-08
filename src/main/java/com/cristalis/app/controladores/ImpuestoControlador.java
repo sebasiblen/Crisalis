@@ -1,7 +1,10 @@
 package com.cristalis.app.controladores;
 
 import com.cristalis.app.modelo.Impuesto;
+import com.cristalis.app.modelo.ItemImpuesto;
 import com.cristalis.app.servicio.ImpuestoServicio;
+import com.cristalis.app.servicio.ItemImpuestoServicio;
+import com.cristalis.app.servicio.ItemServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +18,10 @@ public class ImpuestoControlador {
 
     @Autowired
     private ImpuestoServicio impuestoServicio;
-
+    
+    @Autowired
+    private ItemImpuestoServicio itemImpuesto;
+    
     @GetMapping("/impuestos")
     public String Impuestos(Model modelo) {
         modelo.addAttribute("impuestos", impuestoServicio.listadoImpuestos());
@@ -45,17 +51,19 @@ public class ImpuestoControlador {
     public String ActualizarImpuesto(@ModelAttribute("impuesto") Impuesto impuesto, @PathVariable Long id) {
         Impuesto impuestoActualizado = impuestoServicio.obtenerImpuestoPorID(id);
         impuestoActualizado.setDescripcion(impuesto.getDescripcion());
-        double porcentaje = 0.0;
-        if (impuesto.getPorcentaje() > 1) {
-            porcentaje  = impuesto.getPorcentaje() / 100;
-        }
-        impuestoActualizado.setPorcentaje(porcentaje);
-        impuestoServicio.actualizarImpuesto(impuestoActualizado);
+        impuestoActualizado.setPorcentaje(impuesto.getPorcentaje());
+        impuestoServicio.guardarImpuesto(impuestoActualizado);
         return "redirect:/impuestos";
     }
 
     @GetMapping("/impuestos/eliminar/{id}")
     public String EliminarImpuesto(@PathVariable Long id) {
+        
+        for (ItemImpuesto ii : itemImpuesto.listadoItemsImpuestos()) {
+            if (ii.getImpuesto().getIdImpuesto().equals(id)) {
+                itemImpuesto.eliminarItemImpuesto(ii.getIdItemImpuesto());
+            }
+        }
         impuestoServicio.eliminarImpuesto(id);
         return "redirect:/impuestos";
     }

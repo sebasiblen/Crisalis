@@ -130,5 +130,11 @@ public class IItemServicio implements ItemServicio {
 
     @Override
     public void desactivarServicio(Item item) {
+        item.setEstado("Desactivado");
+    }
+    
+    @Override
+    public void activarServicio(Item item) {
+        item.setEstado("Activo");
     }
 }

@@ -86,9 +86,16 @@
                             <td>
                                 <button class="btn-secundario">
                                     <a
-                                        th:href="@{/clientes/servicios_activos/persona/desactivar/{id} 
+                                        th:href="@{/clientes/servicios_activos/desactivar/empresa/{id} 
                                         (id=${servicio.idItem})}"
                                         >Desactivar</a
+                                    >
+                                </button>
+                                <button class="btn-secundario">
+                                    <a
+                                        th:href="@{/clientes/servicios_activos/activar/empresa/{id} 
+                                        (id=${servicio.idItem})}"
+                                        >Activar</a
                                     >
                                 </button>
                             </td>
@@ -107,17 +114,8 @@
                     </thead>
                     <tbody>
                         <tr th:each="servicio : ${vencidos}">
-                            <td th:text="${servicio.idBien}"></td>
-                            <td th:text="${servicio.descripcion}"></td>
-                            <td>
-                                <button class="btn-secundario">
-                                    <a
-                                        th:href="@{/clientes/servicios_activos/persona/desactivar/{id} 
-                                        (id=${servicio.idBien})}"
-                                        >Activar</a
-                                    >
-                                </button>
-                            </td>
+                            <td th:text="${servicio.idItem != null} ? ${servicio.idItem} : '--'"></td>
+                            <td th:text="${servicio.descripcion ne null} ? ${servicio.descripcion} : '--' "></td>
                         </tr>
                     </tbody>
                 </table>

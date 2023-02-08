@@ -246,23 +246,34 @@ public class ClienteControlador {
         modelo.addAttribute("listaServiciosActivos",
                 personaServicio.listadoServiciosContratados(personaTemp));
         modelo.addAttribute("vencidos", personaServicio.listadoServiciosVencidos(personaTemp));
-        return "cliente_servicios_activos";
+        return "cliente_servicios_activos_persona";
     }
-    
-//    @GetMapping("/clientes/servicios_activos/persona/desactivar/{id}")
-//    public String DesactivarServicio(Model modelo, @PathVariable Long id){
-//        // Item seleccionado.
-//        Item servicio = itemServicio.obtenerItemPorID(id);
-//        // Nuevo estado a asignar
-//        String estado = "Desactivado";
-////        personaServicio.desactivarServicioContratado(personaTemp, servicio);
-//        personaServicio.guardarPersona(personaTemp);
-//        var v  = personaTemp.getIdCliente();
-//        System.out.println(v);
-//        personaTemp = null;
-//        return "redirect:/clientes/servicios_activos/persona/"+ v;
-//    }
-    
+
+    @GetMapping("/clientes/servicios_activos/desactivar/persona/{id}")
+    public String DesactivarServicioPersona(Model modelo, @PathVariable Long id) {
+        // Item seleccionado.
+        Item servicio = itemServicio.obtenerItemPorID(id);
+        itemServicio.desactivarServicio(servicio);
+        itemServicio.guardarItem(servicio);
+
+        personaServicio.guardarPersona(personaTemp);
+        var v = personaTemp.getIdCliente();
+
+        return "redirect:/clientes/servicios_activos/persona/" + v;
+    }
+
+    @GetMapping("/clientes/servicios_activos/activar/persona/{id}")
+    public String ReactivarServicioPersona(Model modelo, @PathVariable Long id) {
+        // Item seleccionado.
+        Item servicio = itemServicio.obtenerItemPorID(id);
+        itemServicio.activarServicio(servicio);
+        itemServicio.guardarItem(servicio);
+
+        personaServicio.guardarPersona(personaTemp);
+        var v = personaTemp.getIdCliente();
+        return "redirect:/clientes/servicios_activos/persona/" + v;
+    }
+
     /**
      * Servicios Activos de una empresa
      *
@@ -272,15 +283,38 @@ public class ClienteControlador {
      */
     @GetMapping("/clientes/servicios_activos/empresa/{id}")
     public String ServiciosActivosClienteEmpresa(@PathVariable Long id, Model modelo) {
-        Empresa empresa = empresaServicio.obtenerEmpresaPorID(id);
-        modelo.addAttribute("cliente", empresa);
+        empresaTemp = empresaServicio.obtenerEmpresaPorID(id);
+        modelo.addAttribute("cliente",
+                empresaTemp);
         modelo.addAttribute("listaServiciosActivos",
-                empresaServicio.listadoServiciosContratados(empresa));
-        
-        var v = empresaTemp.getIdCliente();
-        empresaTemp = null;
-        return "redirect:/clientes/servicios_activos/persona/" + v;
+                empresaServicio.listadoServiciosContratados(empresaTemp));
+        modelo.addAttribute("vencidos",
+                empresaServicio.listadoServiciosVencidos(empresaTemp));
+        return "cliente_servicios_activos_empresa";
     }
     
+    @GetMapping("/clientes/servicios_activos/desactivar/empresa/{id}")
+    public String DesactivarServicioEmpresa(Model modelo, @PathVariable Long id) {
+        // Item seleccionado.
+        Item servicio = itemServicio.obtenerItemPorID(id);
+        itemServicio.desactivarServicio(servicio);
+        itemServicio.guardarItem(servicio);
+
+        empresaServicio.guardarEmpresa(empresaTemp);
+        var v = empresaTemp.getIdCliente();
+
+        return "redirect:/clientes/servicios_activos/empresa/" + v;
+    }
     
+    @GetMapping("/clientes/servicios_activos/activar/empresa/{id}")
+    public String ReactivarServicioEmpresa(Model modelo, @PathVariable Long id) {
+        // Item seleccionado.
+        Item servicio = itemServicio.obtenerItemPorID(id);
+        itemServicio.activarServicio(servicio);
+        itemServicio.guardarItem(servicio);
+
+        empresaServicio.guardarEmpresa(empresaTemp);
+        var v = empresaTemp.getIdCliente();
+        return "redirect:/clientes/servicios_activos/empresa/" + v;
+    }
 }

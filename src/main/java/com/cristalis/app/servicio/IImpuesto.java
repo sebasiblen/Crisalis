@@ -27,6 +27,9 @@ public class IImpuesto implements ImpuestoServicio {
 
     @Override
     public Impuesto guardarImpuesto(Impuesto impuesto) {
+        if (impuesto.getPorcentaje() >= 1) {
+            impuesto.setPorcentaje(impuesto.getPorcentaje() / 100);
+        }
         return repositorio.save(impuesto);
     }
 

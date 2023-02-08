@@ -35,4 +35,5 @@ public interface ItemServicio {
     
     public void desactivarServicio( Item item);
     
+    public void activarServicio( Item item);
 }

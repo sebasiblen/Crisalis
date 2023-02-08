@@ -34,8 +34,10 @@ public interface PedidoRepositorio extends JpaRepository<Pedido, Long> {
         @palabra VARCHAR (255)
         AS 
         BEGIN
-            SELECT * FROM pedido p, item i, servicio s
-WHERE (i.id_servicio = s.id_bien AND p.id_pedido = i.pedido_id AND s.descripcion LIKE '%'+'in'+'%')
+            select * from pedido p, item i 
+            where i.descripcion LIKE '%'+ '100' + '%'
+            and i.pedido_id = p.id_pedido
+            and i.id_servicio > 0
         END
      */
     @Procedure
@@ -46,8 +48,10 @@ WHERE (i.id_servicio = s.id_bien AND p.id_pedido = i.pedido_id AND s.descripcion
         @palabra VARCHAR (255)
         AS 
         BEGIN
-            select * from pedido p, item i, producto prod
-        where ((prod.descripcion like '%'+ 'er' + '%')AND (i.id_producto > 0 and i.pedido_id = p.id_pedido))
+           select * from pedido p, item i 
+           where i.descripcion LIKE '%'+ 'Tec' + '%'
+           and i.pedido_id = p.id_pedido
+           and i.id_producto > 0
         END
      */
     @Procedure
@@ -63,7 +67,7 @@ WHERE (i.id_servicio = s.id_bien AND p.id_pedido = i.pedido_id AND s.descripcion
             where p.empresa_id = @palabra
             OR p.persona_id = @palabra
         END
-    */
+     */
     @Procedure
     public List<Pedido> sp_pedidos_asociados(@Param("palabra") String cliente);
 }

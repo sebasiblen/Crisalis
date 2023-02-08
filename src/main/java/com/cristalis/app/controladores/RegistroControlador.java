@@ -35,6 +35,6 @@ public class RegistroControlador {
         }
         modelo.addAttribute("nombres", nombres);
         modelo.addAttribute("stock", stock);
-        return "index";
+        return "/index";
     }
 }

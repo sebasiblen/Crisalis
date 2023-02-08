@@ -1,7 +1,7 @@
 package com.cristalis.app.servicio;
 
 import com.cristalis.app.modelo.Empresa;
-import com.cristalis.app.modelo.Servicio;
+import com.cristalis.app.modelo.Item;
 import java.util.List;
 
 public interface EmpresaServicio {
@@ -18,8 +18,8 @@ public interface EmpresaServicio {
 
     public void eliminarEmpresa(Long id);
 
-    public List<Servicio> listadoServiciosContratados(Empresa empresa);
-
-    public List<Servicio> listadoServiciosVencidos(Empresa empresa);
+    public List<Item> listadoServiciosContratados(Empresa empresa);
+    
+    public List<Item> listadoServiciosVencidos(Empresa empresa);
 
 }

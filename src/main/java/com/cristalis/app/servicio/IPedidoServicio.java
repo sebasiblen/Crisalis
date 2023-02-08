@@ -165,7 +165,9 @@ public class IPedidoServicio implements PedidoServicio {
             if (!personaServicio.listadoServiciosContratados(p.getPersona())
                     .isEmpty() || estaAlgunServicioEnOrden(p)) {
                 for (ItemDTO producto : productos) {
-                    descuentos += (producto.getSubtotal() * 0.10);
+                    if (producto.getProducto().getTipo_impuesto() == TipoImpuestoEnum.GRAVADO) {
+                        descuentos += (producto.getSubtotal() * 0.10);
+                    }
                 }
             }
         }
@@ -174,7 +176,9 @@ public class IPedidoServicio implements PedidoServicio {
             if (!empresaServicio.listadoServiciosContratados(p.getEmpresa())
                     .isEmpty() || estaAlgunServicioEnOrden(p)) {
                 for (ItemDTO producto : productos) {
-                    descuentos += (producto.getSubtotal() * 0.10);
+                    if (producto.getProducto().getTipo_impuesto() == TipoImpuestoEnum.GRAVADO) {
+                        descuentos += (producto.getSubtotal() * 0.10);
+                    }
                 }
             }
         }
@@ -259,9 +263,17 @@ public class IPedidoServicio implements PedidoServicio {
     @Override
     public void AgregarImpuestosExtras(Pedido p) {
         double total = p.getTotal();
+        double porcentajeFinal = 0;
         for (ItemImpuesto impuesto : p.getItemImpuestos()) {
-            total = total + (total * impuesto.getPorcentaje());
+            
+            if (impuesto.getPorcentaje() >= 1) {
+                double porcentaje = (impuesto.getPorcentaje() / 100);
+                porcentajeFinal += porcentaje;
+            } else {
+                porcentajeFinal += impuesto.getPorcentaje();
+            }
         }
+        total = total + (total * porcentajeFinal);
         p.setTotal(total);
     }
 

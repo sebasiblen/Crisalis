@@ -59,13 +59,13 @@ public class IEmpresaServicio implements EmpresaServicio {
     }
 
     @Override
-    public List<Servicio> listadoServiciosContratados(Empresa e) {
+    public List<Item> listadoServiciosContratados(Empresa e) {
 
-        List<Servicio> servicios = new ArrayList<>();
+        List<Item> servicios = new ArrayList<>();
         for (Pedido pedido : e.getPedidos()) {
             for (Item item : pedido.getItems()) {
                 if (item.getServicio() != null) {
-                    servicios.add(item.getServicio());
+                    servicios.add(item);
                 }
             }
         }
@@ -74,21 +74,28 @@ public class IEmpresaServicio implements EmpresaServicio {
     }
 
     @Override
-    public List<Servicio> listadoServiciosVencidos(Empresa e) {
+    public List<Item> listadoServiciosVencidos(Empresa e) {
 
-        List<Servicio> serviciosVencidos = new ArrayList<>();
-        Date fechaActual = new Date();
-        for (Pedido pedido : e.getPedidos()) {
-            Date fechaPedido = pedido.getFecha();
-            long dif = fechaActual.getTime() - fechaPedido.getTime();
-            if (dif > 31) {
-                for (Item item : pedido.getItems()) {
-                    if (item.getServicio() != null) {
-                        serviciosVencidos.add(item.getServicio());
-                    }
-                }
-            }
-        }
+        List<Item> serviciosVencidos = new ArrayList<>();
+//        Date fechaActual = new Date();
+//        Item servicioVencido = null;
+//        
+//        for (Pedido pedido : e.getPedidos()) {
+//            Date fechaPedido = pedido.getFecha();
+//            long dif = fechaActual.getTime() - fechaPedido.getTime();
+//            if (dif > 31) {
+//                for (Item item : pedido.getItems()) {
+//                    if (item.getServicio() != null) {
+//                        serviciosVencidos.add(item);
+//                    }
+//                }
+//            }
+//        }
+//        for (Item sc : listadoServiciosContratados(e)) {
+//            if (sc.equals(servicioVencido)) {
+//                listadoServiciosContratados(e).remove(sc);
+//            }
+//        }
 
         return serviciosVencidos;
     }
